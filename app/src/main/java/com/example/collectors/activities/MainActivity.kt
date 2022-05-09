@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.collectors.Constants
 import com.example.collectors.R
 import com.example.collectors.adapters.MyMovieAdapter
 import com.example.collectors.database.MovieApp
@@ -16,6 +17,9 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
+
+    private var myMovieAdapter: MyMovieAdapter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -24,6 +28,11 @@ class MainActivity : AppCompatActivity() {
         btAdd.setOnClickListener {
             val intent = Intent(this, MovieSearchActivity::class.java)
             startActivity(intent)
+        }
+
+        btRemove.setOnClickListener {
+            Constants.isRemoveMode = !Constants.isRemoveMode
+            myMovieAdapter?.notifyDataSetChanged()
         }
 
         val movieDao = (application as MovieApp).db.movieDao()
@@ -45,12 +54,19 @@ class MainActivity : AppCompatActivity() {
 
                     val myMovieList = ArrayList<MovieEntity>()
                     for(movie in list) myMovieList.add(movie)
-
-                    val myMovieAdapter = MyMovieAdapter(myMovieList, this@MainActivity)
+                    myMovieAdapter = MyMovieAdapter(
+                        myMovieList,
+                        this@MainActivity
+                    ) { deleteRecord(movieDao, it) }
                     rvMyMovieList.adapter = myMovieAdapter
                 }
             }
         }
     }
 
+    private fun deleteRecord(movieDao: MovieDao, movieEntity: MovieEntity){
+        lifecycleScope.launch{
+            movieDao.delete(movieEntity)
+        }
+    }
 }

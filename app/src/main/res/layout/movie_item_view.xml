@@ -15,11 +15,27 @@
         android:orientation="vertical">
 
 
-        <ImageView
-            android:id="@+id/ivMyMovieImage"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            tools:srcCompat="@tools:sample/avatars"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivMyMovieImage"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <ImageButton
+                android:id="@+id/btRemoveCard"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right|top"
+                android:layout_margin="5dp"
+                android:background="@null"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/ic_remove_card" />
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tvMyMovieTitle"

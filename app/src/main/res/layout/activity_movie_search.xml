@@ -41,7 +41,8 @@
         android:id="@+id/rvMovieSearchList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        tools:listitem="@layout/movie_search_item_view" />
 
 
 </LinearLayout>

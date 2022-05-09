@@ -19,6 +19,8 @@ object Constants {
     const val MOVIE_RATE = "movie_rate"
     const val SELECTED_MOVIE = "selected_movie"
 
+    var isRemoveMode = false
+
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)
                 as ConnectivityManager

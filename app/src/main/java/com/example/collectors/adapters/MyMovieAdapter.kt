@@ -45,11 +45,7 @@ class MyMovieAdapter(private val myMovieList: ArrayList<MovieEntity>, private va
             holder.itemView.myRatingBar.rating = movie.rate
             holder.itemView.setOnClickListener {
                 val intent = Intent(context, MyMovieDetail::class.java)
-                intent.putExtra(Constants.MOVIE_IMAGE, movie.image)
-                intent.putExtra(Constants.MOVIE_TITLE, movie.title)
-                intent.putExtra(Constants.MOVIE_RATE, movie.rate)
-                intent.putExtra(Constants.MOVIE_SUMMARY, movie.summary)
-                intent.putExtra(Constants.MOVIE_REVIEW, movie.review)
+                intent.putExtra(Constants.SELECTED_MOVIE, movie)
                 context.startActivity(intent)
             }
         }

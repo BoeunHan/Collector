@@ -17,6 +17,7 @@ object Constants {
     const val MOVIE_SUMMARY = "movie_summary"
     const val MOVIE_REVIEW = "movie_review"
     const val MOVIE_RATE = "movie_rate"
+    const val SELECTED_MOVIE = "selected_movie"
 
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)

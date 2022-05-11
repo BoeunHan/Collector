@@ -49,18 +49,40 @@
             android:textColor="@color/textColor"
             android:textSize="15sp" />
 
-        <RatingBar
-            android:id="@+id/myRatingBar"
-            style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:isIndicator="true"
-            android:numStars="5"
-            android:rating="3"
-            android:scaleX="1"
-            android:stepSize="0.5"
-            android:theme="@style/RatingBar" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RatingBar
+                android:id="@+id/myRatingBar"
+                style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:rating="3"
+                android:stepSize="0.5"
+                android:theme="@style/RatingBar" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/btLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginRight="10dp"
+                app:srcCompat="@drawable/ic_like" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

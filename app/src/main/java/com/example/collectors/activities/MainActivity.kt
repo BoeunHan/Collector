@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private var myMovieAdapter: MyMovieAdapter? = null
+    private var movieDao: MovieDao? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,43 +31,54 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
+
+        movieDao = (application as MovieApp).db.movieDao()
+        getMyMovies()
         btRemove.setOnClickListener {
             Constants.isRemoveMode = !Constants.isRemoveMode
             myMovieAdapter?.notifyDataSetChanged()
         }
-
-        val movieDao = (application as MovieApp).db.movieDao()
-        getMyMovies(movieDao)
-
     }
 
-    private fun getMyMovies(movieDao: MovieDao){
+    private fun getMyMovies(){
 
         lifecycleScope.launch{
-            movieDao.fetchAllMovies().collect { list ->
+            movieDao?.fetchAllMovies()?.collect { list ->
                 if(list.isNotEmpty()){
-                    val gridLayoutManager = GridLayoutManager(
-                            this@MainActivity,
-                            2,
-                            GridLayoutManager.HORIZONTAL,
-                            false)
-                    rvMyMovieList.layoutManager = gridLayoutManager
-
                     val myMovieList = ArrayList<MovieEntity>()
                     for(movie in list) myMovieList.add(movie)
-                    myMovieAdapter = MyMovieAdapter(
-                        myMovieList,
-                        this@MainActivity
-                    ) { deleteRecord(movieDao, it) }
-                    rvMyMovieList.adapter = myMovieAdapter
+                    setMovieAdapter(myMovieList)
                 }
             }
         }
     }
 
-    private fun deleteRecord(movieDao: MovieDao, movieEntity: MovieEntity){
+    private fun setMovieAdapter(myMovieList: ArrayList<MovieEntity>){
+        val gridLayoutManager = GridLayoutManager(
+                this@MainActivity,
+                2,
+                GridLayoutManager.HORIZONTAL,
+                false)
+        rvMyMovieList.layoutManager = gridLayoutManager
+
+        myMovieAdapter = MyMovieAdapter(
+                myMovieList,
+                this@MainActivity,
+                { deleteRecord(it) },
+                { id, like -> likeOrDislike(id, like)}
+        )
+        rvMyMovieList.adapter = myMovieAdapter
+    }
+
+    private fun deleteRecord(movieEntity: MovieEntity){
         lifecycleScope.launch{
-            movieDao.delete(movieEntity)
+            movieDao?.delete(movieEntity)
+        }
+    }
+    private fun likeOrDislike(id: Int, like: Boolean){
+        lifecycleScope.launch{
+            movieDao?.likeMovie(id, like)
         }
     }
 }

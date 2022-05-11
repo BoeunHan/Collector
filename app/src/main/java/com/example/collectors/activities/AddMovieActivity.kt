@@ -56,9 +56,9 @@ class AddMovieActivity : AppCompatActivity(), View.OnClickListener {
                 val summary = etSummary.text.toString()
                 val review = etReview.text.toString()
 
-                val cal = Calendar.getInstance()
+                val date = Date()
                 val sdf = SimpleDateFormat("dd MMM, yyyy")
-                val date = sdf.format(cal.time)
+                val datestr = sdf.format(date)
 
                 val movieDao = (application as MovieApp).db?.movieDao()
 
@@ -70,9 +70,9 @@ class AddMovieActivity : AppCompatActivity(), View.OnClickListener {
                         rate,
                         summary,
                         review,
-                        date
+                        datestr
                     )
-                    addRecord(movieDao!!, newMovie)
+                    addRecord(movieDao, newMovie)
                 }else{
                     val updateMovie = MovieEntity(
                         myMovie?.id!!,
@@ -82,9 +82,9 @@ class AddMovieActivity : AppCompatActivity(), View.OnClickListener {
                         summary,
                         review,
                         myMovie?.uploadDate!!,
-                        date
+                        datestr
                     )
-                    updateRecord(movieDao!!, updateMovie)
+                    updateRecord(movieDao, updateMovie)
                 }
 
                 finish()

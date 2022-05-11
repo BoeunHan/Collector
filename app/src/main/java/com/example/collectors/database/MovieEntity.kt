@@ -17,5 +17,6 @@ data class MovieEntity(
     val summary: String = "",
     val review: String = "",
     val uploadDate: String = "",
-    val editDate: String = ""
+    val editDate: String = "",
+    val like: Boolean = false
 ) : Parcelable

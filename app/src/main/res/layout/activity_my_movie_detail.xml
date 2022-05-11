@@ -22,7 +22,7 @@
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:title="Movie Title"
             app:collapsedTitleTextColor="@color/textColor"
-            app:expandedTitleTextColor="@color/mediumGrey"
+            app:expandedTitleTextColor="@color/white"
             >
 
             <ImageView

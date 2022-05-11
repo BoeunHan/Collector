@@ -1,6 +1,5 @@
 package com.example.collectors.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.collectors.Constants
 import kotlinx.coroutines.flow.Flow
@@ -18,4 +17,11 @@ interface MovieDao {
 
     @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}`")
     fun fetchAllMovies(): Flow<List<MovieEntity>>
+
+    @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}` WHERE `like`=1")
+    fun fetchLikeMovies(): Flow<List<MovieEntity>>
+
+    @Query("UPDATE `${Constants.TABLE_MOVIE_LIST}` SET `like` = :like WHERE id = :id")
+    suspend fun likeMovie(id: Int, like: Boolean)
+
 }

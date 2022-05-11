@@ -18,7 +18,8 @@ import kotlinx.android.synthetic.main.movie_item_view.view.*
 
 class MyMovieAdapter(
     private val myMovieList: ArrayList<MovieEntity>, private val context: Context,
-    private val removeListener: (movie: MovieEntity) -> Unit
+    private val removeListener: (movie: MovieEntity) -> Unit,
+    private val likeListener: (id: Int, like: Boolean) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -48,6 +49,15 @@ class MyMovieAdapter(
             holder.itemView.tvMyMovieTitle.text = movie.title
             Glide.with(context).load(movie.image).into(holder.itemView.ivMyMovieImage)
             holder.itemView.myRatingBar.rating = movie.rate
+
+            if(movie.like) holder.itemView.btLike.setImageResource(R.drawable.ic_like)
+            else holder.itemView.btLike.setImageResource(R.drawable.ic_dislike)
+
+            holder.itemView.btLike.setOnClickListener {
+                if(movie.like) likeListener(movie.id, false)
+                else likeListener(movie.id, true)
+                notifyItemChanged(position)
+            }
 
             holder.itemView.btRemoveCard?.setOnClickListener {
                 removeListener(movie)

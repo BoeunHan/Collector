@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.collectors.Constants
 import com.example.collectors.R
@@ -11,22 +12,39 @@ import com.example.collectors.adapters.MovieSearchAdapter
 import com.example.collectors.models.Item
 import com.example.collectors.models.MovieList
 import com.example.collectors.network.MovieApiService
+import com.example.collectors.textToFlow
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_movie_search.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
 class MovieSearchActivity : AppCompatActivity() {
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_search)
 
-        btSearch.setOnClickListener {
-            getSearchResult(etSearch.text.toString())
+        btCancel.setOnClickListener {
+            etSearch.setText("")
+        }
+
+        lifecycleScope.launch{
+            val editTextFlow = etSearch.textToFlow()
+            editTextFlow
+                .debounce(500)
+                .filter{ it?.length!! > 0 }
+                .onEach{ getSearchResult(it.toString())}
+                .launchIn(this)
         }
     }
 
@@ -51,11 +69,8 @@ class MovieSearchActivity : AppCompatActivity() {
 
                     if (response.isSuccessful && response.body()!=null) {
                         val result = response.body()
-                        Log.e("Success! :", result.toString())
 
                         setupSearchRecyclerView(result!!.items)
-                        val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                        manager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
 
                     } else {
                         when (response.code()) {

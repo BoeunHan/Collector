@@ -14,9 +14,6 @@ object Constants {
 
     const val MOVIE_IMAGE = "movie_image"
     const val MOVIE_TITLE = "movie_title"
-    const val MOVIE_SUMMARY = "movie_summary"
-    const val MOVIE_REVIEW = "movie_review"
-    const val MOVIE_RATE = "movie_rate"
     const val SELECTED_MOVIE = "selected_movie"
 
     var isRemoveMode = false

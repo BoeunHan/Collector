@@ -9,7 +9,6 @@
     tools:context=".activities.MovieSearchActivity">
 
     <LinearLayout
-        android:id="@+id/llSearch"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/search_box_background_default"
@@ -17,24 +16,29 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/ic_search" />
+
         <EditText
             android:id="@+id/etSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:background="@null"
             android:inputType="textPersonName"
             android:textColor="@color/textColor"
             android:textSize="18sp" />
 
-        <ImageButton
-            android:id="@+id/btSearch"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:background="#FFFFFF"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/ic_search" />
+        <ImageView
+            android:id="@+id/btCancel"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/ic_cancel" />
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

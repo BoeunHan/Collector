@@ -17,5 +17,4 @@ interface MovieApiService {
         @Query("query") value: String,
         @Query("display") display: Int,
     ): Call<MovieList>
-
 }

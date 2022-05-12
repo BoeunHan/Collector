@@ -2,8 +2,6 @@ package com.example.collectors.models
 
 import com.google.gson.annotations.SerializedName
 
-import java.util.*
-
 data class Item(
     @SerializedName("title") val title: String,
     @SerializedName("link") val link: String,

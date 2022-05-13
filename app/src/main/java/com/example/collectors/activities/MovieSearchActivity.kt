@@ -3,7 +3,7 @@ package com.example.collectors.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.inputmethod.InputMethodManager
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.collectors.Constants
@@ -15,7 +15,8 @@ import com.example.collectors.network.MovieApiService
 import com.example.collectors.textToFlow
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_movie_search.*
-import kotlinx.coroutines.Dispatchers
+import kotlinx.android.synthetic.main.activity_movie_search.btCancel
+import kotlinx.android.synthetic.main.activity_movie_search.tvNothingFound
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -35,11 +36,11 @@ class MovieSearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_movie_search)
 
         btCancel.setOnClickListener {
-            etSearch.setText("")
+            etSearchMovie.setText("")
         }
 
         lifecycleScope.launch{
-            val editTextFlow = etSearch.textToFlow()
+            val editTextFlow = etSearchMovie.textToFlow()
             editTextFlow
                 .debounce(500)
                 .filter{ it?.length!! > 0 }
@@ -90,9 +91,17 @@ class MovieSearchActivity : AppCompatActivity() {
         }
     }
     fun setupSearchRecyclerView(movieList: ArrayList<Item>){
-        rvMovieSearchList.layoutManager = LinearLayoutManager(this)
-        val movieSearchAdapter = MovieSearchAdapter(movieList, this)
-        rvMovieSearchList.adapter = movieSearchAdapter
+        if(movieList.isNullOrEmpty()){
+            tvNothingFound.visibility = View.VISIBLE
+            rvMovieSearchList.visibility = View.GONE
+        }
+        else {
+            tvNothingFound.visibility = View.GONE
+            rvMovieSearchList.visibility = View.VISIBLE
+            rvMovieSearchList.layoutManager = LinearLayoutManager(this)
+            val movieSearchAdapter = MovieSearchAdapter(movieList, this)
+            rvMovieSearchList.adapter = movieSearchAdapter
+        }
     }
 }
 

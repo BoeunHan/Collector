@@ -3,6 +3,7 @@ package com.example.collectors.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.collectors.Constants
@@ -25,19 +26,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        movieDao = (application as MovieApp).db.movieDao()
+        getMyMovies()
 
         btAdd.setOnClickListener {
             val intent = Intent(this, MovieSearchActivity::class.java)
             startActivity(intent)
         }
 
-
-
-        movieDao = (application as MovieApp).db.movieDao()
-        getMyMovies()
         btRemove.setOnClickListener {
             Constants.isRemoveMode = !Constants.isRemoveMode
             myMovieAdapter?.notifyDataSetChanged()
+        }
+
+        btSearchReview.setOnClickListener {
+            val intent = Intent(this, ReviewSearchActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -45,30 +49,36 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch{
             movieDao?.fetchAllMovies()?.collect { list ->
-                if(list.isNotEmpty()){
-                    val myMovieList = ArrayList<MovieEntity>()
-                    for(movie in list) myMovieList.add(movie)
-                    setMovieAdapter(myMovieList)
-                }
+                val myMovieList = ArrayList<MovieEntity>()
+                for (movie in list) myMovieList.add(movie)
+                setMovieAdapter(myMovieList)
             }
         }
     }
 
     private fun setMovieAdapter(myMovieList: ArrayList<MovieEntity>){
-        val gridLayoutManager = GridLayoutManager(
-                this@MainActivity,
-                2,
-                GridLayoutManager.HORIZONTAL,
-                false)
-        rvMyMovieList.layoutManager = gridLayoutManager
+        if(myMovieList.isNullOrEmpty()){
+            tvNothingFound.visibility = View.VISIBLE
+            rvMyMovieList.visibility = View.GONE
+        }
+        else {
+            tvNothingFound.visibility = View.GONE
+            rvMyMovieList.visibility = View.VISIBLE
+            val gridLayoutManager = GridLayoutManager(
+                    this@MainActivity,
+                    2,
+                    GridLayoutManager.HORIZONTAL,
+                    false)
+            rvMyMovieList.layoutManager = gridLayoutManager
 
-        myMovieAdapter = MyMovieAdapter(
-                myMovieList,
-                this@MainActivity,
-                { deleteRecord(it) },
-                { id, like -> likeOrDislike(id, like)}
-        )
-        rvMyMovieList.adapter = myMovieAdapter
+            myMovieAdapter = MyMovieAdapter(
+                    myMovieList,
+                    this@MainActivity,
+                    { deleteRecord(it) },
+                    { id, like -> likeOrDislike(id, like) }
+            )
+            rvMyMovieList.adapter = myMovieAdapter
+        }
     }
 
     private fun deleteRecord(movieEntity: MovieEntity){

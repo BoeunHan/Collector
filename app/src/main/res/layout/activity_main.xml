@@ -74,6 +74,15 @@
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/ic_remove" />
 
+            <ImageButton
+                android:id="@+id/btSearchReview"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@null"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/ic_search" />
+
         </LinearLayout>
 
     </LinearLayout>
@@ -84,4 +93,15 @@
         android:layout_height="match_parent"
         android:background="@color/lightGrey"
         tools:listitem="@layout/movie_item_view" />
+    <TextView
+        android:id="@+id/tvNothingFound"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Nothing Found."
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        android:background="@color/lightGrey"
+        android:visibility="gone" />
+
 </LinearLayout>

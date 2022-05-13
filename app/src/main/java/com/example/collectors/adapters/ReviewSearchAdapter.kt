@@ -1,9 +1,7 @@
 package com.example.collectors.adapters
 
-
 import android.content.Context
 import android.content.Intent
-import android.graphics.Movie
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,13 +13,11 @@ import com.example.collectors.activities.MyMovieDetail
 import com.example.collectors.database.MovieEntity
 import kotlinx.android.synthetic.main.movie_item_view.view.*
 
-
-class MyMovieAdapter(
-    private val myMovieList: ArrayList<MovieEntity>,
+class ReviewSearchAdapter(
+    private val movieList: ArrayList<MovieEntity>,
     private val context: Context,
-    private val removeListener: (movie: MovieEntity) -> Unit,
-    private val likeListener: (id: Int, like: Boolean) -> Unit
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val likeListener: (id: Int, like: Boolean) -> Unit)
+: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
@@ -37,15 +33,14 @@ class MyMovieAdapter(
             )
         )
     }
+
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int
     ) {
-        val movie = myMovieList[position]
+        val movie = movieList[position]
         if(holder is MyViewHolder) {
-
-            if(Constants.isRemoveMode) holder.itemView.btRemoveCard.visibility = View.VISIBLE
-            else holder.itemView.btRemoveCard.visibility = View.GONE
+            holder.itemView.btRemoveCard.visibility = View.GONE
 
             holder.itemView.tvMyMovieTitle.text = movie.title
             Glide.with(context).load(movie.image).into(holder.itemView.ivMyMovieImage)
@@ -60,10 +55,6 @@ class MyMovieAdapter(
                 notifyItemChanged(position)
             }
 
-            holder.itemView.btRemoveCard?.setOnClickListener {
-                removeListener(movie)
-            }
-
             holder.itemView.setOnClickListener {
                 val intent = Intent(context, MyMovieDetail::class.java)
                 intent.putExtra(Constants.SELECTED_MOVIE, movie)
@@ -74,7 +65,8 @@ class MyMovieAdapter(
     }
 
     override fun getItemCount(): Int {
-        return myMovieList.size
+        return movieList.size
     }
+
 
 }

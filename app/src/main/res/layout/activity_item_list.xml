@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.MovieListActivity">
+    tools:context=".activities.ItemListActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,6 +19,7 @@
             android:layout_margin="5dp" />
 
         <TextView
+            android:id="@+id/tvCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -28,7 +29,7 @@
             android:textSize="20sp" />
 
         <ImageButton
-            android:id="@+id/btAdd"
+            android:id="@+id/btAddItem"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
@@ -63,7 +64,7 @@
                 app:srcCompat="@drawable/ic_search" />
 
             <EditText
-                android:id="@+id/etSearchMovie"
+                android:id="@+id/etSearchItem"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
@@ -97,7 +98,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv"
+        android:id="@+id/rvItemList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/movie_item_view" />

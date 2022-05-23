@@ -2,25 +2,22 @@ package com.example.collectors.adapters
 
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.collectors.Category
 
 import com.example.collectors.R
-import com.example.collectors.activities.MovieSearchActivity
 import com.example.collectors.database.BasicInfo
-import com.example.collectors.database.MovieEntity
-
-import kotlinx.android.synthetic.main.main_list_item_view.view.*
-
+import kotlinx.android.synthetic.main.movie_item_view.view.*
 
 
 class MainAdapter(
-    private val list: ArrayList<Pair<String, ArrayList<BasicInfo>>>,
+    private val category: Category,
+    private val list: ArrayList<BasicInfo>,
     private val context: Context,
     private val removeListener: (id: Int) -> Unit,
     private val likeListener: (id: Int, like: Boolean) -> Unit
@@ -32,11 +29,8 @@ class MainAdapter(
         parent: ViewGroup,
         viewType: Int
     ): RecyclerView.ViewHolder {
-        return MyViewHolder(
-            LayoutInflater.from(context).inflate(
-                R.layout.main_list_item_view,
-                parent,
-                false
+        return MyViewHolder(LayoutInflater.from(context).inflate(
+                R.layout.movie_item_view, parent,false
             )
         )
     }
@@ -44,35 +38,24 @@ class MainAdapter(
         holder: RecyclerView.ViewHolder,
         position: Int
     ) {
-        val category = list[position]
+        val item = list[position]
+
         if(holder is MyViewHolder) {
-            holder.itemView.tvCategory.text = category.first
-
-            holder.itemView.btAdd.setOnClickListener {
-                when(category.first) {
-                    "영화" -> {
-                        val intent = Intent(context, MovieSearchActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                }
+            holder.itemView.myRatingBar.visibility = View.GONE
+            if(item.image!="")  Glide.with(holder.itemView).load(item.image).into(holder.itemView.ivImageItem)
+            else {
+                holder.itemView.ivImageItem.scaleType = ImageView.ScaleType.CENTER
+                Glide.with(holder.itemView).load(R.drawable.ic_no_image).into(holder.itemView.ivImageItem)
             }
-            holder.itemView.btMore.setOnClickListener {
-                when(category.first) {
-                    "영화" -> {
-                    }
-                }
+            holder.itemView.tvTitleItem.text = item.title
+            if(item.like) holder.itemView.btLike.setImageResource(R.drawable.ic_like)
+            else holder.itemView.btLike.setImageResource(R.drawable.ic_dislike)
+
+            holder.itemView.btLike.setOnClickListener {
+                if(item.like) likeListener(item.id, false)
+                else likeListener(item.id, true)
+                notifyItemChanged(position)
             }
-
-
-            val linearLayoutManager = LinearLayoutManager(context)
-            linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-            holder.itemView.rvCategoryList.layoutManager = linearLayoutManager
-            holder.itemView.rvCategoryList.adapter = CategoryAdapter(
-                category.second,
-                context,
-                removeListener,
-                likeListener
-            )
         }
     }
 

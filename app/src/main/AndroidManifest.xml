@@ -14,7 +14,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/CustomActionBar">
-        <activity android:name=".activities.MovieListActivity"></activity>
+        <activity android:name=".activities.ItemListActivity"></activity>
         <activity android:name=".activities.MyMovieDetail" />
         <activity android:name=".activities.ReviewSearchActivity" />
         <activity android:name=".activities.MovieSearchActivity" />

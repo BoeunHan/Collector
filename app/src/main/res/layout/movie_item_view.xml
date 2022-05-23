@@ -33,16 +33,6 @@
                 android:layout_margin="5dp"
                 app:srcCompat="@drawable/ic_like" />
 
-            <ImageButton
-                android:id="@+id/btRemoveCard"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="start"
-                android:layout_margin="5dp"
-                android:background="@null"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/ic_remove_card" />
-
             <TextView
                 android:id="@+id/tvTitleItem"
                 android:layout_width="match_parent"

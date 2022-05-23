@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.collectors.Constants
 import com.example.collectors.R
 import com.example.collectors.adapters.MyMovieAdapter
+import com.example.collectors.database.BasicInfo
 import com.example.collectors.database.MovieApp
 import com.example.collectors.database.MovieDao
 import com.example.collectors.database.MovieEntity
@@ -21,14 +22,16 @@ class MainActivity : AppCompatActivity() {
 
     private var myMovieAdapter: MyMovieAdapter? = null
     private var movieDao: MovieDao? = null
+    private val mainList = HashMap<String, ArrayList<BasicInfo>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main2)
 
         movieDao = (application as MovieApp).db.movieDao()
-        getMyMovies()
+        //getMyMovies()
 
+        /*
         btAdd.setOnClickListener {
             val intent = Intent(this, MovieSearchActivity::class.java)
             startActivity(intent)
@@ -42,11 +45,20 @@ class MainActivity : AppCompatActivity() {
         btSearchReview.setOnClickListener {
             val intent = Intent(this, ReviewSearchActivity::class.java)
             startActivity(intent)
-        }
+        }*/
     }
 
+    private fun fetchMainInfo(){
+        lifecycleScope.launch{
+            movieDao?.fetchBasicInfo()?.collect { list ->
+                val myList = ArrayList<BasicInfo>()
+                for (movie in list) myList.add(movie)
+                mainList["영화"] = myList
+            }
+        }
+    }
+/*
     private fun getMyMovies(){
-
         lifecycleScope.launch{
             movieDao?.fetchAllMovies()?.collect { list ->
                 val myMovieList = ArrayList<MovieEntity>()
@@ -80,7 +92,7 @@ class MainActivity : AppCompatActivity() {
             rvMyMovieList.adapter = myMovieAdapter
         }
     }
-
+*/
     private fun deleteRecord(movieEntity: MovieEntity){
         lifecycleScope.launch{
             movieDao?.delete(movieEntity)
@@ -91,4 +103,5 @@ class MainActivity : AppCompatActivity() {
             movieDao?.likeMovie(id, like)
         }
     }
+
 }

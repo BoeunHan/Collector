@@ -18,6 +18,9 @@ interface MovieDao {
     @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}`")
     fun fetchAllMovies(): Flow<List<MovieEntity>>
 
+    @Query("SELECT title, image, rate FROM `${Constants.TABLE_MOVIE_LIST}`")
+    fun fetchBasicInfo(): Flow<List<BasicInfo>>
+
     @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}` WHERE `like`=1")
     fun fetchLikeMovies(): Flow<List<MovieEntity>>
 

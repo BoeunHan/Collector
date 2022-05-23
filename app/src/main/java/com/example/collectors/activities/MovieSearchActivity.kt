@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.collectors.Constants
 import com.example.collectors.R
@@ -99,6 +100,7 @@ class MovieSearchActivity : AppCompatActivity() {
             tvNothingFound.visibility = View.GONE
             rvMovieSearchList.visibility = View.VISIBLE
             rvMovieSearchList.layoutManager = LinearLayoutManager(this)
+            rvMovieSearchList.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
             val movieSearchAdapter = MovieSearchAdapter(movieList, this)
             rvMovieSearchList.adapter = movieSearchAdapter
         }

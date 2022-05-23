@@ -3,32 +3,37 @@ package com.example.collectors.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.collectors.Constants
 import com.example.collectors.R
+import com.example.collectors.adapters.MainAdapter
 import com.example.collectors.adapters.MyMovieAdapter
 import com.example.collectors.database.BasicInfo
 import com.example.collectors.database.MovieApp
 import com.example.collectors.database.MovieDao
 import com.example.collectors.database.MovieEntity
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main2.*
+import kotlinx.android.synthetic.main.main_list_item_view.view.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
 
-    private var myMovieAdapter: MyMovieAdapter? = null
+    private var mainAdapter: MainAdapter? = null
     private var movieDao: MovieDao? = null
-    private val mainList = HashMap<String, ArrayList<BasicInfo>>()
+    private val mainList: ArrayList<Pair<String, ArrayList<BasicInfo>>> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
         movieDao = (application as MovieApp).db.movieDao()
+        fetchMainInfo()
         //getMyMovies()
 
         /*
@@ -50,11 +55,38 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchMainInfo(){
         lifecycleScope.launch{
+            val myList = ArrayList<BasicInfo>()
             movieDao?.fetchBasicInfo()?.collect { list ->
-                val myList = ArrayList<BasicInfo>()
+
                 for (movie in list) myList.add(movie)
-                mainList["영화"] = myList
+                setMainAdapter(mainList)
             }
+            mainList.add(Pair("영화",myList))
+
+
+        }
+    }
+
+    private fun setMainAdapter(mainList: ArrayList<Pair<String, ArrayList<BasicInfo>>>){
+        if(mainList.isNullOrEmpty()){
+            tvNothingFound.visibility = View.VISIBLE
+            rvMain.visibility = View.GONE
+        }
+        else {
+            Log.e("setMainAdapter","adapter set")
+            Log.e("mainlist",mainList.toString())
+            tvNothingFound.visibility = View.GONE
+            rvMain.visibility = View.VISIBLE
+
+            val linearLayoutManager = LinearLayoutManager(this@MainActivity)
+            linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+            rvMain.layoutManager = linearLayoutManager
+            rvMain.adapter = MainAdapter(
+                mainList,
+                this@MainActivity,
+                { deleteRecord(it) },
+                { id, like -> likeOrDislike(id, like) }
+            )
         }
     }
 /*
@@ -93,9 +125,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 */
-    private fun deleteRecord(movieEntity: MovieEntity){
+    private fun deleteRecord(id: Int){
         lifecycleScope.launch{
-            movieDao?.delete(movieEntity)
+            movieDao?.delete(id)
         }
     }
     private fun likeOrDislike(id: Int, like: Boolean){

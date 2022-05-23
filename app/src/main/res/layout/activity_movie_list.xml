@@ -28,7 +28,7 @@
             android:textSize="20sp" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/btAdd"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"

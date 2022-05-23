@@ -12,13 +12,13 @@ interface MovieDao {
     @Update
     suspend fun update(movieEntity: MovieEntity)
 
-    @Delete
-    suspend fun delete(movieEntity: MovieEntity)
+    @Query("DELETE FROM `${Constants.TABLE_MOVIE_LIST}` WHERE id = :id")
+    suspend fun delete(id: Int)
 
     @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}`")
     fun fetchAllMovies(): Flow<List<MovieEntity>>
 
-    @Query("SELECT title, image, rate FROM `${Constants.TABLE_MOVIE_LIST}`")
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}`")
     fun fetchBasicInfo(): Flow<List<BasicInfo>>
 
     @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}` WHERE `like`=1")

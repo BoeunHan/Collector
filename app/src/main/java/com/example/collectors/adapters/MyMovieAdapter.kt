@@ -3,7 +3,6 @@ package com.example.collectors.adapters
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Movie
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,8 +46,8 @@ class MyMovieAdapter(
             if(Constants.isRemoveMode) holder.itemView.btRemoveCard.visibility = View.VISIBLE
             else holder.itemView.btRemoveCard.visibility = View.GONE
 
-            holder.itemView.tvMyMovieTitle.text = movie.title
-            Glide.with(context).load(movie.image).into(holder.itemView.ivMyMovieImage)
+            holder.itemView.tvTitleItem.text = movie.title
+            Glide.with(context).load(movie.image).into(holder.itemView.ivImageItem)
             holder.itemView.myRatingBar.rating = movie.rate
 
             if(movie.like) holder.itemView.btLike.setImageResource(R.drawable.ic_like)

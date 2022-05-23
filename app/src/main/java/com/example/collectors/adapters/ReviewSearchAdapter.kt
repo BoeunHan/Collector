@@ -42,8 +42,8 @@ class ReviewSearchAdapter(
         if(holder is MyViewHolder) {
             holder.itemView.btRemoveCard.visibility = View.GONE
 
-            holder.itemView.tvMyMovieTitle.text = movie.title
-            Glide.with(context).load(movie.image).into(holder.itemView.ivMyMovieImage)
+            holder.itemView.tvTitleItem.text = movie.title
+            Glide.with(context).load(movie.image).into(holder.itemView.ivImageItem)
             holder.itemView.myRatingBar.rating = movie.rate
 
             if(movie.like) holder.itemView.btLike.setImageResource(R.drawable.ic_like)

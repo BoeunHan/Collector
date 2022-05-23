@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,6 +16,7 @@
         android:paddingEnd="10dp">
 
         <TextView
+            android:id="@+id/tvCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="영화"
@@ -28,7 +29,7 @@
             android:layout_weight="1" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/btAdd"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:background="@null"
@@ -36,7 +37,7 @@
             app:srcCompat="@drawable/ic_add" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/btMore"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:background="@null"
@@ -46,6 +47,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCategoryList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/movie_item_view" />

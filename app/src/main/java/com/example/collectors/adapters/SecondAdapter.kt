@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.collectors.Category
-import com.example.collectors.Categoryy
 
 import com.example.collectors.R
 import com.example.collectors.database.BasicInfo
@@ -17,7 +15,6 @@ import kotlinx.android.synthetic.main.movie_item_view.view.*
 
 
 class SecondAdapter(
-        private val item: Categoryy,
         private val list: ArrayList<BasicInfo>,
         private val context: Context,
         private val removeListener: (id: Int) -> Unit,

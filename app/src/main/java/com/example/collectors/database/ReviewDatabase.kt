@@ -4,23 +4,22 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 
 @Database(entities=[MovieEntity::class], version=6)
-abstract class MovieDatabase : RoomDatabase() {
+abstract class ReviewDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
 
     companion object{
         @Volatile
-        private var INSTANCE: MovieDatabase? = null
+        private var INSTANCE: ReviewDatabase? = null
 
-        fun getInstance(context: Context): MovieDatabase{
+        fun getInstance(context: Context): ReviewDatabase{
             synchronized(this){
                 var instance = INSTANCE
                 if(instance==null){
                     instance = Room.databaseBuilder(
                         context.applicationContext,
-                        MovieDatabase::class.java,
+                            ReviewDatabase::class.java,
                         "movie_database"
                     ).fallbackToDestructiveMigration().build()
                 }

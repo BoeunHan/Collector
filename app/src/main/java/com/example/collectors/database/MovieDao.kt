@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface MovieDao : BaseDao<MovieEntity>{
 
     @Query("DELETE FROM `${Constants.TABLE_MOVIE_LIST}` WHERE id = :id")
-    suspend fun delete(id: Int)
+    override suspend fun delete(id: Int)
 
     @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}`")
     override fun fetchAll(): Flow<List<MovieEntity>>

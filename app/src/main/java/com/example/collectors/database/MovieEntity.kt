@@ -19,4 +19,4 @@ data class MovieEntity(
     val uploadDate: String = "",
     val editDate: String = "",
     val like: Boolean = false
-) : Parcelable, BaseEntity()
+) : Parcelable

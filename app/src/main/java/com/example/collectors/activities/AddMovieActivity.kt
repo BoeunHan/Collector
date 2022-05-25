@@ -7,7 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.collectors.Constants
 import com.example.collectors.R
-import com.example.collectors.database.MovieApp
+import com.example.collectors.database.CollectorApp
 import com.example.collectors.database.MovieDao
 import com.example.collectors.database.MovieEntity
 import kotlinx.android.synthetic.main.activity_add_movie.*
@@ -60,7 +60,7 @@ class AddMovieActivity : AppCompatActivity(), View.OnClickListener {
                 val sdf = SimpleDateFormat("dd MMM, yyyy")
                 val datestr = sdf.format(date)
 
-                val movieDao = (application as MovieApp).db?.movieDao()
+                val movieDao = (application as CollectorApp).db?.movieDao()
 
                 if(myMovie==null){
                     val newMovie = MovieEntity(

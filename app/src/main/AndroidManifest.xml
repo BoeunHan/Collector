@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".database.MovieApp"
+        android:name=".database.CollectorApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,7 +16,6 @@
         android:theme="@style/CustomActionBar">
         <activity android:name=".activities.ItemListActivity"></activity>
         <activity android:name=".activities.MyMovieDetail" />
-        <activity android:name=".activities.ReviewSearchActivity" />
         <activity android:name=".activities.MovieSearchActivity" />
         <activity android:name=".activities.AddMovieActivity" />
         <activity android:name=".activities.MainActivity">

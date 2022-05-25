@@ -7,17 +7,17 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.collectors.Category
 import com.example.collectors.R
 import com.example.collectors.adapters.ItemAdapter
 import com.example.collectors.database.BasicInfo
-import com.example.collectors.database.MovieApp
+import com.example.collectors.database.CollectorApp
 import com.example.collectors.database.MovieDao
 import com.example.collectors.textToFlow
 import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.activity_item_list.btCancel
 import kotlinx.android.synthetic.main.activity_item_list.tvNothingFound
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.main_list_item_view.view.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 class ItemListActivity : AppCompatActivity() {
 
     private var movieDao: MovieDao? = null
-    private lateinit var category: String
+    private var category: String? = null
 
     @FlowPreview
     @ExperimentalCoroutinesApi
@@ -37,10 +37,11 @@ class ItemListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_list)
 
-        movieDao = (application as MovieApp).db.movieDao()
-        category = intent.getStringExtra("Category") as String
+        movieDao = (application as CollectorApp).db.movieDao()
+        category = intent.getStringExtra("Category")
 
-        tvCategory.text = category
+        tvListCategory.text = category
+
         fetchInfo("")
 
         btCancel.setOnClickListener {
@@ -55,23 +56,21 @@ class ItemListActivity : AppCompatActivity() {
                 .launchIn(this)
         }
 
-        btAddItem.setOnClickListener(MyAddOnClickListener())
-    }
-    inner class MyAddOnClickListener : View.OnClickListener {
-        override fun onClick(view: View?) {
+        btAddItem.setOnClickListener {
             var intent: Intent? = null
             when(category){
-                Category.MOVIE.name -> intent = Intent(this@ItemListActivity, MovieSearchActivity::class.java)
-                Category.BOOK.name -> intent = Intent(this@ItemListActivity, MovieSearchActivity::class.java)
+                "MOVIE" -> { intent = Intent(this, MovieSearchActivity::class.java) }
+                "BOOK" -> { intent = Intent(this, MovieSearchActivity::class.java) }
             }
+            intent?.putExtra("Category", category)
             startActivity(intent)
-
         }
     }
+
     private fun fetchInfo(value: String){
         Log.e("string",value)
         when(category){
-            Category.MOVIE.name -> {
+            "MOVIE" -> {
                 lifecycleScope.launch{
                     movieDao?.searchBasicInfo("%$value%")?.collect { list ->
                         val mySearchList = ArrayList<BasicInfo>()
@@ -80,7 +79,7 @@ class ItemListActivity : AppCompatActivity() {
                     }
                 }
             }
-            Category.BOOK.name -> {
+            "BOOK" -> {
 
             }
         }

@@ -15,6 +15,8 @@ interface BaseDao<T> {
     @Delete
     suspend fun delete(obj: T)
 
+    suspend fun delete(id: Int)
+
     fun fetchAll(): Flow<List<T>>
 
     fun fetchAllBasicInfo(): Flow<List<BasicInfo>>

@@ -6,21 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.collectors.Category
+import com.example.collectors.Categoryy
 
 import com.example.collectors.R
 import com.example.collectors.database.BasicInfo
+import kotlinx.android.synthetic.main.main_list_item_view.view.*
 import kotlinx.android.synthetic.main.movie_item_view.view.*
 
 
 class MainAdapter(
-    private val category: Category,
-    private val list: ArrayList<BasicInfo>,
-    private val context: Context,
-    private val removeListener: (id: Int) -> Unit,
-    private val likeListener: (id: Int, like: Boolean) -> Unit
+        private val list: ArrayList<Categoryy>,
+        private val context: Context
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -30,7 +30,7 @@ class MainAdapter(
         viewType: Int
     ): RecyclerView.ViewHolder {
         return MyViewHolder(LayoutInflater.from(context).inflate(
-                R.layout.movie_item_view, parent,false
+                R.layout.main_list_item_view, parent,false
             )
         )
     }
@@ -41,21 +41,15 @@ class MainAdapter(
         val item = list[position]
 
         if(holder is MyViewHolder) {
-            holder.itemView.myRatingBar.visibility = View.GONE
-            if(item.image!="")  Glide.with(holder.itemView).load(item.image).into(holder.itemView.ivImageItem)
-            else {
-                holder.itemView.ivImageItem.scaleType = ImageView.ScaleType.CENTER
-                Glide.with(holder.itemView).load(R.drawable.ic_no_image).into(holder.itemView.ivImageItem)
-            }
-            holder.itemView.tvTitleItem.text = item.title
-            if(item.like) holder.itemView.btLike.setImageResource(R.drawable.ic_like)
-            else holder.itemView.btLike.setImageResource(R.drawable.ic_dislike)
+            holder.itemView.tvCategory.text = item.category
 
-            holder.itemView.btLike.setOnClickListener {
-                if(item.like) likeListener(item.id, false)
-                else likeListener(item.id, true)
-                notifyItemChanged(position)
-            }
+            val linearLayoutManager = LinearLayoutManager(context)
+            linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+            holder.itemView.rvCategoryList.layoutManager = linearLayoutManager
+
+            holder.itemView.rvCategoryList.adapter = SecondAdapter(
+                    item, item.list, context,
+                    {it},{id, like ->{}})
         }
     }
 

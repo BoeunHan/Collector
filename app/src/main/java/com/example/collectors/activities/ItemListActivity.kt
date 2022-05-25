@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.activity_item_list.btCancel
 import kotlinx.android.synthetic.main.activity_item_list.tvNothingFound
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_review_search.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
@@ -74,7 +73,7 @@ class ItemListActivity : AppCompatActivity() {
         when(category){
             Category.MOVIE.name -> {
                 lifecycleScope.launch{
-                    movieDao?.fetchBasicInfoSearch("%$value%")?.collect { list ->
+                    movieDao?.searchBasicInfo("%$value%")?.collect { list ->
                         val mySearchList = ArrayList<BasicInfo>()
                         for (item in list) mySearchList.add(item)
                         setItemAdapter(mySearchList)
@@ -111,7 +110,7 @@ class ItemListActivity : AppCompatActivity() {
     }
     private fun likeOrDislike(id: Int, like: Boolean){
         lifecycleScope.launch{
-            movieDao?.likeMovie(id, like)
+            movieDao?.like(id, like)
         }
     }
 }

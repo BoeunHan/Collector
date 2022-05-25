@@ -1,5 +1,6 @@
 package com.example.collectors.adapters
 
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -7,13 +8,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.collectors.Category
 import com.example.collectors.Categoryy
+
 import com.example.collectors.R
 import com.example.collectors.database.BasicInfo
 import kotlinx.android.synthetic.main.movie_item_view.view.*
 
 
-class ItemAdapter(
+class SecondAdapter(
+        private val item: Categoryy,
         private val list: ArrayList<BasicInfo>,
         private val context: Context,
         private val removeListener: (id: Int) -> Unit,
@@ -26,8 +30,7 @@ class ItemAdapter(
         parent: ViewGroup,
         viewType: Int
     ): RecyclerView.ViewHolder {
-        return MyViewHolder(
-            LayoutInflater.from(context).inflate(
+        return MyViewHolder(LayoutInflater.from(context).inflate(
                 R.layout.movie_item_view, parent,false
             )
         )
@@ -39,6 +42,7 @@ class ItemAdapter(
         val item = list[position]
 
         if(holder is MyViewHolder) {
+            holder.itemView.myRatingBar.visibility = View.GONE
             if(item.image!="")  Glide.with(holder.itemView).load(item.image).into(holder.itemView.ivImageItem)
             else {
                 holder.itemView.ivImageItem.scaleType = ImageView.ScaleType.CENTER

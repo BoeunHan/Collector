@@ -8,6 +8,8 @@ import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.example.collectors.Constants
 import com.example.collectors.R
 import com.example.collectors.database.CollectorApp

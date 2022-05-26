@@ -11,7 +11,7 @@
         android:layout_width="120dp"
         android:layout_height="170dp"
         android:elevation="10dp"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="8dp">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -24,6 +24,14 @@
                 android:foreground="@drawable/gradient_shape"
                 android:scaleType="centerCrop"
                 tools:srcCompat="@drawable/cat_image" />
+
+            <ImageView
+                android:id="@+id/ivLike"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="top|end"
+                android:layout_margin="5dp"
+                app:srcCompat="@drawable/ic_like" />
 
             <TextView
                 android:id="@+id/tvTitleItem"

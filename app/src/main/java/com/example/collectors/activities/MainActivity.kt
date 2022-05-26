@@ -62,19 +62,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = linearLayoutManager
 
         recyclerView.adapter = SecondAdapter(
-                list, this@MainActivity,
-                {it},{id, like ->{}})
+                list, this@MainActivity)
     }
-
-    private fun deleteRecord(id: Int){
-        lifecycleScope.launch{
-            movieDao?.delete(id)
-        }
-    }
-    private fun likeOrDislike(id: Int, like: Boolean){
-        lifecycleScope.launch{
-            movieDao?.like(id, like)
-        }
-    }
-
 }

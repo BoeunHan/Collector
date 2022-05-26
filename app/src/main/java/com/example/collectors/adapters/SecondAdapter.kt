@@ -16,9 +16,7 @@ import kotlinx.android.synthetic.main.card_item_view.view.*
 
 class SecondAdapter(
         private val list: ArrayList<BasicInfo>,
-        private val context: Context,
-        private val removeListener: (id: Int) -> Unit,
-        private val likeListener: (id: Int, like: Boolean) -> Unit
+        private val context: Context
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -40,12 +38,13 @@ class SecondAdapter(
 
         if(holder is MyViewHolder) {
             holder.itemView.myRatingBar.visibility = View.GONE
+            if(item.like) holder.itemView.ivLike.visibility = View.VISIBLE
+            else holder.itemView.ivLike.visibility = View.GONE
             if(item.image!="")  Glide.with(holder.itemView).load(item.image).into(holder.itemView.ivImageItem)
             else {
                 holder.itemView.ivImageItem.scaleType = ImageView.ScaleType.CENTER
                 Glide.with(holder.itemView).load(R.drawable.ic_no_image).into(holder.itemView.ivImageItem)
             }
-
 
             holder.itemView.tvTitleItem.text = item.title
 

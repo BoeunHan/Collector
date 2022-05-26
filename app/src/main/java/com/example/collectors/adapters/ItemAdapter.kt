@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.collectors.Constants
 import com.example.collectors.R
-import com.example.collectors.activities.MyMovieDetail
+import com.example.collectors.activities.MovieDetailActivity
 import com.example.collectors.database.BasicInfo
 import kotlinx.android.synthetic.main.card_item_view.view.*
 
@@ -47,11 +47,13 @@ class ItemAdapter(
             }
             holder.itemView.tvTitleItem.text = item.title
             holder.itemView.myRatingBar.rating = item.rate
+            if(item.like) holder.itemView.ivLike.visibility = View.VISIBLE
+            else holder.itemView.ivLike.visibility = View.GONE
 
             holder.itemView.setOnClickListener {
                 when(category) {
                     "MOVIE" -> {
-                        val intent = Intent(context, MyMovieDetail::class.java)
+                        val intent = Intent(context, MovieDetailActivity::class.java)
                         intent.putExtra(Constants.ID, item.id)
                         context.startActivity(intent)
                     }

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.collectors.Constants
 import com.example.collectors.R
 import com.example.collectors.adapters.ItemAdapter
 import com.example.collectors.database.BasicInfo
@@ -38,7 +39,7 @@ class ItemListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_item_list)
 
         movieDao = (application as CollectorApp).db.movieDao()
-        category = intent.getStringExtra("Category")
+        category = intent.getStringExtra(Constants.CATEGORY)
 
         tvListCategory.text = category
 
@@ -68,7 +69,6 @@ class ItemListActivity : AppCompatActivity() {
     }
 
     private fun fetchInfo(value: String){
-        Log.e("string",value)
         when(category){
             "MOVIE" -> {
                 lifecycleScope.launch{
@@ -80,7 +80,7 @@ class ItemListActivity : AppCompatActivity() {
                 }
             }
             "BOOK" -> {
-
+                setItemAdapter(ArrayList())
             }
         }
     }
@@ -96,9 +96,8 @@ class ItemListActivity : AppCompatActivity() {
 
             rvItemList.layoutManager = GridLayoutManager(this, 3)
             rvItemList.adapter = ItemAdapter(
-                list, this@ItemListActivity,
-                { deleteRecord(it) },
-                { id, like -> likeOrDislike(id, like) }
+                    category!!,
+                    list, this@ItemListActivity
             )
         }
     }

@@ -1,22 +1,24 @@
 package com.example.collectors.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.collectors.Constants
 import com.example.collectors.R
+import com.example.collectors.activities.MyMovieDetail
 import com.example.collectors.database.BasicInfo
-import kotlinx.android.synthetic.main.movie_item_view.view.*
+import kotlinx.android.synthetic.main.card_item_view.view.*
 
 
 class ItemAdapter(
+        private val category: String,
         private val list: ArrayList<BasicInfo>,
-        private val context: Context,
-        private val removeListener: (id: Int) -> Unit,
-        private val likeListener: (id: Int, like: Boolean) -> Unit
+        private val context: Context
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -27,7 +29,7 @@ class ItemAdapter(
     ): RecyclerView.ViewHolder {
         return MyViewHolder(
             LayoutInflater.from(context).inflate(
-                R.layout.movie_item_view, parent,false
+                R.layout.card_item_view, parent,false
             )
         )
     }
@@ -44,13 +46,16 @@ class ItemAdapter(
                 Glide.with(holder.itemView).load(R.drawable.ic_no_image).into(holder.itemView.ivImageItem)
             }
             holder.itemView.tvTitleItem.text = item.title
-            if(item.like) holder.itemView.btLike.setImageResource(R.drawable.ic_like)
-            else holder.itemView.btLike.setImageResource(R.drawable.ic_dislike)
+            holder.itemView.myRatingBar.rating = item.rate
 
-            holder.itemView.btLike.setOnClickListener {
-                if(item.like) likeListener(item.id, false)
-                else likeListener(item.id, true)
-                notifyItemChanged(position)
+            holder.itemView.setOnClickListener {
+                when(category) {
+                    "MOVIE" -> {
+                        val intent = Intent(context, MyMovieDetail::class.java)
+                        intent.putExtra(Constants.ID, item.id)
+                        context.startActivity(intent)
+                    }
+                }
             }
         }
     }

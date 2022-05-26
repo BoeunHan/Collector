@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.collectors.Constants
 
 import com.example.collectors.R
 import com.example.collectors.activities.ItemListActivity
@@ -48,16 +49,14 @@ class MainAdapter(
                     "MOVIE" -> { intent = Intent(context, MovieSearchActivity::class.java) }
                     "BOOK" -> { intent = Intent(context, MovieSearchActivity::class.java) }
                 }
-                intent?.putExtra("Category", item)
+                intent?.putExtra(Constants.CATEGORY, item)
                 context.startActivity(intent)
             }
             holder.itemView.btMore.setOnClickListener {
                 val intent = Intent(context, ItemListActivity::class.java)
-                intent.putExtra("Category", item)
+                intent.putExtra(Constants.CATEGORY, item)
                 context.startActivity(intent)
             }
-
-
 
         }
     }

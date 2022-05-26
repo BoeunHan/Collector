@@ -3,6 +3,7 @@ package com.example.collectors.adapters
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +45,7 @@ class MovieSearchAdapter(private val movieList: ArrayList<Item>, private val con
                 holder.itemView.ivImage.scaleType = ImageView.ScaleType.CENTER
                 Glide.with(holder.itemView).load(R.drawable.ic_no_image).into(holder.itemView.ivImage)
             }
-            holder.itemView.tvTitle.text = movie.title
+            holder.itemView.tvTitle.text = Html.fromHtml(movie.title).toString()
             holder.itemView.tvPubDate.text = movie.pubDate
             if(movie.director!=""){
                 val str = movie.director

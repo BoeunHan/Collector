@@ -50,6 +50,6 @@
         android:id="@+id/rvCategoryList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/movie_item_view" />
+        tools:listitem="@layout/card_item_view" />
 
 </LinearLayout>

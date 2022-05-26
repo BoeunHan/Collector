@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 
 import com.example.collectors.R
 import com.example.collectors.database.BasicInfo
-import kotlinx.android.synthetic.main.movie_item_view.view.*
+import kotlinx.android.synthetic.main.card_item_view.view.*
 
 
 class SecondAdapter(
@@ -28,7 +28,7 @@ class SecondAdapter(
         viewType: Int
     ): RecyclerView.ViewHolder {
         return MyViewHolder(LayoutInflater.from(context).inflate(
-                R.layout.movie_item_view, parent,false
+                R.layout.card_item_view, parent,false
             )
         )
     }
@@ -45,15 +45,10 @@ class SecondAdapter(
                 holder.itemView.ivImageItem.scaleType = ImageView.ScaleType.CENTER
                 Glide.with(holder.itemView).load(R.drawable.ic_no_image).into(holder.itemView.ivImageItem)
             }
-            holder.itemView.tvTitleItem.text = item.title
-            if(item.like) holder.itemView.btLike.setImageResource(R.drawable.ic_like)
-            else holder.itemView.btLike.setImageResource(R.drawable.ic_dislike)
 
-            holder.itemView.btLike.setOnClickListener {
-                if(item.like) likeListener(item.id, false)
-                else likeListener(item.id, true)
-                notifyItemChanged(position)
-            }
+
+            holder.itemView.tvTitleItem.text = item.title
+
         }
     }
 

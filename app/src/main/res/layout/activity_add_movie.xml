@@ -10,7 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="500dp"
-        android:background="@color/lightGrey"
+        android:background="@color/white"
         android:fitsSystemWindows="true"
         android:theme="@style/CustomActionBar">
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/lightGrey"
+            app:contentScrim="@color/white"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:title="Movie Title"
             app:collapsedTitleTextColor="@color/textColor"
@@ -31,9 +31,11 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
-                app:srcCompat="@drawable/cat_image" />
+                app:srcCompat="@drawable/cat_image"
+                android:foreground="@drawable/gradient_shape"/>
 
             <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarMovieAddEdit"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"/>
@@ -64,7 +66,7 @@
                     android:layout_margin="10dp"
                     android:text="점수"
                     android:textColor="@color/textColor"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <RatingBar
                     android:id="@+id/ratingBar"
@@ -84,7 +86,7 @@
                 android:layout_margin="10dp"
                 android:text="나의 줄거리"
                 android:textColor="@color/textColor"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/etSummary"
@@ -97,7 +99,7 @@
                 android:padding="10dp"
                 android:scrollbars="vertical"
                 android:textColor="@color/textColor"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -107,7 +109,7 @@
                 android:layout_marginBottom="10dp"
                 android:text="나의 후기"
                 android:textColor="@color/textColor"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/etReview"
@@ -120,17 +122,8 @@
                 android:padding="10dp"
                 android:scrollbars="vertical"
                 android:textColor="@color/textColor"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/btSave"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:backgroundTint="@color/secondaryColor"
-                android:text="저장"
-                android:textSize="18sp"
-                android:textStyle="bold" />
         </LinearLayout>
 
 

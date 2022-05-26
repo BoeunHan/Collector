@@ -101,7 +101,7 @@
         android:id="@+id/rvItemList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/movie_item_view" />
+        tools:listitem="@layout/card_item_view" />
     <TextView
         android:id="@+id/tvNothingFound"
         android:layout_width="match_parent"

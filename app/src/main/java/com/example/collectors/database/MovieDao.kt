@@ -10,6 +10,9 @@ interface MovieDao : BaseDao<MovieEntity>{
     @Query("DELETE FROM `${Constants.TABLE_MOVIE_LIST}` WHERE id = :id")
     override suspend fun delete(id: Int)
 
+    @Query("DELETE FROM `${Constants.TABLE_MOVIE_LIST}` WHERE id in (:idSet)")
+    override suspend fun deleteIdList(idSet: Set<Int>)
+
     @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}` WHERE id = :id")
     override fun fetchData(id: Int): Flow<MovieEntity>
 

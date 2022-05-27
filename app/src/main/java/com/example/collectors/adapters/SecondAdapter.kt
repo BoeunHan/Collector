@@ -40,10 +40,10 @@ class SecondAdapter(
             holder.itemView.myRatingBar.visibility = View.GONE
             if(item.like) holder.itemView.ivLike.visibility = View.VISIBLE
             else holder.itemView.ivLike.visibility = View.GONE
-            if(item.image!="")  Glide.with(holder.itemView).load(item.image).into(holder.itemView.ivImageItem)
+            if(item.image!="")  Glide.with(holder.itemView).load(item.image).into(holder.itemView.ivItemImage)
             else {
-                holder.itemView.ivImageItem.scaleType = ImageView.ScaleType.CENTER
-                Glide.with(holder.itemView).load(R.drawable.ic_no_image).into(holder.itemView.ivImageItem)
+                holder.itemView.ivItemImage.scaleType = ImageView.ScaleType.CENTER
+                Glide.with(holder.itemView).load(R.drawable.ic_no_image).into(holder.itemView.ivItemImage)
             }
 
             holder.itemView.tvTitleItem.text = item.title

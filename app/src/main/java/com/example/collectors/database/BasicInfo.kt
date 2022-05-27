@@ -2,6 +2,7 @@ package com.example.collectors.database
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
+import androidx.room.Ignore
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

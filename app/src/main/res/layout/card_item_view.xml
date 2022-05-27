@@ -18,7 +18,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/ivImageItem"
+                android:id="@+id/ivItemImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:foreground="@drawable/gradient_shape"
@@ -32,6 +32,16 @@
                 android:layout_gravity="top|end"
                 android:layout_margin="5dp"
                 app:srcCompat="@drawable/ic_like" />
+
+            <ImageView
+                android:id="@+id/ivChecked"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="start|top"
+                android:layout_margin="5dp"
+                android:background="@drawable/checkedimage_background"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_checked" />
 
             <TextView
                 android:id="@+id/tvTitleItem"

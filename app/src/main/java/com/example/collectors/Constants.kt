@@ -4,6 +4,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.view.View
+import androidx.core.content.ContextCompat
+import kotlinx.android.synthetic.main.card_item_view.view.*
 
 object Constants {
     const val TABLE_MOVIE_LIST = "movie-list"
@@ -18,6 +21,8 @@ object Constants {
     const val SELECTED_MOVIE = "selected_movie"
     const val CATEGORY = "category"
     const val ID = "id"
+
+    var selectMode: Boolean = false
 
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)

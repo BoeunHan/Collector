@@ -2,7 +2,9 @@ package com.example.collectors.database
 
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.Query
 import androidx.room.Update
+import com.example.collectors.Constants
 import kotlinx.coroutines.flow.Flow
 
 interface BaseDao<T> {
@@ -23,7 +25,13 @@ interface BaseDao<T> {
 
     fun fetchAllBasicInfo(): Flow<List<BasicInfo>>
 
-    fun searchBasicInfo(value: String): Flow<List<BasicInfo>>
+    fun searchBasicInfoDateAscending(value: String): Flow<List<BasicInfo>>
+
+    fun searchBasicInfoDateDescending(value: String): Flow<List<BasicInfo>>
+
+    fun searchBasicInfoRateAscending(value: String): Flow<List<BasicInfo>>
+
+    fun searchBasicInfoRateDescending(value: String): Flow<List<BasicInfo>>
 
     fun fetchLike(): Flow<List<T>>
 

@@ -21,8 +21,10 @@ import kotlinx.android.synthetic.main.activity_item_list.tvNothingFound
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_list_item_view.view.*
 import kotlinx.android.synthetic.main.remove_dialog.*
+import kotlinx.android.synthetic.main.sort_dialog.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
@@ -34,6 +36,9 @@ class ItemListActivity : AppCompatActivity(), View.OnClickListener {
     private var movieDao: MovieDao? = null
     private var category: String? = null
     private lateinit var itemAdapter: ItemAdapter
+    private lateinit var sortJob: Job
+    private var sortNum: Int = 1
+    private var curString: String = ""
 
     @FlowPreview
     @ExperimentalCoroutinesApi
@@ -46,7 +51,7 @@ class ItemListActivity : AppCompatActivity(), View.OnClickListener {
 
         tvListCategory.text = category
 
-        fetchInfo("")
+        sortJob = orderDateDescending("")
 
         btCancel.setOnClickListener {
             etSearchItem.setText("")
@@ -56,7 +61,10 @@ class ItemListActivity : AppCompatActivity(), View.OnClickListener {
             val editTextFlow = etSearchItem.textToFlow()
             editTextFlow
                 .debounce(500)
-                .onEach{ fetchInfo(it.toString()) }
+                .onEach{
+                    curString = it.toString()
+                    fetchInfo(curString)
+                }
                 .launchIn(this)
         }
 
@@ -66,21 +74,52 @@ class ItemListActivity : AppCompatActivity(), View.OnClickListener {
         btAddItem.setOnClickListener(this)
         btSelect.setOnClickListener(this)
         fabRemove.setOnClickListener(this)
+        btSort.setOnClickListener(this)
+        btSortImage.setOnClickListener(this)
     }
 
     private fun fetchInfo(value: String){
-        when(category){
-            "MOVIE" -> {
-                lifecycleScope.launch{
-                    movieDao?.searchBasicInfo("%$value%")?.collect { list ->
-                        val mySearchList = ArrayList<BasicInfo>()
-                        for (item in list) mySearchList.add(item)
-                        setItemAdapter(mySearchList)
-                    }
-                }
+        sortJob.cancel()
+        when(sortNum) {
+            1 -> sortJob = orderDateDescending(value)
+            2-> sortJob = orderDateAscending(value)
+            3 -> sortJob = orderRateDescending(value)
+            4 -> sortJob = orderRateAscending(value)
+        }
+    }
+    private fun orderDateDescending(value: String): Job{
+        return lifecycleScope.launch{
+            movieDao?.searchBasicInfoDateDescending("%$value%")?.collect { list ->
+                val mySearchList = ArrayList<BasicInfo>()
+                for (item in list) mySearchList.add(item)
+                setItemAdapter(mySearchList)
             }
-            "BOOK" -> {
-                setItemAdapter(ArrayList())
+        }
+    }
+    private fun orderDateAscending(value: String): Job{
+        return lifecycleScope.launch{
+            movieDao?.searchBasicInfoDateAscending("%$value%")?.collect { list ->
+                val mySearchList = ArrayList<BasicInfo>()
+                for (item in list) mySearchList.add(item)
+                setItemAdapter(mySearchList)
+            }
+        }
+    }
+    private fun orderRateDescending(value: String): Job{
+        return lifecycleScope.launch{
+            movieDao?.searchBasicInfoRateDescending("%$value%")?.collect { list ->
+                val mySearchList = ArrayList<BasicInfo>()
+                for (item in list) mySearchList.add(item)
+                setItemAdapter(mySearchList)
+            }
+        }
+    }
+    private fun orderRateAscending(value: String): Job{
+        return lifecycleScope.launch{
+            movieDao?.searchBasicInfoRateAscending("%$value%")?.collect { list ->
+                val mySearchList = ArrayList<BasicInfo>()
+                for (item in list) mySearchList.add(item)
+                setItemAdapter(mySearchList)
             }
         }
     }
@@ -99,8 +138,8 @@ class ItemListActivity : AppCompatActivity(), View.OnClickListener {
                     category!!,
                     list, this@ItemListActivity
             )
-            itemAdapter.setFabListener { b ->
-                fabRemove.isEnabled = b
+            itemAdapter.setFabListener { bool ->
+                fabRemove.isEnabled = bool
             }
             rvItemList.adapter = itemAdapter
         }
@@ -155,6 +194,38 @@ class ItemListActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
                 removeDialog.show()
+            }
+            btSort, btSortImage -> {
+                val sortDialog = BottomSheetDialog(this, R.style.CustomBottomSheetDialog)
+                sortDialog.setContentView(R.layout.sort_dialog)
+                sortDialog.setCancelable(true)
+
+                sortDialog.btDateDescending.setOnClickListener {
+                    sortNum = 1
+                    fetchInfo(curString)
+                    btSort.text = "최신순"
+                    sortDialog.dismiss()
+                }
+                sortDialog.btDateAscending.setOnClickListener {
+                    sortNum = 2
+                    fetchInfo(curString)
+                    btSort.text = "오래된순"
+                    sortDialog.dismiss()
+                }
+                sortDialog.btRateDescending.setOnClickListener {
+                    sortNum = 3
+                    fetchInfo(curString)
+                    btSort.text = "별점높은순"
+                    sortDialog.dismiss()
+                }
+                sortDialog.btRateAscending.setOnClickListener {
+                    sortNum = 4
+                    fetchInfo(curString)
+                    btSort.text = "별점낮은순"
+                    sortDialog.dismiss()
+                }
+
+                sortDialog.show()
             }
         }
     }

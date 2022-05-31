@@ -16,11 +16,20 @@ interface MovieDao : BaseDao<MovieEntity>{
     @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}` WHERE id = :id")
     override fun fetchData(id: Int): Flow<MovieEntity>
 
-    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}`")
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` ORDER BY id DESC")
     override fun fetchAllBasicInfo(): Flow<List<BasicInfo>>
 
-    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value")
-    override fun searchBasicInfo(value: String): Flow<List<BasicInfo>>
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value ORDER BY id ASC")
+    override fun searchBasicInfoDateAscending(value: String): Flow<List<BasicInfo>>
+
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value ORDER BY id DESC")
+    override fun searchBasicInfoDateDescending(value: String): Flow<List<BasicInfo>>
+
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value ORDER BY rate ASC")
+    override fun searchBasicInfoRateAscending(value: String): Flow<List<BasicInfo>>
+
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value ORDER BY rate DESC")
+    override fun searchBasicInfoRateDescending(value: String): Flow<List<BasicInfo>>
 
     @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}` WHERE `like`=1")
     override fun fetchLike(): Flow<List<MovieEntity>>

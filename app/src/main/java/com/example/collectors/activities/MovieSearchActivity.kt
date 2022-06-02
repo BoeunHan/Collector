@@ -1,15 +1,20 @@
 package com.example.collectors.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.collectors.Constants
 import com.example.collectors.R
 import com.example.collectors.adapters.MovieSearchAdapter
+import com.example.collectors.database.CollectorApp
+import com.example.collectors.database.MovieDao
 import com.example.collectors.models.Item
 import com.example.collectors.models.MovieList
 import com.example.collectors.network.MovieApiService
@@ -30,11 +35,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
 class MovieSearchActivity : AppCompatActivity() {
+
+    private var movieDao: MovieDao? = null
+
     @FlowPreview
     @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_search)
+
+        movieDao = (application as CollectorApp).db.movieDao()
 
         btCancel.setOnClickListener {
             etSearchMovie.setText("")
@@ -91,7 +101,7 @@ class MovieSearchActivity : AppCompatActivity() {
 
         }
     }
-    fun setupSearchRecyclerView(movieList: ArrayList<Item>){
+    private fun setupSearchRecyclerView(movieList: ArrayList<Item>){
         if(movieList.isNullOrEmpty()){
             tvNothingFound.visibility = View.VISIBLE
             rvMovieSearchList.visibility = View.GONE
@@ -101,8 +111,23 @@ class MovieSearchActivity : AppCompatActivity() {
             rvMovieSearchList.visibility = View.VISIBLE
             rvMovieSearchList.layoutManager = LinearLayoutManager(this)
             rvMovieSearchList.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-            val movieSearchAdapter = MovieSearchAdapter(movieList, this)
+            val movieSearchAdapter = MovieSearchAdapter(movieList, this) { title, image -> checkDuplicate(title, image) }
             rvMovieSearchList.adapter = movieSearchAdapter
+        }
+    }
+
+    private fun checkDuplicate(title: String, image: String){
+        lifecycleScope.launch{
+            if(movieDao?.checkExist(title, image)==true){
+                Toast.makeText(this@MovieSearchActivity, "이미 리뷰를 남긴 영화입니다.", Toast.LENGTH_SHORT).show()
+            }else {
+                val intent = Intent(this@MovieSearchActivity, AddMovieActivity::class.java)
+                intent.putExtra(Constants.MOVIE_IMAGE, image)
+                intent.putExtra(Constants.MOVIE_TITLE, title)
+                startActivity(intent)
+                finish()
+            }
+
         }
     }
 }

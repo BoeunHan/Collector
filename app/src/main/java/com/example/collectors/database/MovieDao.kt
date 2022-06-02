@@ -37,4 +37,7 @@ interface MovieDao : BaseDao<MovieEntity>{
     @Query("UPDATE `${Constants.TABLE_MOVIE_LIST}` SET `like` = :like WHERE id = :id")
     override suspend fun like(id: Int, like: Boolean)
 
+    @Query("SELECT EXISTS(SELECT * FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title = :title AND image = :image)")
+    override suspend fun checkExist(title: String, image: String): Boolean
+
 }

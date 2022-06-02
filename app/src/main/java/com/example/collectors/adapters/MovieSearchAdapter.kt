@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.collectors.Constants
@@ -16,21 +17,24 @@ import com.example.collectors.activities.AddMovieActivity
 import com.example.collectors.models.Item
 import kotlinx.android.synthetic.main.movie_search_item_view.view.*
 
-class MovieSearchAdapter(private val movieList: ArrayList<Item>, private val context: Context)
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class MovieSearchAdapter(
+        private val movieList: ArrayList<Item>,
+        private val context: Context,
+        private val checkDuplicate: (title: String, image: String) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+            parent: ViewGroup,
+            viewType: Int
     ): RecyclerView.ViewHolder {
         return MyViewHolder(
-            LayoutInflater.from(context).inflate(
-                R.layout.movie_search_item_view,
-                parent,
-                false
-            )
+                LayoutInflater.from(context).inflate(
+                        R.layout.movie_search_item_view,
+                        parent,
+                        false
+                )
         )
     }
 
@@ -56,11 +60,7 @@ class MovieSearchAdapter(private val movieList: ArrayList<Item>, private val con
                 holder.itemView.tvActor.text = "출연: ${str.substring(0, str.length - 1)}"
             }
             holder.itemView.setOnClickListener {
-                val intent = Intent(context, AddMovieActivity::class.java)
-                intent.putExtra(Constants.MOVIE_IMAGE, movie.image)
-                intent.putExtra(Constants.MOVIE_TITLE, movie.title)
-                context.startActivity(intent)
-                (context as Activity).finish()
+                checkDuplicate(Html.fromHtml(movie.title).toString(), movie.image)
             }
 
         }

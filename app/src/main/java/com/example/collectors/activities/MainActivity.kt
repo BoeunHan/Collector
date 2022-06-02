@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
                 categoryList,
                 this@MainActivity
         ) { category, recyclerView -> setCategoryList(category, recyclerView) }
-
     }
 
 

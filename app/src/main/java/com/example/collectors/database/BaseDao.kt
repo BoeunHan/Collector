@@ -36,4 +36,6 @@ interface BaseDao<T> {
     fun fetchLike(): Flow<List<T>>
 
     suspend fun like(id: Int, like: Boolean)
+
+    suspend fun checkExist(title: String, image: String): Boolean
 }

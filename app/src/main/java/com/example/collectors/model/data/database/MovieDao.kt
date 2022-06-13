@@ -1,22 +1,22 @@
-package com.example.collectors.database
+package com.example.collectors.model.data.database
 
 import androidx.room.*
-import com.example.collectors.Constants
+import com.example.collectors.utils.Constants
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface MovieDao : BaseDao<MovieEntity>{
+interface MovieDao : BaseDao<MovieEntity> {
 
     @Query("DELETE FROM `${Constants.TABLE_MOVIE_LIST}` WHERE id = :id")
     override suspend fun delete(id: Int)
 
     @Query("DELETE FROM `${Constants.TABLE_MOVIE_LIST}` WHERE id in (:idSet)")
-    override suspend fun deleteIdList(idSet: Set<Int>)
+    override suspend fun deleteIdSet(idSet: Set<Int>)
 
     @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}` WHERE id = :id")
     override fun fetchData(id: Int): Flow<MovieEntity>
 
-    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` ORDER BY id DESC")
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` ORDER BY id DESC LIMIT 10")
     override fun fetchAllBasicInfo(): Flow<List<BasicInfo>>
 
     @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value ORDER BY id ASC")

@@ -1,74 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="120dp"
-        android:layout_height="170dp"
-        android:elevation="10dp"
-        app:cardCornerRadius="8dp">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="mainActivity"
+            type="com.example.collectors.view.activities.MainActivity" />
+        <!--
+        <variable
+            name="itemListActivity"
+            type="com.example.collectors.view.activities.ItemListActivity" />
+            -->
+        <variable
+            name="item"
+            type="com.example.collectors.model.data.database.BasicInfo" />
+        <variable
+            name="category"
+            type="String" />
+        <variable
+            name="ratingVisibility"
+            type="Boolean" />
+        <variable
+            name="viewmodel"
+            type="com.example.collectors.viewmodel.ItemViewModel" />
+    </data>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/ivItemImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:foreground="@drawable/gradient_shape"
-                android:scaleType="centerCrop"
-                tools:srcCompat="@drawable/cat_image" />
-
-            <ImageView
-                android:id="@+id/ivLike"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="top|end"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/ic_like" />
-
-            <ImageView
-                android:id="@+id/ivChecked"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="start|top"
-                android:layout_margin="5dp"
-                android:background="@drawable/checkedimage_background"
-                android:visibility="gone"
-                app:srcCompat="@drawable/ic_checked" />
-
-            <TextView
-                android:id="@+id/tvTitleItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_margin="5dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:padding="3dp"
-                android:text="Movie Title"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-        </FrameLayout>
-    </androidx.cardview.widget.CardView>
-
-    <RatingBar
-        android:id="@+id/myRatingBar"
-        style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_margin="5dp"
-        android:isIndicator="true"
-        android:numStars="5"
-        android:rating="3"
-        android:stepSize="0.5"
-        android:theme="@style/RatingBar" />
+        android:orientation="vertical">
 
-</LinearLayout>
+        <androidx.cardview.widget.CardView
+            android:layout_width="120dp"
+            android:layout_height="170dp"
+            android:elevation="10dp"
+            app:cardCornerRadius="8dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/ivItemImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/cat_image"
+                    app:image="@{item.image}"/>
+                    <!--app:drawable="@{viewmodel.selectedIdSet.contains(item.id)}"-->
+
+                <ImageView
+                    android:id="@+id/ivLike"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="top|end"
+                    android:layout_margin="5dp"
+                    android:visibility="@{item.like ? View.VISIBLE : View.GONE}" />
+
+                <ImageView
+                    android:id="@+id/ivChecked"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="start|top"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/checkedimage_background"
+                    app:srcCompat="@drawable/ic_checked"
+                    android:visibility="gone"/>
+                <!--android:visibility="@{viewmodel.selectedIdSet.contains(item.id) ? View.VISIBLE : View.GONE}"-->
+
+                <TextView
+                    android:id="@+id/tvTitleItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:padding="3dp"
+                    android:text="@{item.title}"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+
+        <RatingBar
+            android:id="@+id/myRatingBar"
+            style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:rating="@{item.rate}"
+            android:stepSize="0.5"
+            android:theme="@style/RatingBar"
+            android:visibility="@{ratingVisibility ? View.VISIBLE : View.GONE}"/>
+
+    </LinearLayout>
+</layout>

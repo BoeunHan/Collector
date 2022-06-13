@@ -1,14 +1,11 @@
-package com.example.collectors.database
+package com.example.collectors.model.data.database
 
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
-import com.example.collectors.Constants
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 interface BaseDao<T> {
-    @Insert
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(obj: T)
 
     @Update
@@ -19,7 +16,7 @@ interface BaseDao<T> {
 
     suspend fun delete(id: Int)
 
-    suspend fun deleteIdList(idSet: Set<Int>)
+    suspend fun deleteIdSet(idSet: Set<Int>)
 
     fun fetchData(id: Int): Flow<T>
 

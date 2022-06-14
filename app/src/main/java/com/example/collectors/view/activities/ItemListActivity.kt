@@ -13,6 +13,7 @@ import com.example.collectors.utils.Constants
 import com.example.collectors.R
 import com.example.collectors.model.data.database.BasicInfo
 import com.example.collectors.databinding.ActivityItemListBinding
+import com.example.collectors.databinding.RemoveDialogBinding
 import com.example.collectors.databinding.SortDialogBinding
 import com.example.collectors.view.adapters.ItemAdapter
 import com.example.collectors.viewmodel.ItemViewModel
@@ -36,6 +37,7 @@ class ItemListActivity : AppCompatActivity() {
 
     private lateinit var sortDialog: BottomSheetDialog
 
+    private lateinit var category: String
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,15 +50,13 @@ class ItemListActivity : AppCompatActivity() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
-        viewModel.setMainMode(false)
-        //viewModel.getResult()
 
         rvItemList = binding.rvItemList
         rvItemList?.layoutManager = GridLayoutManager(this, 3)
 
 
-        val category = intent.getStringExtra(Constants.CATEGORY)
-        viewModel.setCategory(category!!)
+        category = intent.getStringExtra(Constants.CATEGORY)!!
+        viewModel.setCategory(category)
         binding.category = category
 
         lifecycleScope.launch {
@@ -76,7 +76,7 @@ class ItemListActivity : AppCompatActivity() {
             binding.isEmpty = true
         } else {
             binding.isEmpty = false
-            itemAdapter = ItemAdapter(list)
+            itemAdapter = ItemAdapter(list, category, this@ItemListActivity, viewModel)
             rvItemList?.adapter = itemAdapter
         }
 
@@ -98,7 +98,9 @@ class ItemListActivity : AppCompatActivity() {
 
     fun showRemoveDialog(view: View) {
         removeDialog = BottomSheetDialog(this, R.style.CustomBottomSheetDialog)
-        removeDialog?.setContentView(R.layout.remove_dialog)
+        val binding = RemoveDialogBinding.inflate(layoutInflater)
+        binding.activity = this
+        removeDialog?.setContentView(binding.root)
         removeDialog?.setCancelable(true)
         removeDialog?.show()
     }
@@ -106,15 +108,11 @@ class ItemListActivity : AppCompatActivity() {
     fun onClickRemoveDialog(view: View) {
         if (view.id == R.id.btRemoveCheck) {
             viewModel.removeSelectedItems()
-            viewModel.setSelectMode(false)
         }
         removeDialog?.dismiss()
     }
 
-    fun reverseSelectMode(view: View) {
-        if (viewModel.selectMode.value) viewModel.setSelectMode(false)
-        else viewModel.setSelectMode(true)
-    }
+
 
     fun searchItems(category: String) {
         var intent: Intent? = null
@@ -129,16 +127,16 @@ class ItemListActivity : AppCompatActivity() {
         intent?.putExtra(Constants.CATEGORY, category)
         startActivity(intent)
     }
-    /*
+
     fun getItemDetail(category: String, id: Int){
         when (category) {
-            "MOVIE" -> {
+            "MOVIE" -> {/*
                 val intent = Intent(this, MovieDetailActivity::class.java)
                 intent.putExtra(Constants.ID, id)
-                startActivity(intent)
+                startActivity(intent)*/
             }
         }
-    }*/
+    }
 
     override fun onStop() {
         super.onStop()
@@ -147,7 +145,7 @@ class ItemListActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.setMainMode(true)
+       //viewModel.setMainMode(true)
         viewModel.clear()
     }
 }

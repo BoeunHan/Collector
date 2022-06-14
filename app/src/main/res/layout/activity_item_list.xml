@@ -41,7 +41,7 @@
                 android:text="@{viewmodel.selectMode? `취소` : `선택`}"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:onClick="@{activity::reverseSelectMode}"/>
+                android:onClick="@{viewmodel::reverseSelectMode}"/>
 
             <TextView
                 android:id="@+id/tvListCategory"
@@ -117,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="2dp"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="@{viewmodel.sortModeName}"
                 android:textColor="@color/textColor"
                 android:textSize="12sp"
@@ -130,7 +130,16 @@
                 app:srcCompat="@drawable/ic_sort"
                 android:onClick="@{activity::showSortDialog}" />
         </LinearLayout>
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="2dp"
+            android:gravity="end"
+            android:text="@{viewmodel.selectedIdSet.toString()}"
+            android:textColor="@color/textColor"
+            android:textSize="12sp"
+            android:onClick="@{activity::showSortDialog}"/>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -159,7 +168,7 @@
                 android:layout_gravity="end|bottom"
                 android:layout_margin="16dp"
                 android:backgroundTint="@color/white"
-                android:enabled="@{viewmodel.selectedIdSet.empty ? false : true}"
+                android:enabled="@{viewmodel.isSelectedEmpty ? false : true}"
                 android:src="@drawable/ic_delete"
                 android:visibility="@{viewmodel.selectMode ? View.VISIBLE : View.GONE}"
                 app:backgroundTint="@drawable/fab_remove_selector"

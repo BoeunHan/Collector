@@ -17,6 +17,7 @@ import com.example.collectors.databinding.MainListItemViewBinding
 import com.example.collectors.model.data.database.BasicInfo
 import com.example.collectors.utils.Constants
 import com.example.collectors.view.adapters.CategoryAdapter
+import com.example.collectors.view.adapters.ItemAdapter
 import com.example.collectors.view.adapters.SecondAdapter
 import com.example.collectors.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
-        viewModel.setMainMode(true)
+        //viewModel.setMainMode(true)
 
         val rvMain = binding.rvMain
         val layoutManager = LinearLayoutManager(this)
@@ -96,8 +97,8 @@ class MainActivity : AppCompatActivity() {
         layoutManager.orientation = LinearLayoutManager.HORIZONTAL
         recyclerview.layoutManager = layoutManager
 
-        recyclerview.adapter = SecondAdapter(
-            list, category, this@MainActivity
+        recyclerview.adapter = ItemAdapter(
+            list, category, this@MainActivity, viewModel
         )
     }
 
@@ -144,5 +145,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
         startActivity(intent)
+    }
+    fun getItemDetail(category: String, id: Int){
+        when (category) {
+            "MOVIE" -> {/*
+                val intent = Intent(this, MovieDetailActivity::class.java)
+                intent.putExtra(Constants.ID, id)
+                startActivity(intent)*/
+            }
+        }
     }
 }

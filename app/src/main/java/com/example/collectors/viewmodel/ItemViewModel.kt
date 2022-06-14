@@ -50,12 +50,13 @@ class ItemViewModel @Inject constructor(
 
     private var category = ""
 
-    private var _selectedIdSet = MutableStateFlow(HashSet<Int>())
+    private val _selectedIdSet = MutableStateFlow(HashSet<Int>())
     val selectedIdSet = _selectedIdSet.asStateFlow()
 
+    val isSelectedEmpty = MutableStateFlow(true)
 
-    private var _mainMode = MutableStateFlow(true)
-    val mainMode = _mainMode.asStateFlow()
+    //private var _mainMode = MutableStateFlow(true)
+    //val mainMode = _mainMode.asStateFlow()
     private var _selectMode = MutableStateFlow(false)
     val selectMode = _selectMode.asStateFlow()
 
@@ -130,6 +131,7 @@ class ItemViewModel @Inject constructor(
 
                 }
             }
+            setSelectMode(false)
         }
     }
 
@@ -174,23 +176,34 @@ class ItemViewModel @Inject constructor(
         searchValue.update { "" }
     }
 
-    fun onClickItem(view: View, id: Int) {
-        if (_selectedIdSet.value.contains(id)) _selectedIdSet.value.remove(id)
-        else _selectedIdSet.value.add(id)
-    }
+    fun onClickItem(id: Int) {
+        if (_selectedIdSet.value.contains(id)) _selectedIdSet.update { it.remove(id); it }
+        else _selectedIdSet.update { it.add(id); it }
 
+        if(_selectedIdSet.value.isEmpty()) isSelectedEmpty.update { true }
+        else isSelectedEmpty.update { false }
+        Log.e("selectedIdSet",selectedIdSet.value.toString())
+    }
+/*
     fun setMainMode(boolean: Boolean) {
         _mainMode.value = boolean
         if (boolean) {
             _movieDetail.value = null
         }
     }
-
+*/
     fun setSelectMode(boolean: Boolean) {
         _selectMode.value = boolean
         if (!boolean) {
             _selectedIdSet.value.clear()
         }
+
+    Log.e("select mode",_selectMode.value.toString())
+    }
+
+    fun reverseSelectMode(view: View) {
+        setSelectMode(!_selectMode.value)
+        Log.e("select mode",_selectMode.value.toString())
     }
 
     fun getMovieDetail(id: Int) {

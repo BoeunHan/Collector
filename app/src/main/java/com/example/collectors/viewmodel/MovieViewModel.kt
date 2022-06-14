@@ -2,6 +2,7 @@ package com.example.collectors.viewmodel
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.EditText
 import android.widget.RatingBar
 import androidx.lifecycle.ViewModel
@@ -22,11 +23,7 @@ data class MovieStatus(
     var id: Int = 0,
     var title: String = "",
     var image: String = "",
-    var rate: Float = 0.0f,
-    var summary: String = "",
-    var review: String = "",
     var uploadDate: String = "",
-    var editDate: String = "",
     var like: Boolean = false
 )
 
@@ -35,73 +32,56 @@ class MovieViewModel @Inject constructor(
     val movieRepository: MovieRepository
 ) : ViewModel() {
 
-    private var _movieStatus: MutableStateFlow<MovieStatus?> = MutableStateFlow(null)
-    val movieStatus = _movieStatus.asStateFlow()
+    var movieStatus = MovieStatus()
+
+    var rate = MutableStateFlow(0.0f)
+    var summary = MutableStateFlow("")
+    var review = MutableStateFlow("")
 
 
-    fun setMovieStatus(movieEntity: MovieEntity){
-        _movieStatus.value = MovieStatus(
-            movieEntity.id,
-            movieEntity.title,
-            movieEntity.image,
-            movieEntity.rate,
-            movieEntity.summary,
-            movieEntity.review,
-            movieEntity.uploadDate,
-            movieEntity.editDate,
-            movieEntity.like
-        )
+    init {
+
     }
-    fun setMovieStatus(title: String, image: String){
-        _movieStatus.value = MovieStatus(
+    fun setMovieStatus(movieEntity: MovieEntity) {
+        movieStatus = movieStatus.copy(
+            id = movieEntity.id,
+            title = movieEntity.title,
+            image = movieEntity.image,
+            uploadDate = movieEntity.uploadDate,
+            like = movieEntity.like
+        )
+        rate.update { movieEntity.rate }
+        summary.update { movieEntity.summary }
+        review.update { movieEntity.review }
+    }
+
+    fun setMovieStatus(title: String, image: String) {
+        movieStatus = movieStatus.copy(
             title = title,
             image = image
         )
     }
 
-
-    fun onClickSave(){
+    fun onClickSave() {
         val date = Date()
         val sdf = SimpleDateFormat("dd MMM, yyyy")
         val datestr = sdf.format(date)
 
         val movie = MovieEntity(
-            _movieStatus.value?.id!!,
-            _movieStatus.value?.title!!,
-            _movieStatus.value?.image!!,
-            _movieStatus.value?.rate!!,
-            _movieStatus.value?.summary!!,
-            _movieStatus.value?.review!!,
-            if(_movieStatus.value?.uploadDate=="") datestr else _movieStatus.value?.uploadDate!!,
-            if(_movieStatus.value?.uploadDate=="") "" else datestr,
-            _movieStatus.value?.like!!
+            movieStatus.id,
+            movieStatus.title,
+            movieStatus.image,
+            rate.value,
+            summary.value,
+            review.value,
+            if (movieStatus.uploadDate == "") datestr else movieStatus.uploadDate,
+            if (movieStatus.uploadDate == "") "" else datestr,
+            movieStatus.like
         )
 
         viewModelScope.launch {
             movieRepository.insert(movie)
         }
-        _movieStatus.value = null
+        movieStatus = MovieStatus()
     }
-
-    fun onRatingChanged(ratingBar: RatingBar, rating: Float, fromUser: Boolean){
-        _movieStatus.value?.rate = rating
-    }
-
-    inner class MyTextWatcher(private val editText: EditText) : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-        override fun afterTextChanged(p0: Editable?) {}
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            when(editText.id){
-                R.id.etSummary -> {
-                    _movieStatus.value?.summary = p0.toString()
-                }
-                R.id.etReview -> {
-                    _movieStatus.value?.review = p0.toString()
-                }
-            }
-        }
-    }
-
-
-
 }

@@ -49,7 +49,8 @@
                 android:background="@null"
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/ic_add"
-                android:onClick="@{()->activity.onClickAdd(category)}"/>
+                android:onClick="@{()->activity.onClickAdd(category)}"
+                android:contentDescription="add" />
 
             <ImageButton
                 android:id="@+id/btMore"
@@ -58,7 +59,8 @@
                 android:background="@null"
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/ic_more"
-                android:onClick="@{()->activity.onClickMore(category)}"/>
+                android:onClick="@{()->activity.onClickMore(category)}"
+                android:contentDescription="more" />
 
         </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.example.collectors.view.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -20,16 +21,18 @@ class AddMovieActivity : AppCompatActivity() {
 
     var myMovie: MovieEntity? = null
 
-    private var binding: ActivityAddMovieBinding? = null
+    private lateinit var binding: ActivityAddMovieBinding
     private val viewModel: MovieViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityAddMovieBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbarMovieAddEdit)
 
-        setSupportActionBar(binding?.toolbarMovieAddEdit)
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner = this
 
         movieImage = intent.getStringExtra(Constants.IMAGE)       //add의 경우
         movieTitle = intent.getStringExtra(Constants.TITLE)

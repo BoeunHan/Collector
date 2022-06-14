@@ -13,8 +13,8 @@ object Constants {
     const val NAVER_API_ID = "AHx25CUEHS8itsVYc_3V"
     const val NAVER_API_SECRET = "gdGsd5BfO1"
 
-    const val MOVIE_IMAGE = "movie_image"
-    const val MOVIE_TITLE = "movie_title"
+    const val IMAGE = "image"
+    const val TITLE = "title"
     const val SELECTED_MOVIE = "selected_movie"
     const val CATEGORY = "category"
     const val ID = "id"

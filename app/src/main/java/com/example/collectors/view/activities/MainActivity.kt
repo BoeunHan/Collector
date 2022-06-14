@@ -1,6 +1,7 @@
 package com.example.collectors.view.activities
 
 import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,11 +15,13 @@ import com.example.collectors.databinding.ActivityMainBinding
 import com.example.collectors.databinding.CategoryDialogBinding
 import com.example.collectors.databinding.MainListItemViewBinding
 import com.example.collectors.model.data.database.BasicInfo
+import com.example.collectors.utils.Constants
 import com.example.collectors.view.adapters.CategoryAdapter
 import com.example.collectors.view.adapters.SecondAdapter
 import com.example.collectors.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @FlowPreview
@@ -38,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.activity = this
         binding.viewmodel = viewModel
+        binding.lifecycleOwner = this
 
         viewModel.setMainMode(true)
         viewModel.setMainList()
@@ -48,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         rvMain.layoutManager = layoutManager
 
         lifecycleScope.launch {
-            viewModel.categoryList.collect { list ->
+            viewModel.categoryList.collectLatest { list ->
                 val arrayList = ArrayList<String>()
                 for(i in list) arrayList.add(i)
                 categoryList = arrayList
@@ -121,5 +125,26 @@ class MainActivity : AppCompatActivity() {
 
     fun containsCategory(category: String): Boolean{
         return categoryList.contains(category)
+    }
+
+    fun onClickAdd(category: String){
+        lateinit var intent: Intent
+        when(category) {
+            "MOVIE"->{
+                intent = Intent(this, SearchActivity::class.java)
+                intent.putExtra(Constants.CATEGORY, category)
+            }
+        }
+        startActivity(intent)
+    }
+    fun onClickMore(category: String){
+        lateinit var intent: Intent
+        when(category) {
+            "MOVIE"->{
+                //intent = Intent(this, ItemListActivity::class.java)
+                intent.putExtra(Constants.CATEGORY, category)
+            }
+        }
+        startActivity(intent)
     }
 }

@@ -74,20 +74,21 @@ class ItemViewModel @Inject constructor(
         categoryRepository.setCategory(list)
         setMainList()
     }
-    fun setMainList() {
-        for (i in _categoryList.value) {
-                when (i) {
-                    "MOVIE" -> {
-                        movieJob?.cancel()
-                        movieJob = viewModelScope.launch {
-                            movieRepository.fetchAllBasicInfo()
-                                .collect { _movieList.update { it }}
-                        }
-                    }
-                }
 
+    fun setMainList() {
+        if (_categoryList.value.contains("MOVIE")) {
+            movieJob?.cancel()
+            movieJob = viewModelScope.launch {
+                movieRepository.fetchAllBasicInfo()
+                    .collect { list ->
+                        val arrayList = ArrayList<BasicInfo>()
+                        for (j in list) arrayList.add(j)
+                        _movieList.update { arrayList }
+                    }
+            }
         }
     }
+
     fun getResult() {
         viewModelScope.launch {
             _searchValue

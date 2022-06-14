@@ -42,7 +42,6 @@ class SearchViewModel @Inject constructor(
                 .debounce(500)
                 .filter{ it.isNotEmpty() }
                 .onEach{
-                Log.e("searchvalue", it)
                     setMovieSearchResult(it) }
                 .launchIn(this)
         }

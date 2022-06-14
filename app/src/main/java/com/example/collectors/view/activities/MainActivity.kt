@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         viewModel.setMainMode(true)
-        viewModel.setMainList()
 
         val rvMain = binding.rvMain
         val layoutManager = LinearLayoutManager(this)
@@ -72,7 +71,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setCategoryList(category: String, recyclerview: RecyclerView) {
-        val binding = MainListItemViewBinding.inflate(layoutInflater)
         lifecycleScope.launch {
             when (category) {
                 "MOVIE" -> {
@@ -141,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         lateinit var intent: Intent
         when(category) {
             "MOVIE"->{
-                //intent = Intent(this, ItemListActivity::class.java)
+                intent = Intent(this, ItemListActivity::class.java)
                 intent.putExtra(Constants.CATEGORY, category)
             }
         }

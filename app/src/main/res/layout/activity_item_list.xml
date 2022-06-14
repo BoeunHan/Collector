@@ -13,6 +13,9 @@
         <variable
             name="activity"
             type="com.example.collectors.view.activities.ItemListActivity" />
+        <variable
+            name="category"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -46,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@{viewmodel.category}"
+                android:text="@{category}"
                 android:textColor="@color/textColor"
                 android:textSize="20sp" />
 
@@ -57,7 +60,7 @@
                 android:layout_margin="5dp"
                 android:background="@null"
                 app:srcCompat="@drawable/ic_add"
-                android:onClick="@{()->activity.searchItems(viewmodel.category)}"/>
+                android:onClick="@{()->activity.searchItems(category)}"/>
         </LinearLayout>
 
         <View
@@ -97,7 +100,7 @@
                     android:inputType="textPersonName"
                     android:textColor="@color/textColor"
                     android:textSize="18sp"
-                    android:text="@{viewmodel.searchValue}"/>
+                    android:text="@={viewmodel.searchValue}"/>
 
                 <ImageView
                     android:id="@+id/btCancel"
@@ -115,7 +118,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="2dp"
                 android:gravity="right"
-                android:text="최신순"
+                android:text="@{viewmodel.sortModeName}"
                 android:textColor="@color/textColor"
                 android:textSize="12sp"
                 android:onClick="@{activity::showSortDialog}"/>

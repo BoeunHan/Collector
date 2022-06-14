@@ -12,6 +12,7 @@ import com.example.collectors.model.data.database.MovieEntity
 import com.example.collectors.model.repository.CategoryRepository
 import com.example.collectors.model.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -20,6 +21,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
+
+enum class SortField{
+    DATE, RATE
+}
+enum class SortType{
+    ASCENDING, DESCENDING
+}
 
 @FlowPreview
 @HiltViewModel
@@ -30,16 +38,17 @@ class ItemViewModel @Inject constructor(
     private var _categoryList = MutableStateFlow(ArrayList<String>())
     val categoryList = _categoryList.asStateFlow()
 
-    private var _searchValue = MutableStateFlow("")
-    val searchValue = _searchValue.asStateFlow()
+    var searchValue = MutableStateFlow("")
 
-    private var _movieList = MutableStateFlow(ArrayList<BasicInfo>())
-    val movieList = _movieList.asStateFlow()
 
-    private var _sortMode = MutableStateFlow(1)
+    val movieList = movieRepository.fetchAllBasicInfo()
 
-    private var _category = ""
-    val category = _category
+
+    private var sortFlow = MutableStateFlow(Triple(SortField.DATE, SortType.DESCENDING, searchValue.value))
+
+    var sortModeName = MutableStateFlow("최신순")
+
+    private var category = ""
 
     private var _selectedIdSet = MutableStateFlow(HashSet<Int>())
     val selectedIdSet = _selectedIdSet.asStateFlow()
@@ -51,7 +60,6 @@ class ItemViewModel @Inject constructor(
     val selectMode = _selectMode.asStateFlow()
 
 
-
     private var _movieDetail: MutableStateFlow<MovieEntity?> = MutableStateFlow(null)
     val movieDetail = _movieDetail.asStateFlow()
 
@@ -59,84 +67,62 @@ class ItemViewModel @Inject constructor(
     private var movieJob: Job? = null
     private var bookJob: Job? = null
 
-    init{
+    init {
         fetchCategoryList()
-        setMainList()
-        //getResult()
+        getResult()
     }
 
-    private fun fetchCategoryList(){
+    private fun fetchCategoryList() {
         _categoryList.update { categoryRepository.getCategory() }
 
     }
-    fun setCategoryList(list: ArrayList<String>){
+
+    fun setCategoryList(list: ArrayList<String>) {
         _categoryList.update { list }
         categoryRepository.setCategory(list)
-        setMainList()
     }
 
-    fun setMainList() {
-        if (_categoryList.value.contains("MOVIE")) {
-            movieJob?.cancel()
-            movieJob = viewModelScope.launch {
-                movieRepository.fetchAllBasicInfo()
-                    .collect { list ->
-                        val arrayList = ArrayList<BasicInfo>()
-                        for (j in list) arrayList.add(j)
-                        _movieList.update { arrayList }
-                    }
-            }
-        }
-    }
 
     fun getResult() {
         viewModelScope.launch {
-            _searchValue
+            searchValue
                 .debounce(500)
-                .filter { it.isNotEmpty() }
-                .onEach { setItemList(it) }
+                .onEach { value -> sortFlow.update { it.copy(third = value)  }
+                    Log.e("searchvalue",value)}
                 .launchIn(this)
         }
     }
 
-    private suspend fun setItemList(value: String){
-        _sortMode.collect {
-            fetchJob?.cancel()
+    @ExperimentalCoroutinesApi
+    val itemList = sortFlow.flatMapLatest{
+        when(it.first){
+            SortField.DATE -> {
+                when(it.second){
+                    SortType.DESCENDING -> {
+                        movieRepository.searchBasicInfoDateDescending("%${it.third}%")
+                    }
+                    SortType.ASCENDING -> {
+                        movieRepository.searchBasicInfoDateAscending("%${it.third}%")
+                    }
+                }
+            }
+            SortField.RATE -> {
+                when(it.second){
+                    SortType.DESCENDING -> {
+                        movieRepository.searchBasicInfoRateDescending("%${it.third}%")
+                    }
+                    SortType.ASCENDING -> {
+                        movieRepository.searchBasicInfoRateAscending("%${it.third}%")
+                    }
+                }
+            }
+        }
+    }
+
+
+    fun removeSelectedItems() {
+        viewModelScope.launch {
             when (category) {
-                "MOVIE" -> fetchJob = setMovieList(value, it)
-                //"BOOK" ->
-            }
-        }
-    }
-    private fun setMovieList(value: String, sortMode: Int): Job{
-
-        return viewModelScope.launch {
-            when (sortMode) {
-                1 -> {
-                    movieRepository.searchBasicInfoDateDescending(value)
-                        .collect { _movieList.value = it as ArrayList }
-                }
-                2 -> {
-                    movieRepository.searchBasicInfoDateAscending(value)
-                        .collect { _movieList.value = it as ArrayList }
-                }
-                3 -> {
-                    movieRepository.searchBasicInfoRateDescending(value)
-                        .collect { _movieList.value = it as ArrayList }
-                }
-                4 -> {
-                    movieRepository.searchBasicInfoRateAscending(value)
-                        .collect { _movieList.value = it as ArrayList }
-                }
-            }
-        }
-
-    }
-
-
-    fun removeSelectedItems(){
-        viewModelScope.launch{
-            when (_category) {
                 "MOVIE" -> {
                     movieRepository.deleteIdSet(_selectedIdSet.value)
                 }
@@ -146,52 +132,70 @@ class ItemViewModel @Inject constructor(
             }
         }
     }
-    fun setMode(view: View){
+
+    fun setMode(view: View) {
         when (view.id) {
-            R.id.btDateDescending -> {_sortMode.value = 1}
-            R.id.btDateAscending -> {_sortMode.value = 2}
-            R.id.btRateDescending -> {_sortMode.value = 3}
-            R.id.btRateAscending -> {_sortMode.value = 4}
-        }
-    }
-    fun setCategory(category: String){
-        _category = category
-    }
-    inner class MyTextWatcher : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-        override fun afterTextChanged(p0: Editable?) {}
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            _searchValue.value = p0.toString()
+            R.id.btDateDescending -> {
+                sortFlow.update{
+                    it.copy(first = SortField.DATE, second = SortType.DESCENDING)
+                }
+                sortModeName.update { "최신순" }
+            }
+            R.id.btDateAscending -> {
+                sortFlow.update{
+                    it.copy(first = SortField.DATE, second = SortType.ASCENDING)
+                }
+                sortModeName.update { "오래된순" }
+            }
+            R.id.btRateDescending -> {
+                sortFlow.update{
+                    it.copy(first = SortField.RATE, second = SortType.DESCENDING)
+                }
+                sortModeName.update { "별점높은순" }
+            }
+            R.id.btRateAscending -> {
+                sortFlow.update{
+                    it.copy(first = SortField.RATE, second = SortType.ASCENDING)
+                }
+                sortModeName.update { "별점낮은순" }
+            }
         }
     }
 
-    fun clear(){
-        _searchValue.value = ""
+    fun setCategory(category: String) {
+        this.category = category
     }
 
-    fun clear(view: View){
-        _searchValue.value = ""
+    fun clear() {
+        searchValue.update { "" }
     }
-    fun onClickItem(view: View, id: Int){
-        if(_selectedIdSet.value.contains(id)) _selectedIdSet.value.remove(id)
+
+    fun clear(view: View) {
+        searchValue.update { "" }
+    }
+
+    fun onClickItem(view: View, id: Int) {
+        if (_selectedIdSet.value.contains(id)) _selectedIdSet.value.remove(id)
         else _selectedIdSet.value.add(id)
     }
-    fun setMainMode(boolean: Boolean){
+
+    fun setMainMode(boolean: Boolean) {
         _mainMode.value = boolean
-        if(boolean){
+        if (boolean) {
             _movieDetail.value = null
         }
     }
-    fun setSelectMode(boolean: Boolean){
+
+    fun setSelectMode(boolean: Boolean) {
         _selectMode.value = boolean
-        if(!boolean){
+        if (!boolean) {
             _selectedIdSet.value.clear()
         }
     }
 
     fun getMovieDetail(id: Int) {
         viewModelScope.launch {
-            when (_category) {
+            when (category) {
                 "MOVIE" -> {
                     movieRepository.fetchData(id).collect {
                         _movieDetail.value = it
@@ -200,9 +204,10 @@ class ItemViewModel @Inject constructor(
             }
         }
     }
-    private fun setLike(id: Int, like: Boolean){
+
+    private fun setLike(id: Int, like: Boolean) {
         viewModelScope.launch {
-            when (_category) {
+            when (category) {
                 "MOVIE" -> {
                     movieRepository.like(id, like)
                 }
@@ -210,10 +215,8 @@ class ItemViewModel @Inject constructor(
         }
     }
 
-    fun onClickLike(){
-        if(movieDetail.value!!.like) setLike(movieDetail.value!!.id, false)
+    fun onClickLike() {
+        if (movieDetail.value!!.like) setLike(movieDetail.value!!.id, false)
         else setLike(movieDetail.value!!.id, true)
     }
-
-
 }

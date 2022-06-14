@@ -38,10 +38,6 @@ class MovieViewModel @Inject constructor(
     var summary = MutableStateFlow("")
     var review = MutableStateFlow("")
 
-
-    init {
-
-    }
     fun setMovieStatus(movieEntity: MovieEntity) {
         movieStatus = movieStatus.copy(
             id = movieEntity.id,

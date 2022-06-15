@@ -3,27 +3,21 @@ package com.example.collectors.utils
 import android.os.Build
 import android.text.Html
 import android.util.Log
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.collectors.R
-import com.example.collectors.model.data.database.BasicInfo
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 
 @BindingAdapter("image")
-fun loadImage(view: ImageView, url: String){
-    if(url!="")  Glide.with(view).load(url).into(view)
-    else {
+fun loadImage(view: ImageView, url: String?){
+    if(url==""|| url==null){
         view.scaleType = ImageView.ScaleType.CENTER
         Glide.with(view).load(R.drawable.ic_no_image).into(view)
     }
+    else  Glide.with(view).load(url).into(view)
 }
 
 @RequiresApi(Build.VERSION_CODES.M)

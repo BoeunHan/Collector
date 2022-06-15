@@ -49,23 +49,6 @@ class ItemViewModel @Inject constructor(
 
     var sortModeName = MutableStateFlow("최신순")
 
-    private var category = ""
-
-    val selectedIdSet = HashSet<Int>()
-    val selectedHolderSet = HashSet<ItemAdapter.MyViewHolder>()
-
-    val isSelectedEmpty = MutableStateFlow(true)
-
-    private var _selectMode = MutableStateFlow(false)
-    val selectMode = _selectMode.asStateFlow()
-
-
-    private var _movieDetail: MutableStateFlow<MovieEntity?> = MutableStateFlow(null)
-    val movieDetail = _movieDetail.asStateFlow()
-
-    private var fetchJob: Job? = null
-    private var movieJob: Job? = null
-    private var bookJob: Job? = null
 
     init {
         fetchCategoryList()
@@ -83,7 +66,7 @@ class ItemViewModel @Inject constructor(
     }
 
 
-    fun getResult() {
+    private fun getResult() {
         viewModelScope.launch {
             searchValue
                 .debounce(500)
@@ -119,18 +102,16 @@ class ItemViewModel @Inject constructor(
         }
     }
 
-
-    fun removeSelectedItems() {
+    fun removeItem(category: String, id: Int){
         viewModelScope.launch {
             when (category) {
                 "MOVIE" -> {
-                    movieRepository.deleteIdSet(selectedIdSet)
+                    movieRepository.delete(id)
                 }
                 "BOOK" -> {
 
                 }
             }
-            setSelectMode(false)
         }
     }
 
@@ -163,10 +144,6 @@ class ItemViewModel @Inject constructor(
         }
     }
 
-    fun setCategory(category: String) {
-        this.category = category
-    }
-
     fun clear() {
         searchValue.update { "" }
     }
@@ -175,60 +152,7 @@ class ItemViewModel @Inject constructor(
         searchValue.update { "" }
     }
 
-    fun onClickItem(holder: ItemAdapter.MyViewHolder, id: Int) {
-        if (selectedIdSet.contains(id)) {
-            selectedIdSet.remove(id)
-            holder.isSelected.update { false }
-            selectedHolderSet.remove(holder)
-        }
-        else {
-            selectedIdSet.add(id)
-            holder.isSelected.update { true }
-            selectedHolderSet.add(holder)
-        }
+    fun getMovieDetail(id: Int) = movieRepository.fetchData(id)
 
-        if(selectedIdSet.isEmpty()) isSelectedEmpty.update { true }
-        else isSelectedEmpty.update { false }
-    }
-
-    fun setSelectMode(boolean: Boolean) {
-        _selectMode.value = boolean
-        if (!boolean) {
-            for(i in selectedHolderSet) i.isSelected.update { false }
-            selectedHolderSet.clear()
-            selectedIdSet.clear()
-            isSelectedEmpty.update { true }
-        }
-    }
-
-    fun reverseSelectMode(view: View) {
-        setSelectMode(!_selectMode.value)
-    }
-
-    fun getMovieDetail(id: Int) {
-        viewModelScope.launch {
-            when (category) {
-                "MOVIE" -> {
-                    movieRepository.fetchData(id).collect {
-                        _movieDetail.value = it
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setLike(id: Int, like: Boolean) {
-        viewModelScope.launch {
-            when (category) {
-                "MOVIE" -> {
-                    movieRepository.like(id, like)
-                }
-            }
-        }
-    }
-
-    fun onClickLike() {
-        if (movieDetail.value!!.like) setLike(movieDetail.value!!.id, false)
-        else setLike(movieDetail.value!!.id, true)
-    }
+    suspend fun setMovieLike(id: Int, like: Boolean) = movieRepository.like(id, like)
 }

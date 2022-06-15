@@ -50,21 +50,19 @@ class ItemListActivity : AppCompatActivity() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
-
-
         rvItemList = binding.rvItemList
         rvItemList?.layoutManager = GridLayoutManager(this, 3)
 
 
         category = intent.getStringExtra(Constants.CATEGORY)!!
-        viewModel.setCategory(category)
+
         binding.category = category
 
         lifecycleScope.launch {
 
             viewModel.itemList.collect {
                 val arrayList = ArrayList<BasicInfo>()
-                for(i in it) arrayList.add(i)
+                for (i in it) arrayList.add(i)
                 setItemAdapter(arrayList)
             }
         }
@@ -77,7 +75,7 @@ class ItemListActivity : AppCompatActivity() {
             binding.isEmpty = true
         } else {
             binding.isEmpty = false
-            itemAdapter = ItemAdapter(list, category, this@ItemListActivity, viewModel)
+            itemAdapter = ItemAdapter(list, category, this@ItemListActivity)
             rvItemList?.adapter = itemAdapter
         }
 
@@ -97,22 +95,24 @@ class ItemListActivity : AppCompatActivity() {
         sortDialog.dismiss()
     }
 
-    fun showRemoveDialog(view: View) {
+    fun onLongClickItem(id: Int): Boolean {
         removeDialog = BottomSheetDialog(this, R.style.CustomBottomSheetDialog)
         val binding = RemoveDialogBinding.inflate(layoutInflater)
         binding.activity = this
+        binding.id = id
+        binding.category = category
         removeDialog?.setContentView(binding.root)
         removeDialog?.setCancelable(true)
         removeDialog?.show()
+        return true
     }
 
-    fun onClickRemoveDialog(view: View) {
+    fun onClickRemoveDialog(view: View, category: String, id: Int) {
         if (view.id == R.id.btRemoveCheck) {
-            viewModel.removeSelectedItems()
+            viewModel.removeItem(category, id)
         }
         removeDialog?.dismiss()
     }
-
 
 
     fun searchItems(category: String) {
@@ -129,23 +129,21 @@ class ItemListActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun getItemDetail(category: String, id: Int){
+    fun getItemDetail(category: String, id: Int) {
         when (category) {
-            "MOVIE" -> {/*
-                val intent = Intent(this, MovieDetailActivity::class.java)
-                intent.putExtra(Constants.ID, id)
-                startActivity(intent)*/
+            "MOVIE" -> {
+                val intent = Intent(this@ItemListActivity, MovieDetailActivity::class.java)
+                intent.putExtra(Constants.SELECTED_MOVIE, id)
+                startActivity(intent)
             }
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.setSelectMode(false)
-    }
 
     override fun onDestroy() {
         super.onDestroy()
         viewModel.clear()
     }
+
+
 }

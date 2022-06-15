@@ -22,6 +22,7 @@ import com.example.collectors.view.adapters.SecondAdapter
 import com.example.collectors.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -44,7 +45,6 @@ class MainActivity : AppCompatActivity() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
-        //viewModel.setMainMode(true)
 
         val rvMain = binding.rvMain
         val layoutManager = LinearLayoutManager(this)
@@ -54,16 +54,14 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.categoryList.collectLatest { list ->
                 val arrayList = ArrayList<String>()
-                for(i in list) arrayList.add(i)
+                for (i in list) arrayList.add(i)
                 categoryList = arrayList
-                Log.e("categorylist",categoryList.toString())
 
-                if(categoryList.isNotEmpty()) {
+                if (categoryList.isNotEmpty()) {
                     binding.isEmpty = false
                     rvMain.adapter = CategoryAdapter(arrayList, this@MainActivity)
                     { category, recyclerview -> setCategoryList(category, recyclerview) }
-                }
-                else binding.isEmpty = true
+                } else binding.isEmpty = true
 
             }
         }
@@ -77,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                 "MOVIE" -> {
                     viewModel.movieList.collect { list ->
                         val arrayList = ArrayList<BasicInfo>()
-                        for(i in list) arrayList.add(i)
+                        for (i in list) arrayList.add(i)
                         setAdapter(arrayList, recyclerview, category)
                     }
                 }
@@ -98,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         recyclerview.layoutManager = layoutManager
 
         recyclerview.adapter = ItemAdapter(
-            list, category, this@MainActivity, viewModel
+            list, category, this@MainActivity
         )
     }
 
@@ -115,44 +113,47 @@ class MainActivity : AppCompatActivity() {
 
     fun onClickCategorySave(view: View) {
         categoryList.clear()
-        if(dialogBinding.cbMovie.isChecked) categoryList.add("MOVIE")
-        if(dialogBinding.cbBook.isChecked) categoryList.add("BOOK")
+        if (dialogBinding.cbMovie.isChecked) categoryList.add("MOVIE")
+        if (dialogBinding.cbBook.isChecked) categoryList.add("BOOK")
 
         viewModel.setCategoryList(categoryList)
         categoryDialog.dismiss()
     }
 
-    fun containsCategory(category: String): Boolean{
+    fun containsCategory(category: String): Boolean {
         return categoryList.contains(category)
     }
 
-    fun onClickAdd(category: String){
+    fun onClickAdd(category: String) {
         lateinit var intent: Intent
-        when(category) {
-            "MOVIE"->{
+        when (category) {
+            "MOVIE" -> {
                 intent = Intent(this, SearchActivity::class.java)
                 intent.putExtra(Constants.CATEGORY, category)
             }
         }
         startActivity(intent)
     }
-    fun onClickMore(category: String){
+
+    fun onClickMore(category: String) {
         lateinit var intent: Intent
-        when(category) {
-            "MOVIE"->{
+        when (category) {
+            "MOVIE" -> {
                 intent = Intent(this, ItemListActivity::class.java)
                 intent.putExtra(Constants.CATEGORY, category)
             }
         }
         startActivity(intent)
     }
-    fun getItemDetail(category: String, id: Int){
+
+    fun getItemDetail(category: String, id: Int) {
         when (category) {
-            "MOVIE" -> {/*
-                val intent = Intent(this, MovieDetailActivity::class.java)
-                intent.putExtra(Constants.ID, id)
-                startActivity(intent)*/
+            "MOVIE" -> {
+                val intent = Intent(this@MainActivity, MovieDetailActivity::class.java)
+                intent.putExtra(Constants.SELECTED_MOVIE, id)
+                startActivity(intent)
             }
         }
+
     }
 }

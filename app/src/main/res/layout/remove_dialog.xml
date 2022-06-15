@@ -6,6 +6,12 @@
         <variable
             name="activity"
             type="com.example.collectors.view.activities.ItemListActivity" />
+        <variable
+            name="id"
+            type="Integer" />
+        <variable
+            name="category"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -24,7 +30,7 @@
             android:text="리뷰 삭제"
             android:textColor="@android:color/holo_red_dark"
             android:textSize="16sp"
-            android:onClick="@{activity::onClickRemoveDialog}"/>
+            android:onClick="@{(v)->activity.onClickRemoveDialog(v,category,id)}"/>
 
         <TextView
             android:id="@+id/btRemoveCancel"
@@ -35,7 +41,7 @@
             android:text="취소"
             android:textColor="@color/textColor"
             android:textSize="16sp"
-            android:onClick="@{activity::onClickRemoveDialog}"/>
+            android:onClick="@{(v)->activity.onClickRemoveDialog(v,category,id)}"/>
     </LinearLayout>
 
 </layout>

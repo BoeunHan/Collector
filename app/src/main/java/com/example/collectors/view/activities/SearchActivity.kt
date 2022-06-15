@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.collectors.utils.Constants
 import com.example.collectors.view.adapters.MovieSearchAdapter
-import com.example.collectors.databinding.ActivityMovieSearchBinding
+import com.example.collectors.databinding.ActivitySearchBinding
 import com.example.collectors.model.data.networkModel.MovieItem
 import com.example.collectors.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +23,7 @@ import java.util.*
 @AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMovieSearchBinding
+    private lateinit var binding: ActivitySearchBinding
     private val viewModel: SearchViewModel by viewModels()
 
     private var rvMovieSearchList: RecyclerView? = null
@@ -32,7 +32,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMovieSearchBinding.inflate(layoutInflater)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.viewmodel = viewModel

@@ -11,6 +11,7 @@ import com.example.collectors.model.data.database.BasicInfo
 import com.example.collectors.model.data.database.MovieEntity
 import com.example.collectors.model.repository.CategoryRepository
 import com.example.collectors.model.repository.MovieRepository
+import com.example.collectors.view.adapters.ItemAdapter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -50,13 +51,11 @@ class ItemViewModel @Inject constructor(
 
     private var category = ""
 
-    private val _selectedIdSet = MutableStateFlow(HashSet<Int>())
-    val selectedIdSet = _selectedIdSet.asStateFlow()
+    val selectedIdSet = HashSet<Int>()
+    val selectedHolderSet = HashSet<ItemAdapter.MyViewHolder>()
 
     val isSelectedEmpty = MutableStateFlow(true)
 
-    //private var _mainMode = MutableStateFlow(true)
-    //val mainMode = _mainMode.asStateFlow()
     private var _selectMode = MutableStateFlow(false)
     val selectMode = _selectMode.asStateFlow()
 
@@ -125,7 +124,7 @@ class ItemViewModel @Inject constructor(
         viewModelScope.launch {
             when (category) {
                 "MOVIE" -> {
-                    movieRepository.deleteIdSet(_selectedIdSet.value)
+                    movieRepository.deleteIdSet(selectedIdSet)
                 }
                 "BOOK" -> {
 
@@ -176,34 +175,34 @@ class ItemViewModel @Inject constructor(
         searchValue.update { "" }
     }
 
-    fun onClickItem(id: Int) {
-        if (_selectedIdSet.value.contains(id)) _selectedIdSet.update { it.remove(id); it }
-        else _selectedIdSet.update { it.add(id); it }
-
-        if(_selectedIdSet.value.isEmpty()) isSelectedEmpty.update { true }
-        else isSelectedEmpty.update { false }
-        Log.e("selectedIdSet",selectedIdSet.value.toString())
-    }
-/*
-    fun setMainMode(boolean: Boolean) {
-        _mainMode.value = boolean
-        if (boolean) {
-            _movieDetail.value = null
+    fun onClickItem(holder: ItemAdapter.MyViewHolder, id: Int) {
+        if (selectedIdSet.contains(id)) {
+            selectedIdSet.remove(id)
+            holder.isSelected.update { false }
+            selectedHolderSet.remove(holder)
         }
+        else {
+            selectedIdSet.add(id)
+            holder.isSelected.update { true }
+            selectedHolderSet.add(holder)
+        }
+
+        if(selectedIdSet.isEmpty()) isSelectedEmpty.update { true }
+        else isSelectedEmpty.update { false }
     }
-*/
+
     fun setSelectMode(boolean: Boolean) {
         _selectMode.value = boolean
         if (!boolean) {
-            _selectedIdSet.value.clear()
+            for(i in selectedHolderSet) i.isSelected.update { false }
+            selectedHolderSet.clear()
+            selectedIdSet.clear()
+            isSelectedEmpty.update { true }
         }
-
-    Log.e("select mode",_selectMode.value.toString())
     }
 
     fun reverseSelectMode(view: View) {
         setSelectMode(!_selectMode.value)
-        Log.e("select mode",_selectMode.value.toString())
     }
 
     fun getMovieDetail(id: Int) {

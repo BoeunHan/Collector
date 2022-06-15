@@ -1,6 +1,7 @@
 package com.example.collectors.view.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -24,11 +25,12 @@ class ItemAdapter(
     private val viewModel: ItemViewModel
 ) : RecyclerView.Adapter<ItemAdapter.MyViewHolder>() {
 
-
-    val selectedItems = MutableStateFlow(HashSet<Int>())
     inner class MyViewHolder(
         val binding: CardItemViewBinding
-    ) : RecyclerView.ViewHolder(binding.root)
+    ) : RecyclerView.ViewHolder(binding.root){
+        val isSelected = MutableStateFlow(false)
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -47,6 +49,7 @@ class ItemAdapter(
         if(activity is ItemListActivity) holder.binding.itemListActivity = activity
         holder.binding.category = category
         holder.binding.viewmodel = viewModel
+        holder.binding.holder = holder
 
         holder.binding.lifecycleOwner = activity
     }

@@ -51,6 +51,7 @@ class ItemListActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
 
+
         rvItemList = binding.rvItemList
         rvItemList?.layoutManager = GridLayoutManager(this, 3)
 
@@ -145,7 +146,6 @@ class ItemListActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-       //viewModel.setMainMode(true)
         viewModel.clear()
     }
 }

@@ -130,16 +130,6 @@
                 app:srcCompat="@drawable/ic_sort"
                 android:onClick="@{activity::showSortDialog}" />
         </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="2dp"
-            android:gravity="end"
-            android:text="@{viewmodel.selectedIdSet.toString()}"
-            android:textColor="@color/textColor"
-            android:textSize="12sp"
-            android:onClick="@{activity::showSortDialog}"/>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">

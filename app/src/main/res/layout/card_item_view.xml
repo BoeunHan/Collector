@@ -23,6 +23,10 @@
         <variable
             name="viewmodel"
             type="com.example.collectors.viewmodel.ItemViewModel" />
+        <variable
+            name="holder"
+            type="com.example.collectors.view.adapters.ItemAdapter.MyViewHolder" />
+
 
     </data>
 
@@ -31,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:orientation="vertical"
-        android:onClick="@{()-> viewmodel.selectMode ? viewmodel.onClickItem(item.id) : isMain ? mainActivity.getItemDetail(category, item.id) : itemListActivity.getItemDetail(category, item.id)}">
+        android:onClick="@{()-> viewmodel.selectMode ? viewmodel.onClickItem(holder, item.id) : isMain ? mainActivity.getItemDetail(category, item.id) : itemListActivity.getItemDetail(category, item.id)}">
 
         <androidx.cardview.widget.CardView
             android:layout_width="120dp"
@@ -50,8 +54,7 @@
                     android:scaleType="centerCrop"
                     tools:srcCompat="@drawable/cat_image"
                     app:image="@{item.image}"
-                    app:idSetBlur="@{viewmodel.selectedIdSet}"
-                    app:id="@{item.id}"/>
+                    app:selected="@{holder.isSelected}"/>
 
                 <ImageView
                     android:id="@+id/ivLike"
@@ -69,8 +72,7 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/checkedimage_background"
                     app:srcCompat="@drawable/ic_checked"
-                    app:idSetCheck="@{viewmodel.selectedIdSet}"
-                    app:id="@{item.id}"/>
+                    android:visibility="@{holder.isSelected ? View.VISIBLE : View.GONE}"/>
 
                 <TextView
                     android:id="@+id/tvTitleItem"

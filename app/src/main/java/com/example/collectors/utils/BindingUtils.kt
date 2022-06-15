@@ -27,7 +27,7 @@ fun loadImage(view: ImageView, url: String){
 }
 
 @RequiresApi(Build.VERSION_CODES.M)
-@BindingAdapter("drawable")
+@BindingAdapter("selected")
 fun loadDrawable(view: ImageView, selected: Boolean){
     if(selected) view.foreground = ContextCompat.getDrawable(view.context, R.drawable.gradient_shape_selected)
     else view.foreground = ContextCompat.getDrawable(view.context, R.drawable.gradient_shape)
@@ -51,18 +51,4 @@ fun setText(view: TextView, str: String){
             }
         }
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.M)
-@BindingAdapter("idSetBlur","id")
-fun isSelectedBlur(view: ImageView, set: HashSet<Int>, id: Int){
-    Log.e("selectedblur","실행")
-    if(set.contains(id)) view.foreground = ContextCompat.getDrawable(view.context, R.drawable.gradient_shape_selected)
-    else view.foreground = ContextCompat.getDrawable(view.context, R.drawable.gradient_shape)
-}
-@BindingAdapter("idSetCheck","id")
-fun isSelectedCheck(view: ImageView, set: HashSet<Int>, id: Int){
-    Log.e("selectedcheck","실행")
-    if(set.contains(id)) view.visibility = View.VISIBLE
-    else view.visibility = View.GONE
 }

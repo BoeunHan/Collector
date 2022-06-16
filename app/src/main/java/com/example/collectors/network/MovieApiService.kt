@@ -1,6 +1,6 @@
 package com.example.collectors.network
 
-import com.example.collectors.models.MovieList
+import com.example.collectors.model.data.networkModel.MovieList
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header

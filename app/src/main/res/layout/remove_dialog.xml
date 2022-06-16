@@ -1,29 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/btRemoveCheck"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/button_background"
-        android:gravity="center"
-        android:text="리뷰 삭제"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="16sp" />
+    <data>
+        <variable
+            name="activity"
+            type="com.example.collectors.view.activities.ItemListActivity" />
+        <variable
+            name="id"
+            type="Integer" />
+        <variable
+            name="category"
+            type="String" />
+    </data>
 
-    <TextView
-        android:id="@+id/btRemoveCancel"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/button_background"
-        android:gravity="center"
-        android:text="취소"
-        android:textColor="@color/textColor"
-        android:textSize="16sp" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/btRemoveCheck"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/button_background"
+            android:gravity="center"
+            android:text="리뷰 삭제"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="16sp"
+            android:onClick="@{(v)->activity.onClickRemoveDialog(v,category,id)}"/>
+
+        <TextView
+            android:id="@+id/btRemoveCancel"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/button_background"
+            android:gravity="center"
+            android:text="취소"
+            android:textColor="@color/textColor"
+            android:textSize="16sp"
+            android:onClick="@{(v)->activity.onClickRemoveDialog(v,category,id)}"/>
+    </LinearLayout>
+
+</layout>

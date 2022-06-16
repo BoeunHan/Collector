@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".database.CollectorApp"
+        android:name=".model.data.database.CollectorApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,17 +14,18 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/CustomActionBar">
-        <activity android:name=".activities.ItemListActivity"></activity>
-        <activity android:name=".activities.MovieDetailActivity" />
-        <activity android:name=".activities.MovieSearchActivity" />
-        <activity android:name=".activities.AddMovieActivity" />
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".view.activities.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.activities.SearchActivity"/>
+        <activity android:name=".view.activities.ItemListActivity"/>
+        <activity android:name=".view.activities.AddMovieActivity"/>
+        <activity android:name=".view.activities.MovieDetailActivity"/>
     </application>
 
 </manifest>

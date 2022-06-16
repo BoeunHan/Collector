@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="activity"
+            type="com.example.collectors.view.activities.MainActivity" />
+    </data>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Category"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            android:padding="5dp"
+            android:layout_marginBottom="5dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/black" />
+
+        <CheckBox
+            android:id="@+id/cbMovie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MOVIE"
+            android:checked="@{activity.containsCategory(`MOVIE`)}"/>
+
+        <CheckBox
+            android:id="@+id/cbBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BOOK"
+            android:checked="@{activity.containsCategory(`BOOK`)}"/>
+
+        <CheckBox
+            android:id="@+id/checkBox4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CheckBox"
+            android:checked="@{activity.containsCategory(`?`)}"/>
+
+        <Button
+            android:id="@+id/btCategorySave"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:text="Save"
+            android:textColor="@color/textColor"
+            android:textSize="16sp"
+            android:onClick="@{activity::onClickCategorySave}"/>
+
+
+    </LinearLayout>
+</layout>

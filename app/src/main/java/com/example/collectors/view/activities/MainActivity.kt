@@ -13,16 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.collectors.databinding.ActivityMainBinding
 import com.example.collectors.databinding.CategoryDialogBinding
-import com.example.collectors.databinding.MainListItemViewBinding
 import com.example.collectors.model.data.database.BasicInfo
 import com.example.collectors.utils.Constants
 import com.example.collectors.view.adapters.CategoryAdapter
 import com.example.collectors.view.adapters.ItemAdapter
-import com.example.collectors.view.adapters.SecondAdapter
 import com.example.collectors.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -80,7 +77,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 "BOOK" -> {
-                    //setAdapter(ArrayList(), recyclerview)
+                    viewModel.bookList.collect { list ->
+                        val arrayList = ArrayList<BasicInfo>()
+                        for (i in list) arrayList.add(i)
+                        setAdapter(arrayList, recyclerview, category)
+                    }
                 }
             }
         }
@@ -125,35 +126,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onClickAdd(category: String) {
-        lateinit var intent: Intent
-        when (category) {
-            "MOVIE" -> {
-                intent = Intent(this, SearchActivity::class.java)
-                intent.putExtra(Constants.CATEGORY, category)
-            }
-        }
+        val intent = Intent(this, SearchActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, category)
         startActivity(intent)
     }
 
     fun onClickMore(category: String) {
-        lateinit var intent: Intent
-        when (category) {
-            "MOVIE" -> {
-                intent = Intent(this, ItemListActivity::class.java)
-                intent.putExtra(Constants.CATEGORY, category)
-            }
-        }
+        val intent = Intent(this, ItemListActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, category)
         startActivity(intent)
     }
 
     fun getItemDetail(category: String, id: Int) {
+        lateinit var intent: Intent
         when (category) {
-            "MOVIE" -> {
-                val intent = Intent(this@MainActivity, MovieDetailActivity::class.java)
-                intent.putExtra(Constants.SELECTED_MOVIE, id)
-                startActivity(intent)
-            }
+            "MOVIE" -> intent = Intent(this@MainActivity, MovieDetailActivity::class.java)
+            "BOOK" -> intent = Intent(this@MainActivity, BookDetailActivity::class.java)
         }
-
+        intent.putExtra(Constants.SELECTED_ID, id)
+        startActivity(intent)
     }
+
 }

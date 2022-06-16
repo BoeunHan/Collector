@@ -37,8 +37,6 @@ class ItemAdapter(
     ) {
         holder.binding.item = itemList[position]
 
-        Log.e(itemList[position].title,"${itemList[position].like}")
-
         holder.binding.isMain = activity is MainActivity
         if(activity is MainActivity) holder.binding.mainActivity = activity
         if(activity is ItemListActivity) holder.binding.itemListActivity = activity

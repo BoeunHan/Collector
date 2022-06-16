@@ -41,13 +41,6 @@
             android:text="BOOK"
             android:checked="@{activity.containsCategory(`BOOK`)}"/>
 
-        <CheckBox
-            android:id="@+id/checkBox4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CheckBox"
-            android:checked="@{activity.containsCategory(`?`)}"/>
-
         <Button
             android:id="@+id/btCategorySave"
             style="?android:attr/borderlessButtonStyle"

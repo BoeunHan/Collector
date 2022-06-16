@@ -21,8 +21,6 @@
             name="isMain"
             type="Boolean" />
 
-
-
     </data>
 
     <LinearLayout

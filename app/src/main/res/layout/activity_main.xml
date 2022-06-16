@@ -33,7 +33,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="5dp"
                 android:background="@null"
-                app:srcCompat="@drawable/ic_menu"
+                app:srcCompat="@drawable/ic_settings"
                 android:onClick="@{()->activity.showCategoryDialog()}"
                 android:contentDescription="category edit" />
 

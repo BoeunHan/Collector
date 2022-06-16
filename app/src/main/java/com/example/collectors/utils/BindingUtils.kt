@@ -14,10 +14,9 @@ import com.example.collectors.R
 @BindingAdapter("image")
 fun loadImage(view: ImageView, url: String?){
     if(url==""|| url==null){
-        view.scaleType = ImageView.ScaleType.CENTER
         Glide.with(view).load(R.drawable.ic_no_image).into(view)
     }
-    else  Glide.with(view).load(url).into(view)
+    else  Glide.with(view).load(url).centerCrop().error(R.drawable.ic_no_image).into(view)
 }
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -31,18 +30,18 @@ fun loadDrawable(view: ImageView, selected: Boolean){
 @BindingAdapter("text")
 fun setText(view: TextView, str: String){
     when(view.id){
-        R.id.tvTitle -> {
-            view.text = Html.fromHtml(str).toString()
-        }
         R.id.tvDirector -> {
-            if (str != "") {
-                view.text = "감독: ${str.substring(0, str.length - 1)}"
-            }
+            if (str != "") view.text = "감독: ${str.substring(0, str.length - 1)}"
         }
         R.id.tvActor -> {
-            if (str != "") {
-                view.text = "출연: ${str.substring(0, str.length - 1)}"
-            }
+            if (str != "") view.text = "출연: ${str.substring(0, str.length - 1)}"
+        }
+        R.id.tvAuthor -> {
+            if (str != "") view.text = "저자: $str"
+        }
+        R.id.tvPublisher -> {
+            if (str != "") view.text = "출판사: $str"
         }
     }
 }
+

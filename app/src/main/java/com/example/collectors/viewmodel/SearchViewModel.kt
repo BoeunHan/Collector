@@ -8,6 +8,7 @@ import com.example.collectors.model.data.networkModel.BookItem
 import com.example.collectors.model.data.networkModel.BookList
 import com.example.collectors.model.data.networkModel.MovieItem
 import com.example.collectors.model.data.networkModel.MovieList
+import com.example.collectors.model.repository.BookRepository
 import com.example.collectors.model.repository.MovieRepository
 import com.example.collectors.model.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     val searchRepository: SearchRepository,
-    val movieRepository: MovieRepository
+    val movieRepository: MovieRepository,
+    val bookRepository: BookRepository
 ) : ViewModel() {
 
     private val _movieSearchResult = MutableStateFlow(ArrayList<MovieItem>())
@@ -104,7 +106,7 @@ class SearchViewModel @Inject constructor(
     suspend fun checkExist(title: String, image: String): Boolean{
         return when(category) {
             "MOVIE" -> movieRepository.checkExist(title, image)
-            //"BOOK" -> bookRepository.checkExist(title, image)
+            "BOOK" -> bookRepository.checkExist(title, image)
             else -> false
         }
     }

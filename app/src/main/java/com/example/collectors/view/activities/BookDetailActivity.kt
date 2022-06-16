@@ -11,7 +11,9 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.collectors.utils.Constants
 import com.example.collectors.R
+import com.example.collectors.databinding.ActivityBookDetailBinding
 import com.example.collectors.databinding.ActivityMovieDetailBinding
+import com.example.collectors.model.data.database.BookEntity
 import com.example.collectors.model.data.database.MovieEntity
 import com.example.collectors.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,17 +23,17 @@ import kotlinx.coroutines.launch
 
 @FlowPreview
 @AndroidEntryPoint
-class MovieDetailActivity : AppCompatActivity() {
+class BookDetailActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMovieDetailBinding
+    private lateinit var binding: ActivityBookDetailBinding
     private val viewModel: ItemViewModel by viewModels()
     private var id: Int? = null
-    private var myMovie: MovieEntity? = null
+    private var myBook: BookEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMovieDetailBinding.inflate(layoutInflater)
+        binding = ActivityBookDetailBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
         setSupportActionBar(binding.toolbarMovieDetail)
@@ -41,9 +43,9 @@ class MovieDetailActivity : AppCompatActivity() {
 
         id = intent.getIntExtra(Constants.SELECTED_ID,0)
         lifecycleScope.launch {
-            viewModel.getMovieDetail(id!!).collectLatest {
-                myMovie = it
-                binding.item = myMovie
+            viewModel.getBookDetail(id!!).collectLatest {
+                myBook = it
+                binding.item = myBook
             }
         }
 
@@ -62,8 +64,8 @@ class MovieDetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.btEdit -> {
-                val intent = Intent(this, AddMovieActivity::class.java)
-                intent.putExtra(Constants.SELECTED_MOVIE, myMovie)
+                val intent = Intent(this, AddBookActivity::class.java)
+                intent.putExtra(Constants.SELECTED_BOOK, myBook)
                 startActivity(intent)
             }
         }
@@ -72,8 +74,8 @@ class MovieDetailActivity : AppCompatActivity() {
 
     fun setLike(view: View){
         lifecycleScope.launch {
-            if (myMovie!!.like) viewModel.setMovieLike(myMovie!!.id, false)
-            else viewModel.setMovieLike(myMovie!!.id, true)
+            if (myBook!!.like) viewModel.setBookLike(myBook!!.id, false)
+            else viewModel.setBookLike(myBook!!.id, true)
         }
     }
 

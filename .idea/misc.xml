@@ -4,7 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/drawable/ic_cancel.xml" value="0.1" />
+        <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/drawable/ic_settings.xml" value="0.1825" />
+        <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_add_book.xml" value="0.22509057971014493" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_add_movie.xml" value="0.1" />
+        <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_book_detail.xml" value="0.17255434782608695" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_item_list.xml" value="0.1" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_main.xml" value="0.18958333333333333" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_movie_detail.xml" value="0.15885416666666666" />

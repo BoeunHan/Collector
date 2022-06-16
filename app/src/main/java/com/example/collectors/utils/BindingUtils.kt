@@ -30,7 +30,6 @@ fun loadDrawable(view: ImageView, selected: Boolean){
 @BindingAdapter("text")
 fun setText(view: TextView, str: String){
     when(view.id){
-        R.id.tvTitle -> view.text = Html.fromHtml(str).toString()
         R.id.tvDirector -> {
             if (str != "") view.text = "감독: ${str.substring(0, str.length - 1)}"
         }

@@ -6,6 +6,7 @@ import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.collectors.R
+import com.example.collectors.model.repository.BookRepository
 import com.example.collectors.model.repository.CategoryRepository
 import com.example.collectors.model.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,19 +28,19 @@ enum class SortType{
 @HiltViewModel
 class ItemViewModel @Inject constructor(
     val categoryRepository: CategoryRepository,
-    val movieRepository: MovieRepository
+    val movieRepository: MovieRepository,
+    val bookRepository: BookRepository
 ) : ViewModel() {
     private var _categoryList = MutableStateFlow(ArrayList<String>())
     val categoryList = _categoryList.asStateFlow()
 
+    var category = ""
     var searchValue = MutableStateFlow("")
 
-
-    val movieList = movieRepository.fetchAllBasicInfo()
-
+    val movieList = movieRepository.fetchRecentBasicInfo()
+    val bookList = bookRepository.fetchRecentBasicInfo()
 
     private var sortFlow = MutableStateFlow(Triple(SortField.DATE, SortType.DESCENDING, searchValue.value))
-
     var sortModeName = MutableStateFlow("최신순")
 
 
@@ -63,8 +64,7 @@ class ItemViewModel @Inject constructor(
         viewModelScope.launch {
             searchValue
                 .debounce(500)
-                .onEach { value -> sortFlow.update { it.copy(third = value)  }
-                    Log.e("searchvalue",value)}
+                .onEach { value -> sortFlow.update { it.copy(third = value)  }}
                 .launchIn(this)
         }
     }
@@ -75,34 +75,50 @@ class ItemViewModel @Inject constructor(
             SortField.DATE -> {
                 when(it.second){
                     SortType.DESCENDING -> {
-                        movieRepository.searchBasicInfoDateDescending("%${it.third}%")
+                        when(category) {
+                            "MOVIE"->movieRepository.searchBasicInfoDateDescending("%${it.third}%")
+                            "BOOK"->bookRepository.searchBasicInfoDateDescending("%${it.third}%")
+                            else -> flowOf()
+                        }
                     }
                     SortType.ASCENDING -> {
-                        movieRepository.searchBasicInfoDateAscending("%${it.third}%")
+                        when(category) {
+                            "MOVIE"->movieRepository.searchBasicInfoDateAscending("%${it.third}%")
+                            "BOOK"->bookRepository.searchBasicInfoDateAscending("%${it.third}%")
+                            else -> flowOf()
+                        }
                     }
                 }
             }
             SortField.RATE -> {
                 when(it.second){
                     SortType.DESCENDING -> {
-                        movieRepository.searchBasicInfoRateDescending("%${it.third}%")
+                        when(category) {
+                            "MOVIE"->movieRepository.searchBasicInfoRateDescending("%${it.third}%")
+                            "BOOK"->bookRepository.searchBasicInfoRateDescending("%${it.third}%")
+                            else -> flowOf()
+                        }
                     }
                     SortType.ASCENDING -> {
-                        movieRepository.searchBasicInfoRateAscending("%${it.third}%")
+                        when(category) {
+                            "MOVIE"->movieRepository.searchBasicInfoRateAscending("%${it.third}%")
+                            "BOOK"->bookRepository.searchBasicInfoRateAscending("%${it.third}%")
+                            else -> flowOf()
+                        }
                     }
                 }
             }
         }
     }
 
-    fun removeItem(category: String, id: Int){
+    fun removeItem(id: Int){
         viewModelScope.launch {
             when (category) {
                 "MOVIE" -> {
                     movieRepository.delete(id)
                 }
                 "BOOK" -> {
-
+                    bookRepository.delete(id)
                 }
             }
         }
@@ -146,6 +162,8 @@ class ItemViewModel @Inject constructor(
     }
 
     fun getMovieDetail(id: Int) = movieRepository.fetchData(id)
+    fun getBookDetail(id: Int) = bookRepository.fetchData(id)
 
     suspend fun setMovieLike(id: Int, like: Boolean) = movieRepository.like(id, like)
+    suspend fun setBookLike(id: Int, like: Boolean) = bookRepository.like(id, like)
 }

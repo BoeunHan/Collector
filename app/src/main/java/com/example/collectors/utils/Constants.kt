@@ -15,9 +15,10 @@ object Constants {
 
     const val IMAGE = "image"
     const val TITLE = "title"
-    const val SELECTED_MOVIE = "selected_movie"
     const val CATEGORY = "category"
-    const val ID = "id"
+    const val SELECTED_ID = "selected_id"
+    const val SELECTED_MOVIE = "selected_movie"
+    const val SELECTED_BOOK = "selected_book"
 
     const val CATEGORY_PREF = "category_pref"
     const val CATEGORY_DATA = "category_data"

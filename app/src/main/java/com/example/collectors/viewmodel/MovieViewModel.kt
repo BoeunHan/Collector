@@ -73,6 +73,5 @@ class MovieViewModel @Inject constructor(
         viewModelScope.launch {
             movieRepository.insert(movie)
         }
-        movieStatus = MovieStatus()
     }
 }

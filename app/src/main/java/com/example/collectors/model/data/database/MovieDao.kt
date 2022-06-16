@@ -17,7 +17,7 @@ interface MovieDao : BaseDao<MovieEntity> {
     override fun fetchData(id: Int): Flow<MovieEntity>
 
     @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` ORDER BY id DESC LIMIT 10")
-    override fun fetchAllBasicInfo(): Flow<List<BasicInfo>>
+    override fun fetchRecentBasicInfo(): Flow<List<BasicInfo>>
 
     @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value ORDER BY id ASC")
     override fun searchBasicInfoDateAscending(value: String): Flow<List<BasicInfo>>

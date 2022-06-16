@@ -20,7 +20,7 @@ interface BaseDao<T> {
 
     fun fetchData(id: Int): Flow<T>
 
-    fun fetchAllBasicInfo(): Flow<List<BasicInfo>>
+    fun fetchRecentBasicInfo(): Flow<List<BasicInfo>>
 
     fun searchBasicInfoDateAscending(value: String): Flow<List<BasicInfo>>
 

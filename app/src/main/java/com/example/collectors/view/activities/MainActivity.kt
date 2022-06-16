@@ -13,16 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.collectors.databinding.ActivityMainBinding
 import com.example.collectors.databinding.CategoryDialogBinding
-import com.example.collectors.databinding.MainListItemViewBinding
 import com.example.collectors.model.data.database.BasicInfo
 import com.example.collectors.utils.Constants
 import com.example.collectors.view.adapters.CategoryAdapter
 import com.example.collectors.view.adapters.ItemAdapter
-import com.example.collectors.view.adapters.SecondAdapter
 import com.example.collectors.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -125,24 +122,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onClickAdd(category: String) {
-        lateinit var intent: Intent
-        when (category) {
-            "MOVIE" -> {
-                intent = Intent(this, SearchActivity::class.java)
-                intent.putExtra(Constants.CATEGORY, category)
-            }
-        }
+        val intent = Intent(this, SearchActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, category)
         startActivity(intent)
     }
 
     fun onClickMore(category: String) {
-        lateinit var intent: Intent
-        when (category) {
-            "MOVIE" -> {
-                intent = Intent(this, ItemListActivity::class.java)
-                intent.putExtra(Constants.CATEGORY, category)
-            }
-        }
+        val intent = Intent(this, ItemListActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, category)
         startActivity(intent)
     }
 

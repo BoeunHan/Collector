@@ -77,7 +77,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 "BOOK" -> {
-                    //setAdapter(ArrayList(), recyclerview)
+                    viewModel.bookList.collect { list ->
+                        val arrayList = ArrayList<BasicInfo>()
+                        for (i in list) arrayList.add(i)
+                        setAdapter(arrayList, recyclerview, category)
+                    }
                 }
             }
         }
@@ -134,13 +138,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getItemDetail(category: String, id: Int) {
+        lateinit var intent: Intent
         when (category) {
-            "MOVIE" -> {
-                val intent = Intent(this@MainActivity, MovieDetailActivity::class.java)
-                intent.putExtra(Constants.SELECTED_MOVIE, id)
-                startActivity(intent)
-            }
+            "MOVIE" -> intent = Intent(this@MainActivity, MovieDetailActivity::class.java)
+            "BOOK" -> intent = Intent(this@MainActivity, BookDetailActivity::class.java)
         }
-
+        intent.putExtra(Constants.SELECTED_ID, id)
+        startActivity(intent)
     }
+
 }

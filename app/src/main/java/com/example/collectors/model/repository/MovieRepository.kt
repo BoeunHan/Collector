@@ -22,7 +22,7 @@ class MovieRepository @Inject constructor(reviewDatabase: ReviewDatabase) {
 
     fun fetchData(id: Int): Flow<MovieEntity> = movieDao.fetchData(id)
 
-    fun fetchAllBasicInfo(): Flow<List<BasicInfo>> = movieDao.fetchAllBasicInfo()
+    fun fetchRecentBasicInfo(): Flow<List<BasicInfo>> = movieDao.fetchRecentBasicInfo()
 
     fun searchBasicInfoDateAscending(value: String): Flow<List<BasicInfo>> = movieDao.searchBasicInfoDateAscending(value)
 

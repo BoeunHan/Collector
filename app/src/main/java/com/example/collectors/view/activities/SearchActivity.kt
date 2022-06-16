@@ -94,6 +94,7 @@ class SearchActivity : AppCompatActivity() {
                 lateinit var intent: Intent
                 when(category){
                     "MOVIE" -> intent = Intent(this@SearchActivity, AddMovieActivity::class.java)
+                    "BOOK" -> intent = Intent(this@SearchActivity, AddBookActivity::class.java)
                 }
                 intent.putExtra(Constants.IMAGE, image)
                 intent.putExtra(Constants.TITLE, title)

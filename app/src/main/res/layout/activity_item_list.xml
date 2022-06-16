@@ -1,146 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activities.ItemListActivity">
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewmodel"
+            type="com.example.collectors.viewmodel.ItemViewModel" />
+        <variable
+            name="isEmpty"
+            type="Boolean" />
+        <variable
+            name="activity"
+            type="com.example.collectors.view.activities.ItemListActivity" />
+        <variable
+            name="category"
+            type="String" />
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
-        android:gravity="center_vertical">
-
-        <Button
-            android:id="@+id/btSelect"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:backgroundTint="@android:color/transparent"
-            android:padding="0dp"
-            android:text="선택"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvListCategory"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="영화"
-            android:textColor="@color/textColor"
-            android:textSize="20sp" />
-
-        <ImageButton
-            android:id="@+id/btAddItem"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:background="@null"
-            app:srcCompat="@drawable/ic_add" />
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/black"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".view.activities.ItemListActivity">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:background="@drawable/search_box_background_default"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            android:gravity="center_vertical">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                app:srcCompat="@drawable/ic_search" />
+            <View
+                android:layout_width="50dp"
+                android:layout_height="40dp" />
 
-            <EditText
-                android:id="@+id/etSearchItem"
+            <TextView
+                android:id="@+id/tvListCategory"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
-                android:inputType="textPersonName"
+                android:gravity="center"
+                android:text="@{category}"
                 android:textColor="@color/textColor"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
-            <ImageView
-                android:id="@+id/btCancel"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                app:srcCompat="@drawable/ic_cancel" />
-
+            <ImageButton
+                android:id="@+id/btAddItem"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:background="@null"
+                app:srcCompat="@drawable/ic_add"
+                android:onClick="@{()->activity.searchItems(category)}"/>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/btSort"
-            android:layout_width="60dp"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="2dp"
-            android:gravity="right"
-            android:text="최신순"
-            android:textColor="@color/textColor"
-            android:textSize="12sp" />
-        <ImageView
-            android:id="@+id/btSortImage"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            app:srcCompat="@drawable/ic_sort" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/search_box_background_default"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:srcCompat="@drawable/ic_search" />
+
+                <EditText
+                    android:id="@+id/etSearchItem"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/textColor"
+                    android:textSize="18sp"
+                    android:text="@={viewmodel.searchValue}"/>
+
+                <ImageView
+                    android:id="@+id/btCancel"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:srcCompat="@drawable/ic_cancel"
+                    android:onClick="@{viewmodel::clear}"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btSort"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="2dp"
+                android:gravity="end"
+                android:text="@{viewmodel.sortModeName}"
+                android:textColor="@color/textColor"
+                android:textSize="12sp"
+                android:onClick="@{activity::showSortDialog}"/>
+
+            <ImageView
+                android:id="@+id/btSortImage"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/ic_sort"
+                android:onClick="@{activity::showSortDialog}" />
+        </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvItemList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{isEmpty ? View.GONE : View.VISIBLE}"
+                tools:listitem="@layout/card_item_view" />
+
+            <TextView
+                android:id="@+id/tvNothingFound"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Nothing Found."
+                android:textColor="@color/textColor"
+                android:textSize="16sp"
+                android:visibility="@{isEmpty ? View.VISIBLE : View.GONE}" />
+
+        </FrameLayout>
+
     </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvItemList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible"
-            tools:listitem="@layout/card_item_view" />
-
-        <TextView
-            android:id="@+id/tvNothingFound"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Nothing Found."
-            android:textColor="@color/textColor"
-            android:textSize="16sp"
-            android:visibility="gone" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabRemove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
-            android:backgroundTint="@color/white"
-            android:enabled="false"
-            android:src="@drawable/ic_delete"
-            android:visibility="gone"
-            app:backgroundTint="@drawable/fab_remove_selector"
-            app:borderWidth="1dp"
-            app:tint="@drawable/fab_remove_selector" />
-
-    </FrameLayout>
-
-</LinearLayout>
+</layout>

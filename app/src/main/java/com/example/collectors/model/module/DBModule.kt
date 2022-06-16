@@ -20,7 +20,7 @@ object DBModule {
         return Room.databaseBuilder(
             context,
             ReviewDatabase::class.java,
-            "movie_database"
+            "review_database"
         ).fallbackToDestructiveMigration().build()
     }
 }

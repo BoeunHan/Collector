@@ -1,15 +1,14 @@
 package com.example.collectors.model.data.database
 
 import android.os.Parcelable
-import android.text.Html
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.collectors.utils.Constants
 import kotlinx.parcelize.Parcelize
 
-@Entity(tableName= Constants.TABLE_MOVIE_LIST)
+@Entity(tableName= Constants.TABLE_BOOK_LIST)
 @Parcelize
-data class MovieEntity(
+data class BookEntity(
     @PrimaryKey(autoGenerate=true)
     val id: Int = 0,
     val title: String = "",

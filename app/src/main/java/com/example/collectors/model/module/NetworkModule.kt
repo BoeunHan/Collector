@@ -1,7 +1,7 @@
 package com.example.collectors.model.module
 
 import com.example.collectors.utils.Constants
-import com.example.collectors.network.MovieApiService
+import com.example.collectors.network.SearchApiService
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -25,8 +25,8 @@ object NetworkModule {
     }
 
     @Provides
-    fun providesMovieApiService(retrofit: Retrofit): MovieApiService{
-        return retrofit.create(MovieApiService::class.java)
+    fun provideSearchApiService(retrofit: Retrofit): SearchApiService{
+        return retrofit.create(SearchApiService::class.java)
     }
 }
 

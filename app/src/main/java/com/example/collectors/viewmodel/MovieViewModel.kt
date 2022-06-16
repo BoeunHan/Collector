@@ -1,13 +1,8 @@
 package com.example.collectors.viewmodel
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
-import android.widget.EditText
-import android.widget.RatingBar
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.collectors.R
 import com.example.collectors.model.data.database.MovieEntity
 import com.example.collectors.model.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -78,6 +73,5 @@ class MovieViewModel @Inject constructor(
         viewModelScope.launch {
             movieRepository.insert(movie)
         }
-        movieStatus = MovieStatus()
     }
 }

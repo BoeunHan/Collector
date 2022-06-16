@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.example.collectors.model.data.networkModel.MovieItem" />
+            type="com.example.collectors.model.data.networkModel.BookItem" />
         <variable
             name="activity"
             type="com.example.collectors.view.activities.SearchActivity" />
@@ -70,26 +70,26 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tvDirector"
+                android:id="@+id/tvAuthor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="2"
-                app:text="@{item.director}"
+                app:text="@{item.author}"
                 android:textColor="@color/textColor"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/tvActor"
+                android:id="@+id/tvPublisher"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="2"
-                app:text="@{item.actor}"
+                app:text="@{item.publisher}"
                 android:textColor="@color/textColor"
                 android:textSize="14sp" />
         </LinearLayout>

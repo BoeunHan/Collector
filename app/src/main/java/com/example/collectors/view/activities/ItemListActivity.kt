@@ -55,7 +55,7 @@ class ItemListActivity : AppCompatActivity() {
 
 
         category = intent.getStringExtra(Constants.CATEGORY)!!
-
+        viewModel.category = category
         binding.category = category
 
         lifecycleScope.launch {
@@ -100,43 +100,34 @@ class ItemListActivity : AppCompatActivity() {
         val binding = RemoveDialogBinding.inflate(layoutInflater)
         binding.activity = this
         binding.id = id
-        binding.category = category
         removeDialog?.setContentView(binding.root)
         removeDialog?.setCancelable(true)
         removeDialog?.show()
         return true
     }
 
-    fun onClickRemoveDialog(view: View, category: String, id: Int) {
+    fun onClickRemoveDialog(view: View, id: Int) {
         if (view.id == R.id.btRemoveCheck) {
-            viewModel.removeItem(category, id)
+            viewModel.removeItem(id)
         }
         removeDialog?.dismiss()
     }
 
 
     fun searchItems(category: String) {
-        var intent: Intent? = null
-        when (category) {
-            "MOVIE" -> {
-                intent = Intent(this, SearchActivity::class.java)
-            }
-            "BOOK" -> {
-                //intent = Intent(this, MovieSearchActivity::class.java)
-            }
-        }
-        intent?.putExtra(Constants.CATEGORY, category)
+        val intent = Intent(this, SearchActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, category)
         startActivity(intent)
     }
 
     fun getItemDetail(category: String, id: Int) {
+        lateinit var intent: Intent
         when (category) {
-            "MOVIE" -> {
-                val intent = Intent(this@ItemListActivity, MovieDetailActivity::class.java)
-                intent.putExtra(Constants.SELECTED_MOVIE, id)
-                startActivity(intent)
-            }
+            "MOVIE" -> intent = Intent(this@ItemListActivity, MovieDetailActivity::class.java)
+            "BOOK" -> intent = Intent(this@ItemListActivity, BookDetailActivity::class.java)
         }
+        intent.putExtra(Constants.SELECTED_ID, id)
+        startActivity(intent)
     }
 
 

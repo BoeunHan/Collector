@@ -1,27 +1,20 @@
 package com.example.collectors.viewmodel
 
-import android.text.Editable
-import android.text.TextWatcher
+
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.collectors.R
-import com.example.collectors.model.data.database.BasicInfo
-import com.example.collectors.model.data.database.MovieEntity
 import com.example.collectors.model.repository.CategoryRepository
 import com.example.collectors.model.repository.MovieRepository
-import com.example.collectors.view.adapters.ItemAdapter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-
 import javax.inject.Inject
 import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
 enum class SortField{
     DATE, RATE

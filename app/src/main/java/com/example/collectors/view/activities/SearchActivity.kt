@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.collectors.utils.Constants
 import com.example.collectors.view.adapters.MovieSearchAdapter
 import com.example.collectors.databinding.ActivitySearchBinding
+import com.example.collectors.model.data.networkModel.BookItem
 import com.example.collectors.model.data.networkModel.MovieItem
+import com.example.collectors.view.adapters.BookSearchAdapter
 import com.example.collectors.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
@@ -26,7 +28,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     private val viewModel: SearchViewModel by viewModels()
 
-    private var rvMovieSearchList: RecyclerView? = null
+    private var rvSearchList: RecyclerView? = null
 
     private lateinit var category: String
 
@@ -39,38 +41,49 @@ class SearchActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         category = intent.getStringExtra(Constants.CATEGORY)!!
+        viewModel.category = category
 
-        rvMovieSearchList = binding.rvMovieSearchList
+        rvSearchList = binding.rvSearchList
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        rvMovieSearchList?.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        rvMovieSearchList?.layoutManager = layoutManager
+        rvSearchList?.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        rvSearchList?.layoutManager = layoutManager
 
         lifecycleScope.launch {
             when(category) {
                 "MOVIE"-> viewModel.movieSearchResult.collect { list->
                     val arrayList = ArrayList<MovieItem>()
                     for(i in list) arrayList.add(i)
-                    setupSearchRecyclerView(arrayList)
+                    setupMovieSearchRecyclerView(arrayList)
+                }
+                "BOOK"-> viewModel.bookSearchResult.collect { list->
+                    val arrayList = ArrayList<BookItem>()
+                    for(i in list) arrayList.add(i)
+                    setupBookSearchRecyclerView(arrayList)
                 }
             }
         }
 
     }
 
-    private fun setupSearchRecyclerView(movieList: ArrayList<MovieItem>){
-        if(movieList.isEmpty()){
-            binding.isEmpty = true
-        }
+    private fun setupMovieSearchRecyclerView(movieList: ArrayList<MovieItem>){
+        if(movieList.isEmpty()) binding.isEmpty = true
         else {
             binding.isEmpty = false
-            rvMovieSearchList?.adapter = MovieSearchAdapter(movieList, this)
+            rvSearchList?.adapter = MovieSearchAdapter(movieList, this)
+        }
+    }
+    private fun setupBookSearchRecyclerView(bookList: ArrayList<BookItem>){
+        if(bookList.isEmpty()) binding.isEmpty = true
+        else {
+            binding.isEmpty = false
+            rvSearchList?.adapter = BookSearchAdapter(bookList, this)
         }
     }
 
     fun onClickSearchItem(title: String, image: String){
         lifecycleScope.launch{
-            if(viewModel.checkExist(category, title, image)){
+            if(viewModel.checkExist(title, image)){
                 val str = when(category) {
                     "MOVIE" -> "영화"
                     "BOOK" -> "책"

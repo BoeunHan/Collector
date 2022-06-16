@@ -25,6 +25,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/search_box_background_default"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -44,20 +45,20 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:inputType="textPersonName"
+                android:text="@={viewmodel.searchValue}"
                 android:textColor="@color/textColor"
-                android:textSize="18sp"
-                android:text="@={viewmodel.searchValue}"/>
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/btCancel"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                app:srcCompat="@drawable/ic_cancel"
-                android:onClick="@{viewmodel::clear}"/>
+                android:onClick="@{viewmodel::clear}"
+                app:srcCompat="@drawable/ic_cancel" />
 
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvMovieSearchList"
+            android:id="@+id/rvSearchList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/movie_search_item_view"

@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         rvMain.layoutManager = layoutManager
 
+
         lifecycleScope.launch {
             viewModel.categoryList.collectLatest { list ->
                 val arrayList = ArrayList<String>()
@@ -67,18 +68,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setCategoryList(category: String, recyclerview: RecyclerView) {
+        val arrayList = ArrayList<BasicInfo>()
         lifecycleScope.launch {
             when (category) {
                 "MOVIE" -> {
                     viewModel.movieList.collect { list ->
-                        val arrayList = ArrayList<BasicInfo>()
+                        arrayList.clear()
                         for (i in list) arrayList.add(i)
                         setAdapter(arrayList, recyclerview, category)
                     }
                 }
                 "BOOK" -> {
                     viewModel.bookList.collect { list ->
-                        val arrayList = ArrayList<BasicInfo>()
+                        arrayList.clear()
                         for (i in list) arrayList.add(i)
                         setAdapter(arrayList, recyclerview, category)
                     }
@@ -97,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         recyclerview.layoutManager = layoutManager
 
         recyclerview.adapter = ItemAdapter(
-            list, category, this@MainActivity
+            list, category, this@MainActivity, viewModel
         )
     }
 

@@ -27,7 +27,7 @@
             android:text="리뷰 삭제"
             android:textColor="@android:color/holo_red_dark"
             android:textSize="16sp"
-            android:onClick="@{(v)->activity.onClickRemoveDialog(v,id)}"/>
+            android:onClick="@{(v)->activity.onClickRemoveDialog(v)}"/>
 
         <TextView
             android:id="@+id/btRemoveCancel"
@@ -38,7 +38,7 @@
             android:text="취소"
             android:textColor="@color/textColor"
             android:textSize="16sp"
-            android:onClick="@{(v)->activity.onClickRemoveDialog(v,id)}"/>
+            android:onClick="@{(v)->activity.onClickRemoveDialog(v)}"/>
     </LinearLayout>
 
 </layout>

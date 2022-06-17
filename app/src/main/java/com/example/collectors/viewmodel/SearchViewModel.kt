@@ -37,27 +37,26 @@ class SearchViewModel @Inject constructor(
     val searchValue = MutableStateFlow("")
 
     var category: String = ""
-    init{
+
+    init {
         getResult()
     }
 
     @FlowPreview
-    fun getResult(){
-        viewModelScope.launch{
-            searchValue
-                .debounce(500)
-                .filter{ it.isNotEmpty() }
-                .onEach{
-                    when(category){
-                        "MOVIE"->setMovieSearchResult(it)
-                        "BOOK"->setBookSearchResult(it)
-                    }
+    fun getResult() {
+        searchValue
+            .debounce(500)
+            .filter { it.isNotEmpty() }
+            .onEach {
+                when (category) {
+                    "MOVIE" -> setMovieSearchResult(it)
+                    "BOOK" -> setBookSearchResult(it)
                 }
-                .launchIn(this)
-        }
+            }
+            .launchIn(viewModelScope)
     }
 
-    private fun setMovieSearchResult(value: String){
+    private fun setMovieSearchResult(value: String) {
         searchRepository.getMovieApiCall(value)?.enqueue(object : Callback<MovieList> {
             override fun onResponse(call: Call<MovieList>, response: Response<MovieList>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -65,9 +64,9 @@ class SearchViewModel @Inject constructor(
                     _movieSearchResult.update { result!!.movieItems }
                 } else {
                     when (response.code()) {
-                        400 -> Log.e("Error 400", "Bad connection.")
-                        404 -> Log.e("Error 404", "Not found.")
-                        else -> Log.e("Error", "Generic error.")
+                        400 -> Log.e("Error 400", "Incorrect request.")
+                        404 -> Log.e("Error 404", "Invalid search api.")
+                        500 -> Log.e("Error 500", "System error.")
                     }
                 }
             }
@@ -78,7 +77,7 @@ class SearchViewModel @Inject constructor(
         })
     }
 
-    private fun setBookSearchResult(value: String){
+    private fun setBookSearchResult(value: String) {
         searchRepository.getBookApiCall(value)?.enqueue(object : Callback<BookList> {
             override fun onResponse(call: Call<BookList>, response: Response<BookList>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -86,9 +85,9 @@ class SearchViewModel @Inject constructor(
                     _bookSearchResult.update { result!!.bookItems }
                 } else {
                     when (response.code()) {
-                        400 -> Log.e("Error 400", "Bad connection.")
-                        404 -> Log.e("Error 404", "Not found.")
-                        else -> Log.e("Error", "Generic error.")
+                        400 -> Log.e("Error 400", "Incorrect request.")
+                        404 -> Log.e("Error 404", "Invalid search api.")
+                        500 -> Log.e("Error 500", "System error.")
                     }
                 }
             }
@@ -99,12 +98,12 @@ class SearchViewModel @Inject constructor(
         })
     }
 
-    fun clear(view: View){
+    fun clear(view: View) {
         searchValue.update { "" }
     }
 
-    suspend fun checkExist(title: String, image: String): Boolean{
-        return when(category) {
+    suspend fun checkExist(title: String, image: String): Boolean {
+        return when (category) {
             "MOVIE" -> movieRepository.checkExist(title, image)
             "BOOK" -> bookRepository.checkExist(title, image)
             else -> false

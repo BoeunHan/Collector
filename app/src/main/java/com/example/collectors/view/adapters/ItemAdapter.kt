@@ -2,7 +2,6 @@ package com.example.collectors.view.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -10,13 +9,15 @@ import com.example.collectors.model.data.database.BasicInfo
 import com.example.collectors.databinding.CardItemViewBinding
 import com.example.collectors.view.activities.ItemListActivity
 import com.example.collectors.view.activities.MainActivity
+import com.example.collectors.viewmodel.ItemViewModel
 import kotlinx.coroutines.FlowPreview
 
 @FlowPreview
 class ItemAdapter(
     private val itemList: ArrayList<BasicInfo>,
     private val category: String,
-    private val activity: AppCompatActivity
+    private val activity: AppCompatActivity,
+    private val viewmodel: ItemViewModel
 ) : RecyclerView.Adapter<ItemAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(
@@ -41,6 +42,7 @@ class ItemAdapter(
         if(activity is MainActivity) holder.binding.mainActivity = activity
         if(activity is ItemListActivity) holder.binding.itemListActivity = activity
         holder.binding.category = category
+        holder.binding.viewmodel = viewmodel
 
         holder.binding.lifecycleOwner = activity
     }

@@ -58,10 +58,11 @@ class ItemListActivity : AppCompatActivity() {
         viewModel.category = category
         binding.category = category
 
-        lifecycleScope.launch {
 
+        val arrayList = ArrayList<BasicInfo>()
+        lifecycleScope.launch {
             viewModel.itemList.collect {
-                val arrayList = ArrayList<BasicInfo>()
+                arrayList.clear()
                 for (i in it) arrayList.add(i)
                 setItemAdapter(arrayList)
             }
@@ -75,7 +76,9 @@ class ItemListActivity : AppCompatActivity() {
             binding.isEmpty = true
         } else {
             binding.isEmpty = false
-            itemAdapter = ItemAdapter(list, category, this@ItemListActivity)
+            itemAdapter = ItemAdapter(
+                list, category, this@ItemListActivity, viewModel
+            )
             rvItemList?.adapter = itemAdapter
         }
 
@@ -95,26 +98,24 @@ class ItemListActivity : AppCompatActivity() {
         sortDialog.dismiss()
     }
 
-    fun onLongClickItem(id: Int): Boolean {
+
+    fun showRemoveDialog(view: View) {
         removeDialog = BottomSheetDialog(this, R.style.CustomBottomSheetDialog)
         val binding = RemoveDialogBinding.inflate(layoutInflater)
         binding.activity = this
-        binding.id = id
         removeDialog?.setContentView(binding.root)
         removeDialog?.setCancelable(true)
         removeDialog?.show()
-        return true
     }
 
-    fun onClickRemoveDialog(view: View, id: Int) {
-        if (view.id == R.id.btRemoveCheck) {
-            viewModel.removeItem(id)
-        }
+    fun onClickRemoveDialog(view: View) {
+        if (view.id == R.id.btRemoveCheck) viewModel.removeIdSet()
         removeDialog?.dismiss()
     }
 
 
     fun searchItems(category: String) {
+        viewModel.setSelectMode(false)
         val intent = Intent(this, SearchActivity::class.java)
         intent.putExtra(Constants.CATEGORY, category)
         startActivity(intent)
@@ -134,6 +135,7 @@ class ItemListActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.clear()
+        viewModel.setSelectMode(false)
     }
 
 

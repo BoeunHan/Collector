@@ -7,10 +7,10 @@
         <import type="android.view.View"/>
         <variable
             name="activity"
-            type="com.example.collectors.view.activities.MainActivity" />
+            type="com.han.collector.view.activities.MainActivity" />
         <variable
             name="viewmodel"
-            type="com.example.collectors.viewmodel.ItemViewModel" />
+            type="com.han.collector.viewmodel.ItemViewModel" />
         <variable
             name="isEmpty"
             type="Boolean" />
@@ -48,7 +48,8 @@
 
             <View
                 android:layout_width="50dp"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"/>
         </LinearLayout>
 
         <View
@@ -74,7 +75,7 @@
             android:text="Nothing Found."
             android:textColor="@color/textColor"
             android:textSize="16sp"
-            android:visibility="@{isEmpty? View.VISIBLE : View.GONE}" />
+            android:visibility="@{isEmpty? View.VISIBLE : View.GONE}"/>
 
 
     </LinearLayout>

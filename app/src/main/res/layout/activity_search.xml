@@ -10,7 +10,7 @@
             type="Boolean" />
         <variable
             name="viewmodel"
-            type="com.example.collectors.viewmodel.SearchViewModel" />
+            type="com.han.collector.viewmodel.SearchViewModel" />
     </data>
 
     <LinearLayout
@@ -47,7 +47,7 @@
                 android:inputType="textPersonName"
                 android:text="@={viewmodel.searchValue}"
                 android:textColor="@color/textColor"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <ImageView
                 android:id="@+id/btCancel"

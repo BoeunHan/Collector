@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.collectors">
+    package="com.han.collector">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".model.data.database.CollectorApp"
+        android:name="com.han.collector.model.data.database.CollectorApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/CustomActionBar">
         <activity
-            android:name=".view.activities.MainActivity"
+            android:name="com.han.collector.view.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,12 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activities.SearchActivity" />
-        <activity android:name=".view.activities.ItemListActivity" />
-        <activity android:name=".view.activities.AddMovieActivity" />
-        <activity android:name=".view.activities.AddBookActivity" />
-        <activity android:name=".view.activities.MovieDetailActivity" />
-        <activity android:name=".view.activities.BookDetailActivity" />
+        <activity android:name="com.han.collector.view.activities.SearchActivity" />
+        <activity android:name="com.han.collector.view.activities.ItemListActivity" />
+        <activity android:name="com.han.collector.view.activities.AddMovieActivity" />
+        <activity android:name="com.han.collector.view.activities.AddBookActivity" />
+        <activity android:name="com.han.collector.view.activities.MovieDetailActivity" />
+        <activity android:name="com.han.collector.view.activities.BookDetailActivity" />
     </application>
 
 </manifest>

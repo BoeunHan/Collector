@@ -8,13 +8,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="lightGrey">#F4F4F4</color>
+    <color name="lightGrey">#FAFAFA</color>
     <color name="mediumGrey">#D5D5D5</color>
     <color name="grey">#979797</color>
     <color name="textColor">#3C3C3C</color>
     <color name="ratingDefault">#BCBBB4</color>
     <color name="ratingAccent">#F6CA45</color>
     <color name="mainColor">#FF7F69</color>
-    <color name="secondaryColor">#FAA697</color>
+    <color name="secondaryColor">#F4B4B4</color>
     <color name="blue">#2196F3</color>
 </resources>

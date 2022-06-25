@@ -3,5 +3,5 @@
     <item android:state_enabled="true"
         android:color="@color/textColor"/>
     <item android:state_enabled="false"
-        android:color="@color/grey"/>
+        android:color="@color/mediumGrey"/>
 </selector>

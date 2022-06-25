@@ -7,13 +7,13 @@
         <import type="android.view.View"/>
         <variable
             name="mainActivity"
-            type="com.example.collectors.view.activities.MainActivity" />
+            type="com.han.collector.view.activities.MainActivity" />
         <variable
             name="itemListActivity"
-            type="com.example.collectors.view.activities.ItemListActivity" />
+            type="com.han.collector.view.activities.ItemListActivity" />
         <variable
             name="item"
-            type="com.example.collectors.model.data.database.BasicInfo" />
+            type="com.han.collector.model.data.database.BasicInfo" />
         <variable
             name="category"
             type="String" />
@@ -22,7 +22,7 @@
             type="Boolean" />
         <variable
             name="viewmodel"
-            type="com.example.collectors.viewmodel.ItemViewModel" />
+            type="com.han.collector.viewmodel.ItemViewModel" />
 
     </data>
 
@@ -47,7 +47,7 @@
                     android:id="@+id/ivItemImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
+                    android:scaleType="center"
                     tools:srcCompat="@drawable/cat_image"
                     app:image="@{item.image}"
                     app:selected="@{viewmodel.selectedIdSet.contains(item.id)}"/>

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="activity"
-            type="com.example.collectors.view.activities.MainActivity" />
+            type="com.han.collector.view.activities.MainActivity" />
     </data>
     <LinearLayout
         android:orientation="vertical"
@@ -16,12 +16,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:gravity="center"
-            android:text="Category"
-            android:textColor="@color/textColor"
-            android:textSize="20sp"
             android:padding="5dp"
-            android:layout_marginBottom="5dp"/>
+            android:text="카테고리"
+            android:textColor="@color/textColor"
+            android:textSize="20sp" />
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
@@ -31,15 +31,15 @@
             android:id="@+id/cbMovie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="MOVIE"
-            android:checked="@{activity.containsCategory(`MOVIE`)}"/>
+            android:checked="@{activity.containsCategory(`영화`)}"
+            android:text="영화" />
 
         <CheckBox
             android:id="@+id/cbBook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="BOOK"
-            android:checked="@{activity.containsCategory(`BOOK`)}"/>
+            android:checked="@{activity.containsCategory(`책`)}"
+            android:text="책" />
 
         <Button
             android:id="@+id/btCategorySave"
@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/transparent"
-            android:text="Save"
+            android:text="저장"
             android:textColor="@color/textColor"
             android:textSize="16sp"
             android:onClick="@{activity::onClickCategorySave}"/>

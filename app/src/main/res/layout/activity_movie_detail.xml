@@ -7,10 +7,10 @@
         <import type="android.view.View"/>
         <variable
             name="activity"
-            type="com.example.collectors.view.activities.MovieDetailActivity" />
+            type="com.han.collector.view.activities.MovieDetailActivity" />
         <variable
             name="item"
-            type="com.example.collectors.model.data.database.MovieEntity" />
+            type="com.han.collector.model.data.database.MovieEntity" />
 
     </data>
 
@@ -84,9 +84,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="점수"
+                        android:text="평점"
                         android:textColor="@color/textColor"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"/>
 
                     <RatingBar
                         android:id="@+id/ratingBar"
@@ -106,7 +106,7 @@
                     android:layout_margin="10dp"
                     android:text="나의 줄거리"
                     android:textColor="@color/textColor"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/tvSummary"
@@ -129,7 +129,7 @@
                     android:layout_marginBottom="10dp"
                     android:text="나의 후기"
                     android:textColor="@color/textColor"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/tvReview"
@@ -158,9 +158,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="left"
-                        android:text="@{`등록:`+item.uploadDate}"
+                        android:text="@{`등록: `+item.uploadDate}"
                         android:textColor="@color/textColor"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                     <TextView
                         android:id="@+id/tvEditDate"
@@ -168,7 +168,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="left"
-                        android:text="@{`수정:`+item.editDate}"
+                        android:text="@{`수정: `+item.editDate}"
                         android:textColor="@color/textColor"
                         android:textSize="14sp"
                         android:visibility="@{item.editDate.empty? View.GONE : View.VISIBLE}"/>

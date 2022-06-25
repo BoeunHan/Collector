@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "779928487529",
+    "project_id": "collector-c1b42",
+    "storage_bucket": "collector-c1b42.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779928487529:android:b0693cb03b0871cb0944f8",
+        "android_client_info": {
+          "package_name": "com.han.collector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "779928487529-mq1dul90jgo45btfjn7eptp93qhmr3tt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsMhwnJ79Vtk647iLU6oiL45ZQad7TtGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "779928487529-mq1dul90jgo45btfjn7eptp93qhmr3tt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,10 +6,10 @@
     <data>
         <variable
             name="item"
-            type="com.example.collectors.model.data.networkModel.BookItem" />
+            type="com.han.collector.model.data.networkModel.BookItem" />
         <variable
             name="activity"
-            type="com.example.collectors.view.activities.SearchActivity" />
+            type="com.han.collector.view.activities.SearchActivity" />
     </data>
 
     <LinearLayout
@@ -57,7 +57,7 @@
                     android:text="@{item.title}"
                     android:textColor="@color/textColor"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/tvPubDate"
@@ -91,7 +91,7 @@
                 android:maxLines="2"
                 app:text="@{item.publisher}"
                 android:textColor="@color/textColor"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
         </LinearLayout>
     </LinearLayout>
 </layout>

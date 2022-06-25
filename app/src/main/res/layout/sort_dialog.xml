@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
             name="activity"
-            type="com.example.collectors.view.activities.ItemListActivity" />
+            type="com.han.collector.view.activities.ItemListActivity" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,6 +68,23 @@
             android:textColor="@color/textColor"
             android:textSize="16sp"
             android:onClick="@{activity::onClickSortDialog}"/>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/mediumGrey" />
+
+        <TextView
+            android:id="@+id/btLikes"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="♥"
+            android:textColor="@color/textColor"
+            android:textSize="16sp"
+            android:onClick="@{activity::onClickSortDialog}"/>
+
 
 
     </LinearLayout>

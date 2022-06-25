@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="activity"
-            type="com.example.collectors.view.activities.MainActivity" />
+            type="com.han.collector.view.activities.MainActivity" />
         <variable
             name="category"
             type="String" />
@@ -53,14 +53,14 @@
                 android:contentDescription="add" />
 
             <ImageButton
-                android:id="@+id/btMore"
+                android:id="@+id/btList"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="@null"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/ic_more"
+                android:contentDescription="list"
                 android:onClick="@{()->activity.onClickMore(category)}"
-                android:contentDescription="more" />
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/ic_list" />
 
         </LinearLayout>
 

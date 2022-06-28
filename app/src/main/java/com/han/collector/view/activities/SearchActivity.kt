@@ -6,22 +6,23 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.logEvent
 import com.han.collector.utils.Constants
-import com.han.collector.view.adapters.MovieSearchAdapter
 import com.han.collector.databinding.ActivitySearchBinding
 import com.han.collector.model.data.networkModel.BookItem
 import com.han.collector.model.data.networkModel.MovieItem
 import com.han.collector.view.adapters.BookSearchAdapter
+import com.han.collector.view.adapters.MovieSearchAdapter
 import com.han.collector.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.*
 
 @FlowPreview
 @AndroidEntryPoint
@@ -34,6 +35,7 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var category: String
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
@@ -52,44 +54,44 @@ class SearchActivity : AppCompatActivity() {
         rvSearchList?.layoutManager = layoutManager
 
         lifecycleScope.launch {
-            when(category) {
-                "영화"-> viewModel.movieSearchResult.collect { list->
-                    val arrayList = ArrayList<MovieItem>()
-                    for(i in list) arrayList.add(i)
-                    setupMovieSearchRecyclerView(arrayList)
+            when (category) {
+                "영화" -> {
+                    val pagingAdapter = MovieSearchAdapter(this@SearchActivity)
+                    pagingAdapter.addLoadStateListener { loadState ->
+                        binding.isEmpty =
+                            (loadState.source.refresh is LoadState.NotLoading
+                                    && pagingAdapter.itemCount < 1)
+                    }
+                    rvSearchList?.adapter = pagingAdapter
+                    viewModel.searchFlow.collectLatest { pagingData ->
+                        pagingAdapter.submitData(pagingData as PagingData<MovieItem>)
+                    }
                 }
-                "책"-> viewModel.bookSearchResult.collect { list->
-                    val arrayList = ArrayList<BookItem>()
-                    for(i in list) arrayList.add(i)
-                    setupBookSearchRecyclerView(arrayList)
+                "책" -> {
+                    val pagingAdapter = BookSearchAdapter(this@SearchActivity)
+                    pagingAdapter.addLoadStateListener { loadState ->
+                        binding.isEmpty =
+                            (loadState.source.refresh is LoadState.NotLoading
+                                    && pagingAdapter.itemCount < 1)
+                    }
+                    rvSearchList?.adapter = pagingAdapter
+                    viewModel.searchFlow.collectLatest { pagingData ->
+                        pagingAdapter.submitData(pagingData as PagingData<BookItem>)
+                    }
                 }
             }
-        }
 
-    }
-
-    private fun setupMovieSearchRecyclerView(movieList: ArrayList<MovieItem>){
-        if(movieList.isEmpty()) binding.isEmpty = true
-        else {
-            binding.isEmpty = false
-            rvSearchList?.adapter = MovieSearchAdapter(movieList, this)
-        }
-    }
-    private fun setupBookSearchRecyclerView(bookList: ArrayList<BookItem>){
-        if(bookList.isEmpty()) binding.isEmpty = true
-        else {
-            binding.isEmpty = false
-            rvSearchList?.adapter = BookSearchAdapter(bookList, this)
         }
     }
 
-    fun onClickSearchItem(title: String, image: String){
-        lifecycleScope.launch{
-            if(viewModel.checkExist(title, image)){
-                Toast.makeText(this@SearchActivity, "이미 리뷰를 남긴 ${category}입니다.", Toast.LENGTH_SHORT).show()
-            }else {
+    fun onClickSearchItem(title: String, image: String) {
+        lifecycleScope.launch {
+            if (viewModel.checkExist(title, image)) {
+                Toast.makeText(this@SearchActivity, "이미 리뷰를 남긴 ${category}입니다.", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
                 lateinit var intent: Intent
-                when(category){
+                when (category) {
                     "영화" -> intent = Intent(this@SearchActivity, AddMovieActivity::class.java)
                     "책" -> intent = Intent(this@SearchActivity, AddBookActivity::class.java)
                 }

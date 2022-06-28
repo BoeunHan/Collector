@@ -1,6 +1,7 @@
 package com.han.collector.utils
 
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -27,6 +28,7 @@ fun loadDrawable(view: ImageView, selected: Boolean) {
 @BindingAdapter("text")
 fun setText(view: TextView, str: String) {
     if (str == "") {
+        Log.e("text is ","null~~~~~~~~~")
         view.visibility = View.GONE
         return
     }

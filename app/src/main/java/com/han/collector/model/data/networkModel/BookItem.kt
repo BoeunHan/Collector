@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class BookItem(
     @SerializedName("title") val rawTitle: String,
+    @SerializedName("link") val link: String,
     @SerializedName("image") val image: String,
     @SerializedName("pubdate") val pubDate: String,
     @SerializedName("author") val author: String,

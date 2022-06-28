@@ -1,7 +1,10 @@
 package com.han.collector.view.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.han.collector.databinding.MovieSearchItemViewBinding
 import com.han.collector.model.data.networkModel.MovieItem
@@ -10,31 +13,40 @@ import kotlinx.coroutines.FlowPreview
 
 @FlowPreview
 class MovieSearchAdapter(
-    private val movieList: ArrayList<MovieItem>,
     private val activity: SearchActivity
-) : RecyclerView.Adapter<MovieSearchAdapter.MyViewHolder>() {
+) : PagingDataAdapter<MovieItem, MovieSearchAdapter.MovieViewHolder>(MOVIE_COMPARATOR) {
 
-    inner class MyViewHolder(
-        val binding: MovieSearchItemViewBinding
-    ) : RecyclerView.ViewHolder(binding.root)
+    inner class MovieViewHolder(private val binding: MovieSearchItemViewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: MovieItem) {
+            binding.item = data
+            binding.activity = activity
+        }
+    }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): MyViewHolder {
-        return MyViewHolder(
-            MovieSearchItemViewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+        val binding = MovieSearchItemViewBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
         )
-    }
-    override fun onBindViewHolder(
-        holder: MyViewHolder,
-        position: Int
-    ) {
-        holder.binding.item = movieList[position]
-        holder.binding.activity = activity
+        return MovieViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return movieList.size
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+        val item = getItem(position)
+        item?.let { holder.bind(it) }
+    }
+
+
+    companion object {
+        val MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<MovieItem>() {
+            override fun areItemsTheSame(oldItem: MovieItem, newItem: MovieItem): Boolean {
+                return oldItem.link == newItem.link
+            }
+
+            override fun areContentsTheSame(oldItem: MovieItem, newItem: MovieItem): Boolean {
+                return oldItem == newItem
+            }
+
+        }
     }
 }

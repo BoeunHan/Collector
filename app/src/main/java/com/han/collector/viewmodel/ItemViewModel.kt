@@ -83,14 +83,14 @@ class ItemViewModel @Inject constructor(
                         when (category) {
                             "영화" -> movieRepository.searchBasicInfoDateDescending("%${it.third}%")
                             "책" -> bookRepository.searchBasicInfoDateDescending("%${it.third}%")
-                            else -> flowOf()
+                            else -> flow{}
                         }
                     }
                     SortType.ASCENDING -> {
                         when (category) {
                             "영화" -> movieRepository.searchBasicInfoDateAscending("%${it.third}%")
                             "책" -> bookRepository.searchBasicInfoDateAscending("%${it.third}%")
-                            else -> flowOf()
+                            else -> flow{}
                         }
                     }
                 }
@@ -101,14 +101,14 @@ class ItemViewModel @Inject constructor(
                         when (category) {
                             "영화" -> movieRepository.searchBasicInfoRateDescending("%${it.third}%")
                             "책" -> bookRepository.searchBasicInfoRateDescending("%${it.third}%")
-                            else -> flowOf()
+                            else -> flow{}
                         }
                     }
                     SortType.ASCENDING -> {
                         when (category) {
                             "영화" -> movieRepository.searchBasicInfoRateAscending("%${it.third}%")
                             "책" -> bookRepository.searchBasicInfoRateAscending("%${it.third}%")
-                            else -> flowOf()
+                            else -> flow{}
                         }
                     }
                 }
@@ -117,7 +117,7 @@ class ItemViewModel @Inject constructor(
                 when (category) {
                     "영화" -> movieRepository.fetchLike()
                     "책" -> bookRepository.fetchLike()
-                    else -> flowOf()
+                    else -> flow{}
                 }
             }
 

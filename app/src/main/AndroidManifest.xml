@@ -28,8 +28,7 @@
         <activity android:name="com.han.collector.view.activities.ItemListActivity" />
         <activity android:name="com.han.collector.view.activities.AddMovieActivity" />
         <activity android:name="com.han.collector.view.activities.AddBookActivity" />
-        <activity android:name="com.han.collector.view.activities.MovieDetailActivity" />
-        <activity android:name="com.han.collector.view.activities.BookDetailActivity" />
+        <activity android:name="com.han.collector.view.activities.ReviewDetailActivity" />
     </application>
 
 </manifest>

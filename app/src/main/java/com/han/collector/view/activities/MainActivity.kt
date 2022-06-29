@@ -152,11 +152,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getItemDetail(category: String, id: Int) {
-        lateinit var intent: Intent
-        when (category) {
-            "영화" -> intent = Intent(this@MainActivity, MovieDetailActivity::class.java)
-            "책" -> intent = Intent(this@MainActivity, BookDetailActivity::class.java)
-        }
+        val intent = Intent(this@MainActivity, ReviewDetailActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, category)
         intent.putExtra(Constants.SELECTED_ID, id)
         startActivity(intent)
     }

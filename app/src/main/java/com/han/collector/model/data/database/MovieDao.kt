@@ -31,7 +31,7 @@ interface MovieDao : BaseDao<MovieEntity> {
     @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value ORDER BY rate DESC")
     override fun searchBasicInfoRateDescending(value: String): Flow<List<BasicInfo>>
 
-    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE `like`=1")
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE `like`=1 ORDER BY id DESC")
     override fun fetchLike(): Flow<List<BasicInfo>>
 
     @Query("UPDATE `${Constants.TABLE_MOVIE_LIST}` SET `like` = :like WHERE id = :id")

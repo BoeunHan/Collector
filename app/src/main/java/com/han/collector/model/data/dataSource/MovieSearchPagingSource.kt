@@ -4,16 +4,9 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.han.collector.BuildConfig
-import com.han.collector.model.data.networkModel.BookList
 import com.han.collector.model.data.networkModel.MovieItem
-import com.han.collector.model.data.networkModel.MovieList
 import com.han.collector.network.SearchApiService
-import kotlinx.coroutines.flow.update
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.HttpException
-import retrofit2.Response
-import java.io.IOException
+
 
 class MovieSearchPagingSource(
     val service: SearchApiService,
@@ -28,11 +21,11 @@ class MovieSearchPagingSource(
                 BuildConfig.NAVER_API_SECRET,
                 query,
                 position,
-                PAGE_SIZE
+                params.loadSize
             )
 
-            val prevKey = if (position > 1) position - PAGE_SIZE else null
-            val nextKey = if (response.movieItems.size == PAGE_SIZE) position + PAGE_SIZE else null
+            val prevKey = if (position > 1) position - params.loadSize else null
+            val nextKey = if (response.total >= position + params.loadSize) position + params.loadSize else null
 
             LoadResult.Page(
                 data = response.movieItems,
@@ -46,12 +39,8 @@ class MovieSearchPagingSource(
 
     override fun getRefreshKey(state: PagingState<Int, MovieItem>): Int? {
         return state.anchorPosition?.let {
-            state.closestPageToPosition(it)?.prevKey?.plus(PAGE_SIZE)
-                ?: state.closestPageToPosition(it)?.nextKey?.minus(PAGE_SIZE)
+            state.closestPageToPosition(it)?.prevKey?.plus(state.config.pageSize)
+                ?: state.closestPageToPosition(it)?.nextKey?.minus(state.config.pageSize)
         }
-    }
-
-    companion object{
-        const val PAGE_SIZE = 10
     }
 }

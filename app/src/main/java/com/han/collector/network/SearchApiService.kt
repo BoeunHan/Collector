@@ -16,7 +16,7 @@ interface SearchApiService {
         @Header("X-Naver-Client-Secret") secret: String,
         @Query("query") value: String,
         @Query("start") start: Int,
-        @Query("display") display: Int,
+        @Query("display") display: Int
     ): MovieList
 
     @GET("search/book.json")
@@ -25,7 +25,7 @@ interface SearchApiService {
         @Header("X-Naver-Client-Secret") secret: String,
         @Query("query") value: String,
         @Query("start") start: Int,
-        @Query("display") display: Int,
+        @Query("display") display: Int
     ): BookList
 
 }

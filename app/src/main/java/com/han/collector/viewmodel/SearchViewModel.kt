@@ -51,13 +51,13 @@ class SearchViewModel @Inject constructor(
     val searchFlow = searchValueFlow.flatMapLatest { value ->
         when (category) {
             "영화" -> Pager(
-                config = PagingConfig(pageSize = 10),
+                config = PagingConfig(pageSize = 10, initialLoadSize = 10),
                 initialKey = null,
                 pagingSourceFactory = { MovieSearchPagingSource(searchApiService, value) }
             ).flow
                 .cachedIn(viewModelScope)
             "책" -> Pager(
-                config = PagingConfig(pageSize = 10),
+                config = PagingConfig(pageSize = 10, initialLoadSize = 10),
                 initialKey = null,
                 pagingSourceFactory = { BookSearchPagingSource(searchApiService, value) }
             ).flow

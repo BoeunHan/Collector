@@ -20,13 +20,11 @@ class BookSearchPagingSource(
                 BuildConfig.NAVER_API_SECRET,
                 query,
                 position,
-                PAGE_SIZE
+                params.loadSize
             )
 
-            Log.e("response", response.bookItems.toString())
-
-            val prevKey = if (position > 1) position - PAGE_SIZE else null
-            val nextKey = if (response.bookItems.size == PAGE_SIZE) position + PAGE_SIZE else null
+            val prevKey = if (position > 1) position - params.loadSize else null
+            val nextKey = if (response.total >= position + params.loadSize) position + params.loadSize else null
 
             LoadResult.Page(
                 data = response.bookItems,
@@ -40,12 +38,8 @@ class BookSearchPagingSource(
 
     override fun getRefreshKey(state: PagingState<Int, BookItem>): Int? {
         return state.anchorPosition?.let {
-            state.closestPageToPosition(it)?.prevKey?.plus(PAGE_SIZE)
-                ?: state.closestPageToPosition(it)?.nextKey?.minus(PAGE_SIZE)
+            state.closestPageToPosition(it)?.prevKey?.plus(state.config.pageSize)
+                ?: state.closestPageToPosition(it)?.nextKey?.minus(state.config.pageSize)
         }
-    }
-
-    companion object{
-        const val PAGE_SIZE = 10
     }
 }

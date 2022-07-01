@@ -5,9 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -157,5 +155,6 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(Constants.SELECTED_ID, id)
         startActivity(intent)
     }
+
 
 }

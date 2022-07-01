@@ -4,8 +4,8 @@
     <data>
         <import type="android.view.View" />
         <variable
-            name="item"
-            type="com.han.collector.model.data.database.BookEntity" />
+            name="viewModel"
+            type="com.han.collector.viewmodel.BookViewModel" />
     </data>
 
     <LinearLayout
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:rating="@{item.rate}"
+                android:rating="@{viewModel.bookDetail.rate}"
                 android:stepSize="0.5"
                 android:theme="@style/RatingBar" />
         </LinearLayout>
@@ -57,7 +57,7 @@
             android:lines="6"
             android:padding="10dp"
             android:scrollbars="vertical"
-            android:text="@{item.summary}"
+            android:text="@{viewModel.bookDetail.summary}"
             android:textColor="@color/textColor"
             android:textSize="16sp" />
 
@@ -80,7 +80,7 @@
             android:lines="6"
             android:padding="10dp"
             android:scrollbars="vertical"
-            android:text="@{item.review}"
+            android:text="@{viewModel.bookDetail.review}"
             android:textColor="@color/textColor"
             android:textSize="16sp" />
 
@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:text="@{`등록: `+item.uploadDate}"
+                android:text="@{`등록: `+viewModel.bookDetail.uploadDate}"
                 android:textColor="@color/textColor"
                 android:textSize="14sp" />
 
@@ -108,10 +108,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:text="@{`수정: `+item.editDate}"
+                android:text="@{`수정: `+viewModel.bookDetail.editDate}"
                 android:textColor="@color/textColor"
                 android:textSize="14sp"
-                android:visibility="@{item.editDate.empty? View.GONE : View.VISIBLE}" />
+                android:visibility="@{viewModel.bookDetail.editDate.empty? View.GONE : View.VISIBLE}" />
         </LinearLayout>
 
     </LinearLayout>

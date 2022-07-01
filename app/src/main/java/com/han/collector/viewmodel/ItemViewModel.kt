@@ -4,12 +4,8 @@ package com.han.collector.viewmodel
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.han.collector.R
-import com.han.collector.model.data.database.BookEntity
-import com.han.collector.model.data.database.MovieEntity
 import com.han.collector.model.repository.BookRepository
 import com.han.collector.model.repository.CategoryRepository
 import com.han.collector.model.repository.MovieRepository
@@ -208,11 +204,6 @@ class ItemViewModel @Inject constructor(
         }
         setSelectMode(false)
     }
-
-
-    fun getMovieDetail(id: Int) = movieRepository.fetchData(id)
-    fun getBookDetail(id: Int) = bookRepository.fetchData(id)
-
 
     fun setLike(id: Int, like: Boolean){
         viewModelScope.launch {

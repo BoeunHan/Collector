@@ -20,14 +20,12 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name="com.han.collector.view.activities.SearchActivity" />
         <activity android:name="com.han.collector.view.activities.ItemListActivity" />
-        <activity android:name="com.han.collector.view.activities.AddMovieActivity" />
-        <activity android:name="com.han.collector.view.activities.AddBookActivity" />
+        <activity android:name="com.han.collector.view.activities.AddReviewActivity" />
         <activity android:name="com.han.collector.view.activities.ReviewDetailActivity" />
     </application>
 

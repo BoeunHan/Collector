@@ -33,19 +33,32 @@ class BookViewModel @Inject constructor(
     var summary = MutableStateFlow("")
     var review = MutableStateFlow("")
 
-    fun setBookStatus(bookEntity: BookEntity) {
-        bookStatus = bookStatus.copy(
-            id = bookEntity.id,
-            title = bookEntity.title,
-            image = bookEntity.image,
-            uploadDate = bookEntity.uploadDate,
-            like = bookEntity.like
-        )
-        rate.update { bookEntity.rate }
-        summary.update { bookEntity.summary }
-        review.update { bookEntity.review }
+    val bookDetail = MutableStateFlow(BookEntity())
+
+    fun getBookDetail(id: Int){
+        viewModelScope.launch {
+            bookRepository.fetchData(id).collectLatest { book ->
+                bookDetail.update { book }
+            }
+        }
     }
 
+    fun setBookStatus(id: Int) {
+        viewModelScope.launch {
+            bookRepository.fetchData(id).collectLatest { book ->
+                bookStatus = bookStatus.copy(
+                    id = book.id,
+                    title = book.title,
+                    image = book.image,
+                    uploadDate = book.uploadDate,
+                    like = book.like
+                )
+                rate.update { book.rate }
+                summary.update { book.summary }
+                review.update { book.review }
+            }
+        }
+    }
     fun setBookStatus(title: String, image: String) {
         bookStatus = bookStatus.copy(
             title = title,
@@ -53,7 +66,7 @@ class BookViewModel @Inject constructor(
         )
     }
 
-    fun onClickSave() {
+    fun saveBook() {
         val date = Date()
         val sdf = SimpleDateFormat("yyyy/MM/dd")
         val datestr = sdf.format(date)

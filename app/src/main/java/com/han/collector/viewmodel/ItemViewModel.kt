@@ -1,6 +1,7 @@
 package com.han.collector.viewmodel
 
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -204,9 +205,12 @@ class ItemViewModel @Inject constructor(
         setSelectMode(false)
     }
 
-    fun getMovieDetail(id: Int) = movieRepository.fetchData(id)
-    fun getBookDetail(id: Int) = bookRepository.fetchData(id)
-
-    suspend fun setMovieLike(id: Int, like: Boolean) = movieRepository.like(id, like)
-    suspend fun setBookLike(id: Int, like: Boolean) = bookRepository.like(id, like)
+    fun setLike(id: Int, like: Boolean){
+        viewModelScope.launch {
+            when(category){
+                "영화" -> movieRepository.like(id, !like)
+                "책" -> bookRepository.like(id, !like)
+            }
+        }
+    }
 }

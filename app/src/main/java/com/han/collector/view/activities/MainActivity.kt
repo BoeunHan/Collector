@@ -5,9 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -152,13 +150,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getItemDetail(category: String, id: Int) {
-        lateinit var intent: Intent
-        when (category) {
-            "영화" -> intent = Intent(this@MainActivity, MovieDetailActivity::class.java)
-            "책" -> intent = Intent(this@MainActivity, BookDetailActivity::class.java)
-        }
+        val intent = Intent(this@MainActivity, ReviewDetailActivity::class.java)
+        intent.putExtra(Constants.CATEGORY, category)
         intent.putExtra(Constants.SELECTED_ID, id)
         startActivity(intent)
     }
+
 
 }

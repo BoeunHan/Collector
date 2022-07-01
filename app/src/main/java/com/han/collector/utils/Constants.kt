@@ -15,6 +15,7 @@ object Constants {
     const val TITLE = "title"
     const val CATEGORY = "category"
     const val SELECTED_ID = "selected_id"
+    const val SELECTED_ITEM = "selected_item"
     const val SELECTED_MOVIE = "selected_movie"
     const val SELECTED_BOOK = "selected_book"
 

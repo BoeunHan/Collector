@@ -33,17 +33,31 @@ class MovieViewModel @Inject constructor(
     var summary = MutableStateFlow("")
     var review = MutableStateFlow("")
 
-    fun setMovieStatus(movieEntity: MovieEntity) {
-        movieStatus = movieStatus.copy(
-            id = movieEntity.id,
-            title = movieEntity.title,
-            image = movieEntity.image,
-            uploadDate = movieEntity.uploadDate,
-            like = movieEntity.like
-        )
-        rate.update { movieEntity.rate }
-        summary.update { movieEntity.summary }
-        review.update { movieEntity.review }
+    val movieDetail = MutableStateFlow(MovieEntity())
+
+    fun getMovieDetail(id: Int){
+        viewModelScope.launch {
+            movieRepository.fetchData(id).collectLatest { movie ->
+                movieDetail.update { movie }
+            }
+        }
+    }
+
+    fun setMovieStatus(id: Int) {
+        viewModelScope.launch {
+            movieRepository.fetchData(id).collectLatest { movie ->
+                movieStatus = movieStatus.copy(
+                    id = movie.id,
+                    title = movie.title,
+                    image = movie.image,
+                    uploadDate = movie.uploadDate,
+                    like = movie.like
+                )
+                rate.update { movie.rate }
+                summary.update { movie.summary }
+                review.update { movie.review }
+            }
+        }
     }
 
     fun setMovieStatus(title: String, image: String) {
@@ -53,7 +67,7 @@ class MovieViewModel @Inject constructor(
         )
     }
 
-    fun onClickSave() {
+    fun saveMovie() {
         val date = Date()
         val sdf = SimpleDateFormat("yyyy/MM/dd")
         val datestr = sdf.format(date)

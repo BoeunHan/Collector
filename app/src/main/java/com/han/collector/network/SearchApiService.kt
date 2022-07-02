@@ -14,7 +14,7 @@ interface SearchApiService {
     suspend fun getMovieSearchResult(
         @Header("X-Naver-Client-Id") id: String,
         @Header("X-Naver-Client-Secret") secret: String,
-        @Query("query") value: String,
+        @Query("query") query: String,
         @Query("start") start: Int,
         @Query("display") display: Int
     ): MovieList
@@ -23,7 +23,7 @@ interface SearchApiService {
     suspend fun getBookSearchResult(
         @Header("X-Naver-Client-Id") id: String,
         @Header("X-Naver-Client-Secret") secret: String,
-        @Query("query") value: String,
+        @Query("query") query: String,
         @Query("start") start: Int,
         @Query("display") display: Int
     ): BookList

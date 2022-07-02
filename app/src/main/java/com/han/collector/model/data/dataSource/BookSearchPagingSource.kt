@@ -13,8 +13,10 @@ class BookSearchPagingSource(
 ) : PagingSource<Int, BookItem>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BookItem> {
-        return try{
-            val position = params.key ?: 1
+        return try {
+            val key = params.key ?: 1
+            val position = if (key == 1) 1 else 1 + params.loadSize * (key + 1)
+
             val response = service.getBookSearchResult(
                 BuildConfig.NAVER_API_ID,
                 BuildConfig.NAVER_API_SECRET,
@@ -23,13 +25,10 @@ class BookSearchPagingSource(
                 params.loadSize
             )
 
-            val prevKey = if (position > 1) position - params.loadSize else null
-            val nextKey = if (response.total >= position + params.loadSize) position + params.loadSize else null
-
             LoadResult.Page(
                 data = response.bookItems,
-                prevKey = prevKey,
-                nextKey = nextKey
+                prevKey = null,
+                nextKey = if (response.total >= position + params.loadSize) key.plus(1) else null
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

@@ -16,8 +16,9 @@ class MovieSearchAdapter(
     private val activity: SearchActivity
 ) : PagingDataAdapter<MovieItem, MovieSearchAdapter.MovieViewHolder>(MOVIE_COMPARATOR) {
 
-    inner class MovieViewHolder(private val binding: MovieSearchItemViewBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class MovieViewHolder(
+        private val binding: MovieSearchItemViewBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: MovieItem) {
             binding.item = data
             binding.activity = activity
@@ -26,8 +27,7 @@ class MovieSearchAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val binding = MovieSearchItemViewBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
+            LayoutInflater.from(parent.context), parent, false)
         return MovieViewHolder(binding)
     }
 

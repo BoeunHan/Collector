@@ -3,14 +3,10 @@ package com.han.collector.viewmodel
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
-import com.han.collector.model.data.dataSource.BookSearchPagingSource
-import com.han.collector.model.data.dataSource.MovieSearchPagingSource
 import com.han.collector.model.repository.BookRepository
 import com.han.collector.model.repository.MovieRepository
-import com.han.collector.network.SearchApiService
+import com.han.collector.model.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -22,7 +18,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     val movieRepository: MovieRepository,
     val bookRepository: BookRepository,
-    val searchApiService: SearchApiService
+    val searchRepository: SearchRepository
 ) : ViewModel() {
 
     val searchValue = MutableStateFlow("")
@@ -40,27 +36,17 @@ class SearchViewModel @Inject constructor(
         searchValue
             .debounce(500)
             .filter { it.isNotEmpty() }
-            .onEach {
-                searchValueFlow.emit(it)
-            }
+            .onEach { value -> searchValueFlow.update { value } }
             .launchIn(viewModelScope)
     }
 
 
     @ExperimentalCoroutinesApi
-    val searchFlow = searchValueFlow.flatMapLatest { value ->
+    val searchFlow = searchValueFlow.flatMapLatest {
         when (category) {
-            "영화" -> Pager(
-                config = PagingConfig(pageSize = 10, initialLoadSize = 10),
-                initialKey = null,
-                pagingSourceFactory = { MovieSearchPagingSource(searchApiService, value) }
-            ).flow
+            "영화" -> searchRepository.getMovieSearchFlow(it)
                 .cachedIn(viewModelScope)
-            "책" -> Pager(
-                config = PagingConfig(pageSize = 10, initialLoadSize = 10),
-                initialKey = null,
-                pagingSourceFactory = { BookSearchPagingSource(searchApiService, value) }
-            ).flow
+            "책" -> searchRepository.getBookSearchFlow(it)
                 .cachedIn(viewModelScope)
             else -> flow {}
         }

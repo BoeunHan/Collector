@@ -56,12 +56,9 @@ class ItemListActivity : AppCompatActivity() {
         viewModel.category = category
         binding.category = category
 
-
-        val arrayList = ArrayList<BasicInfo>()
         lifecycleScope.launch {
             viewModel.itemList.collect {
-                arrayList.clear()
-                for (i in it) arrayList.add(i)
+                val arrayList = ArrayList(it)
                 setItemAdapter(arrayList)
             }
         }

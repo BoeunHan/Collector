@@ -24,8 +24,7 @@ class BookSearchAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val binding = BookSearchItemViewBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
+            LayoutInflater.from(parent.context), parent, false)
         return BookViewHolder(binding)
     }
 

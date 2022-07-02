@@ -16,7 +16,7 @@ class ItemAdapter(
     private val itemList: ArrayList<BasicInfo>,
     private val category: String,
     private val activity: AppCompatActivity,
-    private val viewmodel: ItemViewModel
+    private val viewModel: ItemViewModel
 ) : RecyclerView.Adapter<ItemAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(
@@ -41,7 +41,7 @@ class ItemAdapter(
         if(activity is MainActivity) holder.binding.mainActivity = activity
         if(activity is ItemListActivity) holder.binding.itemListActivity = activity
         holder.binding.category = category
-        holder.binding.viewmodel = viewmodel
+        holder.binding.viewModel = viewModel
 
         holder.binding.lifecycleOwner = activity
     }

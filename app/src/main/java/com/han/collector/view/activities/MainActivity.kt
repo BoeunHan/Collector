@@ -56,57 +56,16 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.categoryList.collectLatest { list ->
-                val arrayList = ArrayList<String>()
-                for (i in list) arrayList.add(i)
+                val arrayList = ArrayList(list)
                 categoryList = arrayList
 
                 if (categoryList.isNotEmpty()) {
                     binding.isEmpty = false
-                    rvMain.adapter = CategoryAdapter(categoryList, this@MainActivity)
-                    { category, recyclerview -> setCategoryList(category, recyclerview) }
+                    rvMain.adapter = CategoryAdapter(categoryList, this@MainActivity, viewModel)
                 } else binding.isEmpty = true
 
             }
         }
-
-
-
-    }
-
-    private fun setCategoryList(category: String, recyclerview: RecyclerView) {
-        val arrayList = ArrayList<BasicInfo>()
-        lifecycleScope.launch {
-            when (category) {
-                "영화" -> {
-                    viewModel.movieList.collect { list ->
-                        arrayList.clear()
-                        for (i in list) arrayList.add(i)
-                        setAdapter(arrayList, recyclerview, category)
-                    }
-                }
-                "책" -> {
-                    viewModel.bookList.collect { list ->
-                        arrayList.clear()
-                        for (i in list) arrayList.add(i)
-                        setAdapter(arrayList, recyclerview, category)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setAdapter(
-        list: ArrayList<BasicInfo>,
-        recyclerview: RecyclerView,
-        category: String
-    ) {
-        val layoutManager = LinearLayoutManager(this)
-        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        recyclerview.layoutManager = layoutManager
-
-        recyclerview.adapter = ItemAdapter(
-            list, category, this@MainActivity, viewModel
-        )
     }
 
     fun showCategoryDialog() {
@@ -155,6 +114,5 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(Constants.SELECTED_ID, id)
         startActivity(intent)
     }
-
 
 }

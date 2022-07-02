@@ -21,7 +21,7 @@
             name="isMain"
             type="Boolean" />
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="com.han.collector.viewmodel.ItemViewModel" />
 
     </data>
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:orientation="vertical"
-        android:onClick="@{() -> viewmodel.selectMode ? viewmodel.onClickItem(item.id) : isMain ? mainActivity.getItemDetail(category, item.id) : itemListActivity.getItemDetail(category, item.id)}">
+        android:onClick="@{() -> viewModel.selectMode ? viewModel.onClickItem(item.id) : isMain ? mainActivity.getItemDetail(category, item.id) : itemListActivity.getItemDetail(category, item.id)}">
 
         <androidx.cardview.widget.CardView
             android:layout_width="120dp"
@@ -50,7 +50,7 @@
                     android:scaleType="center"
                     tools:srcCompat="@drawable/cat_image"
                     app:image="@{item.image}"
-                    app:selected="@{viewmodel.selectedIdSet.contains(item.id)}"/>
+                    app:selected="@{viewModel.selectedIdSet.contains(item.id)}"/>
 
                 <ImageView
                     android:id="@+id/ivLike"
@@ -69,7 +69,7 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/checkedimage_background"
                     app:srcCompat="@drawable/ic_checked"
-                    android:visibility="@{viewmodel.selectedIdSet.contains(item.id) ? View.VISIBLE : View.GONE }"/>
+                    android:visibility="@{viewModel.selectedIdSet.contains(item.id) ? View.VISIBLE : View.GONE }"/>
 
                 <TextView
                     android:id="@+id/tvTitleItem"

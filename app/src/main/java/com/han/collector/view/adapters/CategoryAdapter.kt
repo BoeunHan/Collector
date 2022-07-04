@@ -7,7 +7,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.han.collector.databinding.MainListItemViewBinding
-import com.han.collector.model.data.database.BasicInfo
 import com.han.collector.view.activities.MainActivity
 import com.han.collector.viewmodel.ItemViewModel
 import kotlinx.coroutines.FlowPreview
@@ -47,20 +46,24 @@ class CategoryAdapter(
     override fun getItemCount(): Int = categoryList.size
 
     private fun setCategoryList(category: String, recyclerview: RecyclerView) {
+        val layoutManager = LinearLayoutManager(activity)
+        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        recyclerview.layoutManager = layoutManager
+        val pagingAdapter = ItemAdapter(
+            category, activity, viewModel)
+        recyclerview.adapter = pagingAdapter
         activity.lifecycleScope.launch {
             when (category) {
                 "영화" -> viewModel.movieList
                 "책" -> viewModel.bookList
                 else -> flow {}
             }.collectLatest {
-                val arrayList = ArrayList(it)
-                setAdapter(arrayList, recyclerview, category)
+                pagingAdapter.submitData(it)
             }
         }
     }
 
     private fun setAdapter(
-        list: ArrayList<BasicInfo>,
         recyclerview: RecyclerView,
         category: String
     ) {
@@ -69,7 +72,7 @@ class CategoryAdapter(
         recyclerview.layoutManager = layoutManager
 
         recyclerview.adapter = ItemAdapter(
-            list, category, activity, viewModel
+            category, activity, viewModel
         )
     }
 

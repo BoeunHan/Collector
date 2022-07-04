@@ -8,20 +8,21 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.han.collector.utils.Constants
 import com.han.collector.R
-import com.han.collector.model.data.database.BasicInfo
 import com.han.collector.databinding.ActivityItemListBinding
 import com.han.collector.databinding.RemoveDialogBinding
 import com.han.collector.databinding.SortDialogBinding
-import com.han.collector.view.adapters.ItemAdapter
 import com.han.collector.viewmodel.ItemViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.han.collector.view.adapters.ItemAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @FlowPreview
@@ -33,11 +34,12 @@ class ItemListActivity : AppCompatActivity() {
 
     private var rvItemList: RecyclerView? = null
     private var removeDialog: BottomSheetDialog? = null
-    private var itemAdapter: ItemAdapter? = null
 
     private lateinit var sortDialog: BottomSheetDialog
 
     private lateinit var category: String
+
+    private var pagingAdapter: ItemAdapter? = null
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,25 +60,25 @@ class ItemListActivity : AppCompatActivity() {
         viewModel.category = category
         binding.category = category
 
+        setAdapter()
         lifecycleScope.launch {
-            viewModel.itemList.collect {
-                val arrayList = ArrayList(it)
-                setItemAdapter(arrayList)
+            viewModel.itemFlow.collectLatest {
+                pagingAdapter?.submitData(it)
             }
         }
-
     }
 
-    private fun setItemAdapter(list: ArrayList<BasicInfo>) {
-        if (list.isEmpty()) {
-            binding.isEmpty = true
-        } else {
-            binding.isEmpty = false
-            itemAdapter = ItemAdapter(
-                list, category, this@ItemListActivity, viewModel
-            )
-            rvItemList?.adapter = itemAdapter
+    fun setAdapter(){
+        pagingAdapter = ItemAdapter(category, this@ItemListActivity, viewModel)
+        pagingAdapter?.addLoadStateListener { loadState ->
+            binding.isEmpty =
+                (loadState.source.refresh is LoadState.NotLoading
+                        && pagingAdapter?.itemCount!! < 1)
+            if(loadState.source.refresh is LoadState.NotLoading && !viewModel.selectMode.value){
+                rvItemList?.scrollToPosition(0)
+            }
         }
+        binding.rvItemList.adapter = pagingAdapter
     }
 
     fun showSortDialog(view: View) {
@@ -105,6 +107,7 @@ class ItemListActivity : AppCompatActivity() {
 
     fun onClickRemoveDialog(view: View) {
         if (view.id == R.id.btRemoveCheck) viewModel.removeIdSet()
+        pagingAdapter?.refresh()
         removeDialog?.dismiss()
     }
 
@@ -130,12 +133,11 @@ class ItemListActivity : AppCompatActivity() {
         viewModel.setSelectMode(false)
     }
 
-    val onScrollListener = object : RecyclerView.OnScrollListener(){
+    val onScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(recyclerView.windowToken, 0)
         }
     }
-
 }

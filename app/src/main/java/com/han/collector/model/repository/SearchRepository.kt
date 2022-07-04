@@ -19,19 +19,15 @@ class SearchRepository @Inject constructor(
         private val PAGE_SIZE = 10
     }
 
-    fun getMovieSearchFlow(query: String): Flow<PagingData<MovieItem>> {
-        return Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE),
-            initialKey = null,
-            pagingSourceFactory = { MovieSearchPagingSource(searchApiService, query) }
-        ).flow
-    }
+    fun getMovieSearchFlow(query: String) = Pager(
+        config = PagingConfig(pageSize = PAGE_SIZE),
+        initialKey = null,
+        pagingSourceFactory = { MovieSearchPagingSource(searchApiService, query) }
+    ).flow
 
-    fun getBookSearchFlow(query: String): Flow<PagingData<BookItem>> {
-        return Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE),
-            initialKey = null,
-            pagingSourceFactory = { BookSearchPagingSource(searchApiService, query) }
-        ).flow
-    }
+    fun getBookSearchFlow(query: String) = Pager(
+        config = PagingConfig(pageSize = PAGE_SIZE),
+        initialKey = null,
+        pagingSourceFactory = { BookSearchPagingSource(searchApiService, query) }
+    ).flow
 }

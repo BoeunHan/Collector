@@ -11,6 +11,9 @@
         <variable
             name="viewmodel"
             type="com.han.collector.viewmodel.SearchViewModel" />
+        <variable
+            name="activity"
+            type="com.han.collector.view.activities.SearchActivity" />
     </data>
 
     <LinearLayout
@@ -62,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/movie_search_item_view"
+            app:scrollListener="@{activity.onScrollListener}"
             android:visibility="@{isEmpty ? View.GONE : View.VISIBLE}"/>
 
         <TextView

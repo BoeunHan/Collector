@@ -1,13 +1,11 @@
 package com.han.collector.utils
 
 import android.os.Build
-import android.util.Log
-import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.han.collector.R
 
@@ -25,26 +23,7 @@ fun loadDrawable(view: ImageView, selected: Boolean) {
     else view.foreground = ContextCompat.getDrawable(view.context, R.drawable.gradient_shape)
 }
 
-@BindingAdapter("text")
-fun setText(view: TextView, str: String) {
-    if (str == "") {
-        Log.e("text is ","null~~~~~~~~~")
-        view.visibility = View.GONE
-        return
-    }
-    when (view.id) {
-        R.id.tvDirector -> {
-            view.text = "감독: ${str.substring(0, str.length - 1)}"
-        }
-        R.id.tvActor -> {
-            view.text = "출연: ${str.substring(0, str.length - 1)}"
-        }
-        R.id.tvAuthor -> {
-            view.text = "저자: $str"
-        }
-        R.id.tvPublisher -> {
-            view.text = "출판사: $str"
-        }
-    }
+@BindingAdapter("scrollListener")
+fun setOnScrollListener(view: RecyclerView, listener: RecyclerView.OnScrollListener){
+    view.addOnScrollListener(listener)
 }
-

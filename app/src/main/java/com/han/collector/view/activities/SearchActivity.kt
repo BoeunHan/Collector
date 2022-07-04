@@ -1,8 +1,10 @@
 package com.han.collector.view.activities
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -41,6 +43,7 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.activity = this
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
@@ -53,6 +56,10 @@ class SearchActivity : AppCompatActivity() {
         rvSearchList?.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         rvSearchList?.layoutManager = layoutManager
 
+        setRecyclerView()
+    }
+
+    private fun setRecyclerView() {
         lifecycleScope.launch {
             when (category) {
                 "영화" -> {
@@ -101,5 +108,11 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-
+    val onScrollListener = object : RecyclerView.OnScrollListener(){
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(recyclerView.windowToken, 0)
+        }
+    }
 }

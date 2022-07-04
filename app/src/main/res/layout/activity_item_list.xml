@@ -138,7 +138,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="@{isEmpty ? View.GONE : View.VISIBLE}"
-                tools:listitem="@layout/card_item_view" />
+                tools:listitem="@layout/card_item_view"
+                app:scrollListener="@{activity.onScrollListener}"/>
 
             <TextView
                 android:id="@+id/tvNothingFound"

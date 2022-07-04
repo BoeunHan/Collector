@@ -40,7 +40,6 @@ class SearchViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-
     @ExperimentalCoroutinesApi
     val searchFlow = searchValueFlow.flatMapLatest {
         when (category) {

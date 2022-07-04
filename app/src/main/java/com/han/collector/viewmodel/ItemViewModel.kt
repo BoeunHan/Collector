@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.RecyclerView
 import com.han.collector.R
 import com.han.collector.model.repository.BookRepository
 import com.han.collector.model.repository.CategoryRepository
@@ -18,7 +19,7 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 enum class SortField {
-    DATE, RATE, NONE
+    DATE, RATE, LIKE
 }
 
 enum class SortType {
@@ -38,8 +39,8 @@ class ItemViewModel @Inject constructor(
     var category = ""
     var searchValue = MutableStateFlow("")
 
-    val movieList = movieRepository.fetchRecentBasicInfo()
-    val bookList = bookRepository.fetchRecentBasicInfo()
+    val movieList = movieRepository.getRecentReviewFlow()
+    val bookList = bookRepository.getRecentReviewFlow()
 
     private val _selectedIdSet = MutableStateFlow(HashSet<Int>())
     val selectedIdSet = _selectedIdSet.asStateFlow()
@@ -67,7 +68,6 @@ class ItemViewModel @Inject constructor(
         categoryRepository.setCategory(list)
     }
 
-
     private fun getResult() {
         searchValue
             .debounce(500)
@@ -76,85 +76,34 @@ class ItemViewModel @Inject constructor(
     }
 
     @ExperimentalCoroutinesApi
-    val itemList = sortFlow.flatMapLatest {
-        when (it.first) {
-            SortField.DATE -> {
-                when (it.second) {
-                    SortType.DESCENDING -> {
-                        when (category) {
-                            "영화" -> movieRepository.searchBasicInfoDateDescending("%${it.third}%")
-                            "책" -> bookRepository.searchBasicInfoDateDescending("%${it.third}%")
-                            else -> flow{}
-                        }
-                    }
-                    SortType.ASCENDING -> {
-                        when (category) {
-                            "영화" -> movieRepository.searchBasicInfoDateAscending("%${it.third}%")
-                            "책" -> bookRepository.searchBasicInfoDateAscending("%${it.third}%")
-                            else -> flow{}
-                        }
-                    }
-                }
-            }
-            SortField.RATE -> {
-                when (it.second) {
-                    SortType.DESCENDING -> {
-                        when (category) {
-                            "영화" -> movieRepository.searchBasicInfoRateDescending("%${it.third}%")
-                            "책" -> bookRepository.searchBasicInfoRateDescending("%${it.third}%")
-                            else -> flow{}
-                        }
-                    }
-                    SortType.ASCENDING -> {
-                        when (category) {
-                            "영화" -> movieRepository.searchBasicInfoRateAscending("%${it.third}%")
-                            "책" -> bookRepository.searchBasicInfoRateAscending("%${it.third}%")
-                            else -> flow{}
-                        }
-                    }
-                }
-            }
-            SortField.NONE -> {
-                when (category) {
-                    "영화" -> movieRepository.fetchLike()
-                    "책" -> bookRepository.fetchLike()
-                    else -> flow{}
-                }
-            }
-
+    val itemFlow = sortFlow.flatMapLatest {
+        when(category){
+            "영화" -> movieRepository.getReviewFlow(Pair(it.first, it.second), "%${it.third}%")
+            "책" -> bookRepository.getReviewFlow(Pair(it.first, it.second), "%${it.third}%")
+            else -> flow{}
         }
     }
 
     fun setMode(view: View) {
         when (view.id) {
             R.id.btDateDescending -> {
-                sortFlow.update {
-                    it.copy(first = SortField.DATE, second = SortType.DESCENDING)
-                }
+                sortFlow.update { it.copy(first = SortField.DATE, second = SortType.DESCENDING) }
                 sortModeName.update { "최신순" }
             }
             R.id.btDateAscending -> {
-                sortFlow.update {
-                    it.copy(first = SortField.DATE, second = SortType.ASCENDING)
-                }
+                sortFlow.update { it.copy(first = SortField.DATE, second = SortType.ASCENDING) }
                 sortModeName.update { "오래된순" }
             }
             R.id.btRateDescending -> {
-                sortFlow.update {
-                    it.copy(first = SortField.RATE, second = SortType.DESCENDING)
-                }
+                sortFlow.update { it.copy(first = SortField.RATE, second = SortType.DESCENDING) }
                 sortModeName.update { "별점높은순" }
             }
             R.id.btRateAscending -> {
-                sortFlow.update {
-                    it.copy(first = SortField.RATE, second = SortType.ASCENDING)
-                }
+                sortFlow.update { it.copy(first = SortField.RATE, second = SortType.ASCENDING) }
                 sortModeName.update { "별점낮은순" }
             }
             R.id.btLikes -> {
-                sortFlow.update {
-                    it.copy(first = SortField.NONE)
-                }
+                sortFlow.update { it.copy(first = SortField.LIKE) }
                 sortModeName.update { "♥" }
             }
         }

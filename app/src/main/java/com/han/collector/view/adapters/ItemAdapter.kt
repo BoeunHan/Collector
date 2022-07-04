@@ -3,9 +3,11 @@ package com.han.collector.view.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.han.collector.model.data.database.BasicInfo
 import com.han.collector.databinding.CardItemViewBinding
+import com.han.collector.utils.Constants
 import com.han.collector.view.activities.ItemListActivity
 import com.han.collector.view.activities.MainActivity
 import com.han.collector.viewmodel.ItemViewModel
@@ -13,40 +15,34 @@ import kotlinx.coroutines.FlowPreview
 
 @FlowPreview
 class ItemAdapter(
-    private val itemList: ArrayList<BasicInfo>,
     private val category: String,
     private val activity: AppCompatActivity,
     private val viewModel: ItemViewModel
-) : RecyclerView.Adapter<ItemAdapter.MyViewHolder>() {
+) : PagingDataAdapter<BasicInfo, ItemAdapter.ReviewViewHolder>(Constants.REVIEW_COMPARATOR) {
 
-    inner class MyViewHolder(
-        val binding: CardItemViewBinding
-    ) : RecyclerView.ViewHolder(binding.root)
+    inner class ReviewViewHolder(
+        private val binding: CardItemViewBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: BasicInfo) {
+            binding.item = data
+            binding.isMain = activity is MainActivity
+            if(activity is MainActivity) binding.mainActivity = activity
+            if(activity is ItemListActivity) binding.itemListActivity = activity
+            binding.category = category
+            binding.viewModel = viewModel
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): MyViewHolder {
-        return MyViewHolder(
-            CardItemViewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        )
-    }
-    override fun onBindViewHolder(
-        holder: MyViewHolder,
-        position: Int
-    ) {
-        holder.binding.item = itemList[position]
-
-        holder.binding.isMain = activity is MainActivity
-        if(activity is MainActivity) holder.binding.mainActivity = activity
-        if(activity is ItemListActivity) holder.binding.itemListActivity = activity
-        holder.binding.category = category
-        holder.binding.viewModel = viewModel
-
-        holder.binding.lifecycleOwner = activity
+            binding.lifecycleOwner = activity
+        }
     }
 
-    override fun getItemCount(): Int {
-        return itemList.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
+        val binding = CardItemViewBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false)
+        return ReviewViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
+        val item = getItem(position)
+        item?.let { holder.bind(it) }
     }
 }

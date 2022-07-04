@@ -4,6 +4,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import androidx.recyclerview.widget.DiffUtil
+import com.han.collector.model.data.database.BasicInfo
+import com.han.collector.model.data.networkModel.MovieItem
 
 object Constants {
     const val TABLE_MOVIE_LIST = "movie-list"
@@ -39,5 +42,16 @@ object Constants {
             val activeNetworkInfo = connectivityManager.activeNetworkInfo
             return activeNetworkInfo != null && activeNetworkInfo.isConnected
         }
+    }
+
+    val REVIEW_COMPARATOR = object : DiffUtil.ItemCallback<BasicInfo>() {
+        override fun areItemsTheSame(oldItem: BasicInfo, newItem: BasicInfo): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: BasicInfo, newItem: BasicInfo): Boolean {
+            return oldItem == newItem
+        }
+
     }
 }

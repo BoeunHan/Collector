@@ -9,15 +9,12 @@ import android.view.Window
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.han.collector.databinding.ActivityMainBinding
 import com.han.collector.databinding.CategoryDialogBinding
-import com.han.collector.model.data.database.BasicInfo
 import com.han.collector.utils.Constants
 import com.han.collector.view.adapters.CategoryAdapter
-import com.han.collector.view.adapters.ItemAdapter
 import com.han.collector.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview

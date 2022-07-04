@@ -1,5 +1,6 @@
 package com.han.collector.model.data.database
 
+import androidx.paging.PagingSource
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
@@ -20,19 +21,19 @@ interface BaseDao<T> {
 
     fun fetchData(id: Int): Flow<T>
 
-    fun fetchRecentBasicInfo(): Flow<List<BasicInfo>>
-
-    fun searchBasicInfoDateAscending(value: String): Flow<List<BasicInfo>>
-
-    fun searchBasicInfoDateDescending(value: String): Flow<List<BasicInfo>>
-
-    fun searchBasicInfoRateAscending(value: String): Flow<List<BasicInfo>>
-
-    fun searchBasicInfoRateDescending(value: String): Flow<List<BasicInfo>>
-
-    fun fetchLike(): Flow<List<BasicInfo>>
-
     suspend fun like(id: Int, like: Boolean)
 
     suspend fun checkExist(title: String, image: String): Boolean
+
+    fun fetchRecent(): PagingSource<Int, BasicInfo>
+
+    fun fetchDateAscending(value: String): PagingSource<Int, BasicInfo>
+
+    fun fetchDateDescending(value: String): PagingSource<Int, BasicInfo>
+
+    fun fetchRateAscending(value: String): PagingSource<Int, BasicInfo>
+
+    fun fetchRateDescending(value: String): PagingSource<Int, BasicInfo>
+
+    fun fetchLike(): PagingSource<Int, BasicInfo>
 }

@@ -1,9 +1,11 @@
 package com.han.collector.view.activities
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -65,7 +67,6 @@ class ItemListActivity : AppCompatActivity() {
 
     }
 
-
     private fun setItemAdapter(list: ArrayList<BasicInfo>) {
         if (list.isEmpty()) {
             binding.isEmpty = true
@@ -76,7 +77,6 @@ class ItemListActivity : AppCompatActivity() {
             )
             rvItemList?.adapter = itemAdapter
         }
-
     }
 
     fun showSortDialog(view: View) {
@@ -130,5 +130,12 @@ class ItemListActivity : AppCompatActivity() {
         viewModel.setSelectMode(false)
     }
 
+    val onScrollListener = object : RecyclerView.OnScrollListener(){
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(recyclerView.windowToken, 0)
+        }
+    }
 
 }

@@ -56,7 +56,7 @@ class BookRepository @Inject constructor(reviewDatabase: ReviewDatabase) {
             Pair(SortField.LIKE, SortType.DESCENDING),
             Pair(SortField.LIKE, SortType.ASCENDING) -> {
                 Pager(config = PagingConfig(pageSize = PAGE_SIZE),
-                    pagingSourceFactory = { bookDao.fetchLike() })
+                    pagingSourceFactory = { bookDao.fetchLike(query) })
             }
             else -> null
         }?.flow ?: flow {}

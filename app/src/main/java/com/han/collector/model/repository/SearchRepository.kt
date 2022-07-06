@@ -2,13 +2,9 @@ package com.han.collector.model.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.han.collector.model.data.dataSource.BookSearchPagingSource
 import com.han.collector.model.data.dataSource.MovieSearchPagingSource
-import com.han.collector.model.data.networkModel.BookItem
-import com.han.collector.model.data.networkModel.MovieItem
 import com.han.collector.network.SearchApiService
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
@@ -20,13 +16,19 @@ class SearchRepository @Inject constructor(
     }
 
     fun getMovieSearchFlow(query: String) = Pager(
-        config = PagingConfig(pageSize = PAGE_SIZE),
+        config = PagingConfig(
+            pageSize = PAGE_SIZE,
+            enablePlaceholders = false
+        ),
         initialKey = null,
         pagingSourceFactory = { MovieSearchPagingSource(searchApiService, query) }
     ).flow
 
     fun getBookSearchFlow(query: String) = Pager(
-        config = PagingConfig(pageSize = PAGE_SIZE),
+        config = PagingConfig(
+            pageSize = PAGE_SIZE,
+            enablePlaceholders = false
+        ),
         initialKey = null,
         pagingSourceFactory = { BookSearchPagingSource(searchApiService, query) }
     ).flow

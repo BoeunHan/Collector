@@ -19,8 +19,8 @@ android {
         applicationId "com.han.collector"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 10
-        versionName "10.0"
+        versionCode 11
+        versionName "11.0"
 
 
         buildConfigField "String", "NAVER_API_ID", properties['naver_api_id']

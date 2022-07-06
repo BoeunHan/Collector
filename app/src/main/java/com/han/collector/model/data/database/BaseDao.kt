@@ -35,5 +35,5 @@ interface BaseDao<T> {
 
     fun fetchRateDescending(value: String): PagingSource<Int, BasicInfo>
 
-    fun fetchLike(): PagingSource<Int, BasicInfo>
+    fun fetchLike(value: String): PagingSource<Int, BasicInfo>
 }

@@ -38,7 +38,7 @@ interface BookDao : BaseDao<BookEntity> {
     @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_BOOK_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value ORDER BY rate DESC")
     override fun fetchRateDescending(value: String): PagingSource<Int, BasicInfo>
 
-    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_BOOK_LIST}` WHERE `like`=1 ORDER BY id DESC")
-    override fun fetchLike(): PagingSource<Int, BasicInfo>
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_BOOK_LIST}` WHERE `like`=1 AND (title LIKE :value OR summary LIKE :value OR review LIKE :value) ORDER BY id DESC")
+    override fun fetchLike(value: String): PagingSource<Int, BasicInfo>
 
 }

@@ -89,7 +89,7 @@
                     android:layout_height="30dp"
                     app:srcCompat="@drawable/ic_search" />
 
-                <EditText
+                <androidx.emoji2.widget.EmojiEditText
                     android:id="@+id/etSearchItem"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"

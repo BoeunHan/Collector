@@ -19,8 +19,8 @@ android {
         applicationId "com.han.collector"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 11
-        versionName "11.0"
+        versionCode 13
+        versionName "1.0.2"
 
 
         buildConfigField "String", "NAVER_API_ID", properties['naver_api_id']
@@ -60,8 +60,11 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'com.android.support:design:31.0.0'
 
+    //lifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
+
     //gson
-    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'com.google.code.gson:gson:2.8.9'
 
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -100,6 +103,13 @@ dependencies {
     //paging
     def paging_version = "3.1.1"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+
+    //emoji
+    def emoji2_version = "1.2.0-alpha04"
+    implementation "androidx.emoji2:emoji2:$emoji2_version"
+    implementation "androidx.emoji2:emoji2-views:$emoji2_version"
+    implementation "androidx.emoji2:emoji2-views-helper:$emoji2_version"
+
 
 
 

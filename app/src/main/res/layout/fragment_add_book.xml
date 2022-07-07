@@ -46,7 +46,7 @@
             android:textColor="@color/textColor"
             android:textSize="16sp"/>
 
-        <EditText
+        <androidx.emoji2.widget.EmojiEditText
             android:id="@+id/etSummary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             android:textColor="@color/textColor"
             android:textSize="16sp"/>
 
-        <EditText
+        <androidx.emoji2.widget.EmojiEditText
             android:id="@+id/etReview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,5 +1,6 @@
 package com.han.collector.viewmodel
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

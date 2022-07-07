@@ -18,6 +18,7 @@ class SearchRepository @Inject constructor(
     fun getMovieSearchFlow(query: String) = Pager(
         config = PagingConfig(
             pageSize = PAGE_SIZE,
+            initialLoadSize = PAGE_SIZE,
             enablePlaceholders = false
         ),
         initialKey = null,
@@ -27,6 +28,7 @@ class SearchRepository @Inject constructor(
     fun getBookSearchFlow(query: String) = Pager(
         config = PagingConfig(
             pageSize = PAGE_SIZE,
+            initialLoadSize = PAGE_SIZE,
             enablePlaceholders = false
         ),
         initialKey = null,

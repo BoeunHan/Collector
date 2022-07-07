@@ -48,8 +48,10 @@ class ItemViewModel @Inject constructor(
     private var _selectMode = MutableStateFlow(false)
     val selectMode = _selectMode.asStateFlow()
 
-    private var sortFlow =
+    private var _sortFlow =
         MutableStateFlow(Triple(SortField.DATE, SortType.DESCENDING, searchValue.value))
+    val sortFlow = _sortFlow.asStateFlow()
+
     var sortModeName = MutableStateFlow("최신순")
 
 
@@ -71,12 +73,12 @@ class ItemViewModel @Inject constructor(
     private fun getResult() {
         searchValue
             .debounce(500)
-            .onEach { value -> sortFlow.update { it.copy(third = value) } }
+            .onEach { value -> _sortFlow.update { it.copy(third = value) } }
             .launchIn(viewModelScope)
     }
 
     @ExperimentalCoroutinesApi
-    val itemFlow = sortFlow.flatMapLatest {
+    val itemFlow = _sortFlow.flatMapLatest {
         when(category){
             "영화" -> movieRepository.getReviewFlow(Pair(it.first, it.second), "%${it.third}%")
             "책" -> bookRepository.getReviewFlow(Pair(it.first, it.second), "%${it.third}%")
@@ -87,23 +89,23 @@ class ItemViewModel @Inject constructor(
     fun setMode(view: View) {
         when (view.id) {
             R.id.btDateDescending -> {
-                sortFlow.update { it.copy(first = SortField.DATE, second = SortType.DESCENDING) }
+                _sortFlow.update { it.copy(first = SortField.DATE, second = SortType.DESCENDING) }
                 sortModeName.update { "최신순" }
             }
             R.id.btDateAscending -> {
-                sortFlow.update { it.copy(first = SortField.DATE, second = SortType.ASCENDING) }
+                _sortFlow.update { it.copy(first = SortField.DATE, second = SortType.ASCENDING) }
                 sortModeName.update { "오래된순" }
             }
             R.id.btRateDescending -> {
-                sortFlow.update { it.copy(first = SortField.RATE, second = SortType.DESCENDING) }
+                _sortFlow.update { it.copy(first = SortField.RATE, second = SortType.DESCENDING) }
                 sortModeName.update { "별점높은순" }
             }
             R.id.btRateAscending -> {
-                sortFlow.update { it.copy(first = SortField.RATE, second = SortType.ASCENDING) }
+                _sortFlow.update { it.copy(first = SortField.RATE, second = SortType.ASCENDING) }
                 sortModeName.update { "별점낮은순" }
             }
             R.id.btLikes -> {
-                sortFlow.update { it.copy(first = SortField.LIKE) }
+                _sortFlow.update { it.copy(first = SortField.LIKE) }
                 sortModeName.update { "♥" }
             }
         }

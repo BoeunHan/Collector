@@ -3,7 +3,9 @@ package com.han.collector.view.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.han.collector.databinding.MainListItemViewBinding
@@ -53,27 +55,15 @@ class CategoryAdapter(
             category, activity, viewModel)
         recyclerview.adapter = pagingAdapter
         activity.lifecycleScope.launch {
-            when (category) {
-                "영화" -> viewModel.movieList
-                "책" -> viewModel.bookList
-                else -> flow {}
-            }.collectLatest {
-                pagingAdapter.submitData(it)
+            activity.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                when (category) {
+                    "영화" -> viewModel.movieList
+                    "책" -> viewModel.bookList
+                    else -> flow {}
+                }.collectLatest {
+                    pagingAdapter.submitData(it)
+                }
             }
         }
     }
-
-    private fun setAdapter(
-        recyclerview: RecyclerView,
-        category: String
-    ) {
-        val layoutManager = LinearLayoutManager(activity)
-        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        recyclerview.layoutManager = layoutManager
-
-        recyclerview.adapter = ItemAdapter(
-            category, activity, viewModel
-        )
-    }
-
 }

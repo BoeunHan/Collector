@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -52,15 +54,17 @@ class MainActivity : AppCompatActivity() {
 
 
         lifecycleScope.launch {
-            viewModel.categoryList.collectLatest { list ->
-                val arrayList = ArrayList(list)
-                categoryList = arrayList
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.categoryList.collectLatest { list ->
+                    val arrayList = ArrayList(list)
+                    categoryList = arrayList
 
-                if (categoryList.isNotEmpty()) {
-                    binding.isEmpty = false
-                    rvMain.adapter = CategoryAdapter(categoryList, this@MainActivity, viewModel)
-                } else binding.isEmpty = true
+                    if (categoryList.isNotEmpty()) {
+                        binding.isEmpty = false
+                        rvMain.adapter = CategoryAdapter(categoryList, this@MainActivity, viewModel)
+                    } else binding.isEmpty = true
 
+                }
             }
         }
     }

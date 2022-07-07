@@ -9,7 +9,9 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.han.collector.utils.Constants
 import com.han.collector.R
 import com.han.collector.databinding.ActivityReviewDetailBinding
@@ -73,21 +75,23 @@ class ReviewDetailActivity : AppCompatActivity() {
 
     private fun getData() {
         lifecycleScope.launch {
-            when (category) {
-                "영화" -> {
-                    movieViewModel.getMovieDetail(id!!)
-                    movieViewModel.movieDetail.collectLatest {
-                        binding.title = it.title
-                        binding.image = it.image
-                        binding.like = it.like
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                when (category) {
+                    "영화" -> {
+                        movieViewModel.getMovieDetail(id!!)
+                        movieViewModel.movieDetail.collectLatest {
+                            binding.title = it.title
+                            binding.image = it.image
+                            binding.like = it.like
+                        }
                     }
-                }
-                "책" -> {
-                    bookViewModel.getBookDetail(id!!)
-                    bookViewModel.bookDetail.collectLatest {
-                        binding.title = it.title
-                        binding.image = it.image
-                        binding.like = it.like
+                    "책" -> {
+                        bookViewModel.getBookDetail(id!!)
+                        bookViewModel.bookDetail.collectLatest {
+                            binding.title = it.title
+                            binding.image = it.image
+                            binding.like = it.like
+                        }
                     }
                 }
             }

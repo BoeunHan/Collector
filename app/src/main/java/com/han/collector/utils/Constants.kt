@@ -4,9 +4,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.text.InputFilter
 import androidx.recyclerview.widget.DiffUtil
 import com.han.collector.model.data.database.BasicInfo
-import com.han.collector.model.data.networkModel.MovieItem
 
 object Constants {
     const val TABLE_MOVIE_LIST = "movie-list"
@@ -52,6 +52,5 @@ object Constants {
         override fun areContentsTheSame(oldItem: BasicInfo, newItem: BasicInfo): Boolean {
             return oldItem == newItem
         }
-
     }
 }

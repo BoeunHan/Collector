@@ -15,8 +15,8 @@ class MovieSearchPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieItem> {
         return try {
-            val key = params.key ?: 1
-            val position = if (key == 1) 1 else 1 + params.loadSize * (key + 1)
+            val key = params.key ?: 0
+            val position = key*params.loadSize + 1
 
             val response = service.getMovieSearchResult(
                 BuildConfig.NAVER_API_ID,

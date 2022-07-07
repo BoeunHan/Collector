@@ -4,10 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputFilter
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -28,6 +32,7 @@ import kotlinx.coroutines.launch
 
 @FlowPreview
 @AndroidEntryPoint
+@OptIn(ExperimentalCoroutinesApi::class)
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
@@ -37,7 +42,6 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var category: String
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
@@ -46,6 +50,8 @@ class SearchActivity : AppCompatActivity() {
         binding.activity = this
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
+
+        binding.etSearchMovie.filters = arrayOf(EMOJI_FLITER)
 
         category = intent.getStringExtra(Constants.CATEGORY)!!
         viewModel.category = category
@@ -59,35 +65,52 @@ class SearchActivity : AppCompatActivity() {
         setRecyclerView()
     }
 
+    val EMOJI_FLITER = InputFilter { source, start, end, dst, dstart, dend ->
+        for (i in start until end) {
+            val type = Character.getType(source[i])
+            if (type.toByte() == Character.SURROGATE) {
+                return@InputFilter ""
+            }
+        }
+        return@InputFilter null
+    }
+
     private fun setRecyclerView() {
         lifecycleScope.launch {
-            when (category) {
-                "영화" -> {
-                    val pagingAdapter = MovieSearchAdapter(this@SearchActivity)
-                    pagingAdapter.addLoadStateListener { loadState ->
-                        binding.isEmpty =
-                            (loadState.source.refresh is LoadState.NotLoading
-                                    && pagingAdapter.itemCount < 1)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                when (category) {
+                    "영화" -> {
+                        val pagingAdapter = MovieSearchAdapter(this@SearchActivity)
+                        pagingAdapter.addLoadStateListener { loadState ->
+                            binding.isEmpty =
+                                (loadState.source.refresh is LoadState.NotLoading
+                                        && pagingAdapter.itemCount < 1)
+                            if (loadState.source.refresh is LoadState.NotLoading) {
+                                rvSearchList?.scrollToPosition(0)
+                            }
+                        }
+                        rvSearchList?.adapter = pagingAdapter
+                        viewModel.searchFlow.collectLatest { pagingData ->
+                            pagingAdapter.submitData(pagingData as PagingData<MovieItem>)
+                        }
                     }
-                    rvSearchList?.adapter = pagingAdapter
-                    viewModel.searchFlow.collectLatest { pagingData ->
-                        pagingAdapter.submitData(pagingData as PagingData<MovieItem>)
-                    }
-                }
-                "책" -> {
-                    val pagingAdapter = BookSearchAdapter(this@SearchActivity)
-                    pagingAdapter.addLoadStateListener { loadState ->
-                        binding.isEmpty =
-                            (loadState.source.refresh is LoadState.NotLoading
-                                    && pagingAdapter.itemCount < 1)
-                    }
-                    rvSearchList?.adapter = pagingAdapter
-                    viewModel.searchFlow.collectLatest { pagingData ->
-                        pagingAdapter.submitData(pagingData as PagingData<BookItem>)
+                    "책" -> {
+                        val pagingAdapter = BookSearchAdapter(this@SearchActivity)
+                        pagingAdapter.addLoadStateListener { loadState ->
+                            binding.isEmpty =
+                                (loadState.source.refresh is LoadState.NotLoading
+                                        && pagingAdapter.itemCount < 1)
+                            if (loadState.source.refresh is LoadState.NotLoading) {
+                                rvSearchList?.scrollToPosition(0)
+                            }
+                        }
+                        rvSearchList?.adapter = pagingAdapter
+                        viewModel.searchFlow.collectLatest { pagingData ->
+                            pagingAdapter.submitData(pagingData as PagingData<BookItem>)
+                        }
                     }
                 }
             }
-
         }
     }
 
@@ -108,7 +131,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    val onScrollListener = object : RecyclerView.OnScrollListener(){
+    val onScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

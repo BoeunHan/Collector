@@ -19,18 +19,18 @@ import kotlinx.coroutines.launch
 @FlowPreview
 class CategoryAdapter(
     private val categoryList: List<String>,
-    private val activity: MainActivity,
-    private val viewModel: ItemViewModel
+    private val _activity: MainActivity
 ) : RecyclerView.Adapter<CategoryAdapter.MyViewHolder>(){
 
     inner class MyViewHolder(
         val binding: MainListItemViewBinding
     ) : RecyclerView.ViewHolder(binding.root){
-        fun bind(category: String){
-            binding.category = category
-            binding.activity = activity
-
-            setCategoryList(category, binding.rvCategoryList)
+        fun bind(_category: String){
+            binding.apply {
+                category = _category
+                activity = _activity
+                setCategoryList(_category, rvCategoryList)
+            }
         }
     }
 
@@ -48,22 +48,11 @@ class CategoryAdapter(
     override fun getItemCount(): Int = categoryList.size
 
     private fun setCategoryList(category: String, recyclerview: RecyclerView) {
-        val layoutManager = LinearLayoutManager(activity)
+        val layoutManager = LinearLayoutManager(_activity)
         layoutManager.orientation = LinearLayoutManager.HORIZONTAL
         recyclerview.layoutManager = layoutManager
-        val pagingAdapter = ItemAdapter(
-            category, activity, viewModel)
+        val pagingAdapter = ItemAdapter(category, _activity)
         recyclerview.adapter = pagingAdapter
-        activity.lifecycleScope.launch {
-            activity.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                when (category) {
-                    "영화" -> viewModel.movieList
-                    "책" -> viewModel.bookList
-                    else -> flow {}
-                }.collectLatest {
-                    pagingAdapter.submitData(it)
-                }
-            }
-        }
+        _activity.getCategoryList(category, pagingAdapter)
     }
 }

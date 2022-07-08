@@ -11,16 +11,19 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.han.collector.databinding.ActivityMainBinding
 import com.han.collector.databinding.CategoryDialogBinding
 import com.han.collector.utils.Constants
 import com.han.collector.view.adapters.CategoryAdapter
+import com.han.collector.view.adapters.ItemAdapter
 import com.han.collector.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 @FlowPreview
@@ -28,7 +31,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: ItemViewModel by viewModels()
+    val viewModel: ItemViewModel by viewModels()
 
     private lateinit var categoryDialog: Dialog
     private lateinit var dialogBinding: CategoryDialogBinding
@@ -42,16 +45,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.activity = this
-        binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
+        setRecyclerView()
+
+    }
+
+    private fun setRecyclerView() {
         val rvMain = binding.rvMain
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         rvMain.layoutManager = layoutManager
-
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -61,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
                     if (categoryList.isNotEmpty()) {
                         binding.isEmpty = false
-                        rvMain.adapter = CategoryAdapter(categoryList, this@MainActivity, viewModel)
+                        rvMain.adapter = CategoryAdapter(categoryList, this@MainActivity)
                     } else binding.isEmpty = true
 
                 }
@@ -69,6 +75,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun getCategoryList(category: String, pagingAdapter: ItemAdapter){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                when (category) {
+                    "영화" -> viewModel.movieList
+                    "책" -> viewModel.bookList
+                    else -> flow {}
+                }.collectLatest {
+                    pagingAdapter.submitData(it)
+                }
+            }
+        }
+    }
     fun showCategoryDialog() {
         categoryDialog = Dialog(this)
         categoryDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)

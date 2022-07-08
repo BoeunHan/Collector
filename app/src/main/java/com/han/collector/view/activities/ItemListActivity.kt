@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.han.collector.utils.Constants
@@ -36,7 +37,7 @@ import kotlinx.coroutines.launch
 class ItemListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityItemListBinding
-    private val viewModel: ItemViewModel by viewModels()
+    val viewModel: ItemViewModel by viewModels()
 
     private var rvItemList: RecyclerView? = null
     private var removeDialog: BottomSheetDialog? = null
@@ -65,28 +66,28 @@ class ItemListActivity : AppCompatActivity() {
         viewModel.category = category
         binding.category = category
 
-        setAdapter()
+        setRecyclerView()
     }
 
-    private fun setAdapter(){
-        pagingAdapter = ItemAdapter(category, this@ItemListActivity, viewModel)
+    private fun setRecyclerView(){
+        pagingAdapter = ItemAdapter(category, this@ItemListActivity)
         pagingAdapter?.addLoadStateListener { loadState ->
             binding.isEmpty =
                 (loadState.source.refresh is LoadState.NotLoading
                         && pagingAdapter?.itemCount!! < 1)
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.sortFlow.collectLatest {
+                    rvItemList?.layoutManager?.smoothScrollToPosition(rvItemList, null, 0)
+                }
+            }
         }
         binding.rvItemList.adapter = pagingAdapter
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.itemFlow.collectLatest {
                     pagingAdapter?.submitData(it)
-                }
-            }
-        }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.sortFlow.collectLatest {
-                    rvItemList?.layoutManager?.smoothScrollToPosition(rvItemList, null, 0)
                 }
             }
         }

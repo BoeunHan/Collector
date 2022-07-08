@@ -9,9 +9,6 @@
             name="activity"
             type="com.han.collector.view.activities.MainActivity" />
         <variable
-            name="viewmodel"
-            type="com.han.collector.viewmodel.ItemViewModel" />
-        <variable
             name="isEmpty"
             type="Boolean" />
     </data>

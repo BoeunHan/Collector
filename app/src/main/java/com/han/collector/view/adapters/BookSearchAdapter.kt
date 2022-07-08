@@ -9,13 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.han.collector.databinding.BookSearchItemViewBinding
 import com.han.collector.model.data.networkModel.BookItem
 import com.han.collector.view.activities.SearchActivity
+import kotlinx.coroutines.FlowPreview
 
-class BookSearchAdapter(
+@FlowPreview
+class BookSearchAdapter constructor(
     val activity: SearchActivity
 ) : PagingDataAdapter<BookItem, BookSearchAdapter.BookViewHolder>(BOOK_COMPARATOR) {
 
-    inner class BookViewHolder(private val binding: BookSearchItemViewBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class BookViewHolder(
+        private val binding: BookSearchItemViewBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: BookItem) {
             binding.item = data
             binding.activity = activity
@@ -24,7 +27,8 @@ class BookSearchAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val binding = BookSearchItemViewBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false)
+            LayoutInflater.from(parent.context), parent, false
+        )
         return BookViewHolder(binding)
     }
 

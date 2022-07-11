@@ -1,22 +1,31 @@
 package com.han.collector.view.activities
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.view.MenuItem
 import android.view.View
 import android.view.Window
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
+import com.han.collector.R
 import com.han.collector.databinding.ActivityMainBinding
 import com.han.collector.databinding.CategoryDialogBinding
+import com.han.collector.databinding.HeaderNavigationDrawerBinding
 import com.han.collector.utils.Constants
 import com.han.collector.view.adapters.CategoryAdapter
 import com.han.collector.view.adapters.ItemAdapter
@@ -33,7 +42,7 @@ import kotlinx.coroutines.launch
 
 @FlowPreview
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
 
     private lateinit var binding: ActivityMainBinding
     val viewModel: ItemViewModel by viewModels()
@@ -44,13 +53,24 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
+    private val getLoginResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        checkLoggedIn()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.activity = this
+        binding.viewModel = viewModel
         binding.lifecycleOwner = this
+        binding.navView.setNavigationItemSelectedListener(this)
+
+        val headerbinding = HeaderNavigationDrawerBinding.bind(binding.navView.getHeaderView(0))
+        headerbinding.activity = this
+        headerbinding.viewModel = viewModel
+        headerbinding.lifecycleOwner = this
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
@@ -60,14 +80,17 @@ class MainActivity : AppCompatActivity() {
         setRecyclerView()
 
     }
+    fun doLogIn(){
+        val intent = Intent(this, LoginActivity::class.java)
+        getLoginResult.launch(intent)
+    }
 
     private fun checkLoggedIn() {
         if (AuthApiClient.instance.hasToken()) {
             UserApiClient.instance.accessTokenInfo { token, error ->
                 if (error != null) {
                     if (error is KakaoSdkError && error.isInvalidTokenError()) {
-                        val intent = Intent(this, LoginActivity::class.java)
-                        startActivity(intent)
+                        doLogIn()
                     }
                     else {
                         //기타 에러
@@ -77,22 +100,22 @@ class MainActivity : AppCompatActivity() {
                     UserApiClient.instance.me { user, error ->
                         if (error != null) {
                             Log.e("사용자 정보 요청 실패","")
-                            val intent = Intent(this, AuthCodeHandlerActivity::class.java)
-                            startActivity(intent)
+                            doLogIn()
                         } else if (user != null) {
-                            Log.i(
-                                "사용자 정보 요청 성공",
-                                "${user.kakaoAccount?.profile?.nickname}, ${user.kakaoAccount?.profile?.thumbnailImageUrl}"
-                            )
+                            Log.i("사용자 정보 요청 성공",user.kakaoAccount?.profile?.nickname!!)
+                            viewModel.setProfile(user.kakaoAccount?.profile?.nickname, user.kakaoAccount?.profile?.thumbnailImageUrl)
                         }
                     }
                 }
             }
         }
         else {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            doLogIn()
         }
+    }
+
+    fun openDrawer(){
+        binding.drawerLayout.open()
     }
 
     private fun setRecyclerView() {
@@ -178,4 +201,21 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.category_item -> showCategoryDialog()
+            R.id.logout_item -> {
+                UserApiClient.instance.logout { error ->
+                    if(error != null){
+                        Toast.makeText(this@MainActivity, "로그아웃 실패", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@MainActivity, "로그아웃 성공", Toast.LENGTH_SHORT).show()
+                        viewModel.setProfile("로그인","")
+                    }
+                }
+            }
+        }
+        binding.drawerLayout.close()
+        return true
+    }
 }

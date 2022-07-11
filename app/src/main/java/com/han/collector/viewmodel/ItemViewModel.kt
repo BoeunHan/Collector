@@ -54,10 +54,21 @@ class ItemViewModel @Inject constructor(
 
     var sortModeName = MutableStateFlow("최신순")
 
+    private var _nickname = MutableStateFlow<String?>("로그인")
+    val nickname = _nickname.asStateFlow()
+    private var _thumbnail = MutableStateFlow<String?>("")
+    val thumbnail = _thumbnail
+
 
     init {
         fetchCategoryList()
         getResult()
+    }
+
+    fun setProfile(nickname: String?, thumbnail: String?){
+        _nickname.update { nickname }
+        _thumbnail.update { thumbnail }
+        Log.e("${_nickname.value}","${_thumbnail.value}")
     }
 
     private fun fetchCategoryList() {

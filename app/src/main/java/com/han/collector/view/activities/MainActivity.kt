@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.Window
 import androidx.activity.viewModels
@@ -20,6 +21,10 @@ import com.han.collector.utils.Constants
 import com.han.collector.view.adapters.CategoryAdapter
 import com.han.collector.view.adapters.ItemAdapter
 import com.han.collector.viewmodel.ItemViewModel
+import com.kakao.sdk.auth.AuthApiClient
+import com.kakao.sdk.auth.AuthCodeHandlerActivity
+import com.kakao.sdk.common.model.KakaoSdkError
+import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -49,8 +54,45 @@ class MainActivity : AppCompatActivity() {
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
+
+        checkLoggedIn()
+
         setRecyclerView()
 
+    }
+
+    private fun checkLoggedIn() {
+        if (AuthApiClient.instance.hasToken()) {
+            UserApiClient.instance.accessTokenInfo { token, error ->
+                if (error != null) {
+                    if (error is KakaoSdkError && error.isInvalidTokenError()) {
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                    }
+                    else {
+                        //기타 에러
+                    }
+                }
+                else if (token != null){
+                    UserApiClient.instance.me { user, error ->
+                        if (error != null) {
+                            Log.e("사용자 정보 요청 실패","")
+                            val intent = Intent(this, AuthCodeHandlerActivity::class.java)
+                            startActivity(intent)
+                        } else if (user != null) {
+                            Log.i(
+                                "사용자 정보 요청 성공",
+                                "${user.kakaoAccount?.profile?.nickname}, ${user.kakaoAccount?.profile?.thumbnailImageUrl}"
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setRecyclerView() {
@@ -75,7 +117,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getCategoryList(category: String, pagingAdapter: ItemAdapter){
+    fun getCategoryList(category: String, pagingAdapter: ItemAdapter) {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 when (category) {
@@ -88,6 +130,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     fun showCategoryDialog() {
         categoryDialog = Dialog(this)
         categoryDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -104,7 +147,7 @@ class MainActivity : AppCompatActivity() {
         if (dialogBinding.cbMovie.isChecked) categoryList.add("영화")
         if (dialogBinding.cbBook.isChecked) categoryList.add("책")
 
-        firebaseAnalytics.logEvent("category_save"){
+        firebaseAnalytics.logEvent("category_save") {
             param("category_list", categoryList.toString())
         }
 

@@ -76,18 +76,30 @@ class ItemListActivity : AppCompatActivity() {
                 (loadState.source.refresh is LoadState.NotLoading
                         && pagingAdapter?.itemCount!! < 1)
         }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.sortFlow.collectLatest {
-                    rvItemList?.layoutManager?.smoothScrollToPosition(rvItemList, null, 0)
-                }
+
+        val smoothScroller = object : LinearSmoothScroller(this){
+            override fun getVerticalSnapPreference(): Int {
+                return SNAP_TO_START
             }
         }
+        smoothScroller.targetPosition = 0
+
         binding.rvItemList.adapter = pagingAdapter
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.itemFlow.collectLatest {
                     pagingAdapter?.submitData(it)
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.sortFlow.collectLatest {
+                    //rvItemList?.layoutManager?.smoothScrollToPosition(rvItemList, null, 0)
+                    //rvItemList?.layoutManager?.startSmoothScroll(smoothScroller)
+                    rvItemList?.smoothScrollToPosition(0)
+                    //rvItemList?.layoutManager?.scrollToPosition(0)
+
                 }
             }
         }

@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.han.collector.model.data.database.BasicInfo
 import com.han.collector.model.data.database.BookEntity
+import com.han.collector.model.data.database.MovieEntity
 import com.han.collector.model.data.database.ReviewDatabase
 import com.han.collector.viewmodel.SortField
 import com.han.collector.viewmodel.SortType
@@ -31,6 +32,8 @@ class BookRepository @Inject constructor(reviewDatabase: ReviewDatabase) {
     suspend fun deleteIdSet(idSet: Set<Int>) = bookDao.deleteIdSet(idSet)
 
     fun fetchData(id: Int): Flow<BookEntity> = bookDao.fetchData(id)
+
+    fun fetchAll(): List<BookEntity> = bookDao.fetchAll()
 
     fun getRecentReviewFlow() = Pager(config = PagingConfig(pageSize = RECENT_PAGE_SIZE),
         pagingSourceFactory = { bookDao.fetchRecent() }).flow

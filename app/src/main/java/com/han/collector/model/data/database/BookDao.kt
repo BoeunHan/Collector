@@ -17,6 +17,9 @@ interface BookDao : BaseDao<BookEntity> {
     @Query("SELECT * FROM `${Constants.TABLE_BOOK_LIST}` WHERE id = :id")
     override fun fetchData(id: Int): Flow<BookEntity>
 
+    @Query("SELECT * FROM `${Constants.TABLE_BOOK_LIST}`")
+    override fun fetchAll(): List<BookEntity>
+
     @Query("UPDATE `${Constants.TABLE_BOOK_LIST}` SET `like` = :like WHERE id = :id")
     override suspend fun like(id: Int, like: Boolean)
 

@@ -33,9 +33,12 @@ import com.han.collector.view.adapters.ItemAdapter
 import com.han.collector.viewmodel.ItemViewModel
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.AuthCodeHandlerActivity
+import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
@@ -105,6 +108,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         } else if (user != null) {
                             Log.i("사용자 정보 요청 성공",user.kakaoAccount?.profile?.nickname!!)
                             Toast.makeText(this@MainActivity, "로그인되었습니다.", Toast.LENGTH_SHORT).show()
+                            binding.drawerLayout.close()
                             viewModel.setProfile(user.kakaoAccount?.profile?.nickname, user.kakaoAccount?.profile?.thumbnailImageUrl)
                         }
                     }
@@ -238,10 +242,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.category_item -> showCategoryDialog()
-            R.id.logout_item -> doLogout()
+            R.id.logout_item -> {
+                lifecycleScope.launch {
+                    viewModel.upload(callback).await()
+                    doLogout()
+                }
+            }
             R.id.unlink_item -> doUnlink()
         }
         binding.drawerLayout.close()
         return true
+    }
+
+    val callback: (Throwable?) -> Unit = { error ->
+        if(error != null){
+            Log.e("사용자 정보 저장 실패", error.toString())
+        } else {
+            Log.i("사용자 정보 저장 성공", "")
+        }
     }
 }

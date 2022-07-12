@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="줄거리"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+
+        <androidx.emoji2.widget.EmojiTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/multiline_textview_background"
+            android:gravity="start|top"
+            android:lines="5"
+            android:padding="10dp"
+            android:scrollbars="vertical"
+            android:text="book줄거리"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="감상평"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+
+        <androidx.emoji2.widget.EmojiTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/multiline_textview_background"
+            android:gravity="start|top"
+            android:lines="5"
+            android:padding="10dp"
+            android:scrollbars="vertical"
+            android:text="book감상평"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="메모"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+
+        <androidx.emoji2.widget.EmojiTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/multiline_textview_background"
+            android:gravity="start|top"
+            android:lines="5"
+            android:padding="10dp"
+            android:scrollbars="vertical"
+            android:text="book메모"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+    </LinearLayout>
+</layout>

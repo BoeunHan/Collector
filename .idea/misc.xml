@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/drawable/cardview_background.xml" value="0.1" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/drawable/fab_remove_selector.xml" value="0.121" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/drawable/gradient_shape_selected.xml" value="0.2085" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/drawable/ic_cancel.xml" value="0.1" />
@@ -18,22 +19,28 @@
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_add_review.xml" value="0.12760416666666666" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_auth_code_handler.xml" value="0.2" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_book_detail.xml" value="0.2" />
+        <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_card_flip.xml" value="0.12857142857142856" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_item_list.xml" value="0.1" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_login.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_main.xml" value="0.12244897959183673" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_movie_detail.xml" value="0.1" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_movie_search.xml" value="0.264" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_my_movie_detail.xml" value="0.18020833333333333" />
-        <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_review_detail.xml" value="0.18229166666666666" />
+        <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_review_detail.xml" value="0.1" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/activity_search.xml" value="0.1" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/book_search_item_view.xml" value="0.22509057971014493" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/card_item_view.xml" value="0.2" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/category_dialog.xml" value="0.264" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/check_unlink_dialog.xml" value="0.4" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/copyright_dialog.xml" value="0.2" />
+        <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/flipview_back.xml" value="0.264" />
+        <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/flipview_fragment_book_detail.xml" value="0.24230072463768115" />
+        <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/flipview_fragment_movie_detail.xml" value="0.24230072463768115" />
+        <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/flipview_front.xml" value="0.264" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/fragment_add_book.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/fragment_add_movie.xml" value="0.1556420233463035" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/fragment_book_detail.xml" value="0.2" />
+        <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/fragment_card_flip.xml" value="0.12062256809338522" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/fragment_movie_detail.xml" value="0.264" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/header_navigation_drawer.xml" value="0.1651376146788991" />
         <entry key="..\:/Users/Boeun/AndroidStudioProjects/Collectors/app/src/main/res/layout/main_list_item_view.xml" value="0.152" />

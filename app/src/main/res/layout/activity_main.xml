@@ -1,79 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="activity"
             type="com.han.collector.view.activities.MainActivity" />
         <variable
+            name="viewModel"
+            type="com.han.collector.viewmodel.ItemViewModel" />
+        <variable
             name="isEmpty"
             type="Boolean" />
     </data>
-    <LinearLayout
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical"
-        tools:context=".view.activities.MainActivity">
+        android:fitsSystemWindows="true">
 
         <LinearLayout
+            android:id="@+id/navHost"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:gravity="center_vertical">
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            tools:context=".view.activities.MainActivity">
 
-            <ImageButton
-                android:id="@+id/btCategory"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:background="@null"
-                app:srcCompat="@drawable/ic_settings"
-                android:onClick="@{()->activity.showCategoryDialog()}"
-                android:contentDescription="category edit" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Collector"
-                android:textColor="@color/textColor"
-                android:textSize="20sp" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dp"
+                    app:circleImage="@{viewModel.thumbnail}"
+                    app:civ_border_width="1dp"
+                    app:civ_border_color="@color/grey"
+                    android:onClick="@{()->activity.openDrawer()}"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Collector"
+                    android:textColor="@color/textColor"
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:background="@android:color/transparent" />
+            </LinearLayout>
 
             <View
-                android:layout_width="50dp"
-                android:layout_height="40dp"
-                android:background="@android:color/transparent"/>
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/black" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMain"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{isEmpty? View.GONE : View.VISIBLE}"
+                tools:listitem="@layout/main_list_item_view">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/tvNothingFound"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Nothing Found."
+                android:textColor="@color/textColor"
+                android:textSize="16sp"
+                android:visibility="@{isEmpty? View.VISIBLE : View.GONE}" />
+
+
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/black" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvMain"
-            android:layout_width="match_parent"
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navView"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            tools:listitem="@layout/main_list_item_view"
-            android:visibility="@{isEmpty? View.GONE : View.VISIBLE}">
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/header_navigation_drawer"
+            app:menu="@menu/navigation_drawer"/>
 
-        </androidx.recyclerview.widget.RecyclerView>
-
-        <TextView
-            android:id="@+id/tvNothingFound"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Nothing Found."
-            android:textColor="@color/textColor"
-            android:textSize="16sp"
-            android:visibility="@{isEmpty? View.VISIBLE : View.GONE}"/>
-
-
-    </LinearLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

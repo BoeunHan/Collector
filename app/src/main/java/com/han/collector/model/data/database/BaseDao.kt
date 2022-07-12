@@ -21,6 +21,8 @@ interface BaseDao<T> {
 
     fun fetchData(id: Int): Flow<T>
 
+    fun fetchAll(): List<T>
+
     suspend fun like(id: Int, like: Boolean)
 
     suspend fun checkExist(title: String, image: String): Boolean

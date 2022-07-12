@@ -8,11 +8,18 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.han.collector.R
+import de.hdodenhof.circleimageview.CircleImageView
 
 @BindingAdapter("image")
 fun loadImage(view: ImageView, url: String?) {
     if (url == "" || url == null) Glide.with(view).load(R.drawable.ic_no_image).into(view)
     else Glide.with(view).load(url).centerCrop().error(R.drawable.ic_no_image).into(view)
+}
+
+@BindingAdapter("circleImage")
+fun loadImage(view: CircleImageView, url: String?){
+    if (url == "" || url == null) Glide.with(view).load(R.drawable.ic_user).into(view)
+    else Glide.with(view).load(url).error(R.drawable.ic_user).into(view)
 }
 
 @RequiresApi(Build.VERSION_CODES.M)

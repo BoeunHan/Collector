@@ -8,7 +8,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
 }
-Properties properties = new Properties()
+def properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
@@ -25,7 +25,9 @@ android {
 
         buildConfigField "String", "NAVER_API_ID", properties['naver_api_id']
         buildConfigField "String", "NAVER_API_SECRET", properties['naver_api_secret']
-
+        buildConfigField "String", "KAKAO_NATIVE_APP_KEY", properties['kakao_native_app_key']
+        def kakao_native_app_key = properties.getProperty('kakao_native_app_key2')
+        manifestPlaceholders = [KAKAO_NATIVE_APP_KEY: kakao_native_app_key]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -109,6 +111,12 @@ dependencies {
     implementation "androidx.emoji2:emoji2:$emoji2_version"
     implementation "androidx.emoji2:emoji2-views:$emoji2_version"
     implementation "androidx.emoji2:emoji2-views-helper:$emoji2_version"
+
+    //kakao login
+    implementation "com.kakao.sdk:v2-user:2.11.0"
+
+    //circleimageview
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
 
 

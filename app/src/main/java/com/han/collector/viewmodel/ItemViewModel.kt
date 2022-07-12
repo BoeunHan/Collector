@@ -6,15 +6,19 @@ import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.han.collector.R
+import com.han.collector.model.data.database.BookEntity
+import com.han.collector.model.data.database.MovieEntity
 import com.han.collector.model.repository.BookRepository
 import com.han.collector.model.repository.CategoryRepository
 import com.han.collector.model.repository.MovieRepository
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import org.json.JSONArray
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -54,10 +58,47 @@ class ItemViewModel @Inject constructor(
 
     var sortModeName = MutableStateFlow("최신순")
 
+    private var _nickname = MutableStateFlow<String?>("로그인")
+    val nickname = _nickname.asStateFlow()
+    private var _thumbnail = MutableStateFlow<String?>("")
+    val thumbnail = _thumbnail
+
 
     init {
         fetchCategoryList()
         getResult()
+    }
+
+    fun upload(callback: (Throwable?) -> Unit): Deferred<Unit>{
+        lateinit var movieList: List<MovieEntity>
+        lateinit var bookList: List<BookEntity>
+        return CoroutineScope(Dispatchers.IO).async{
+            val movie = async { movieList = movieRepository.fetchAll() }
+            val book = async { bookList = bookRepository.fetchAll() }
+            movie.await()
+            book.await()
+            uploadCategory(callback, movieList, bookList)
+        }
+    }
+
+    private fun uploadCategory(callback: (Throwable?) -> Unit, vararg list: List<Any>) {
+        val jsonArray = JSONArray()
+        for(i in list){
+            val array = JSONArray()
+            for(j in i) array.put(j.toString())
+            jsonArray.put(array)
+        }
+        Log.e("jsonArray", jsonArray.toString())
+
+        val properties = mapOf("reviews" to jsonArray.toString())
+        UserApiClient.instance.updateProfile(properties, callback)
+    }
+
+
+    fun setProfile(nickname: String?, thumbnail: String?){
+        _nickname.update { nickname }
+        _thumbnail.update { thumbnail }
+        Log.e("${_nickname.value}","${_thumbnail.value}")
     }
 
     private fun fetchCategoryList() {

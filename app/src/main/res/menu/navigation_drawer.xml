@@ -12,7 +12,7 @@
             android:icon="@drawable/ic_logout"
             android:title="로그아웃"/>
         <item
-            android:id="@+id/quit_item"
+            android:id="@+id/unlink_item"
             android:checkable="false"
             android:icon="@drawable/ic_quit"
             android:title="탈퇴"/>

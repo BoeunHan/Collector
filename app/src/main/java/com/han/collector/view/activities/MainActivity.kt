@@ -19,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -80,7 +81,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setRecyclerView()
 
     }
-    fun doLogIn(){
+    fun doLogin(){
         val intent = Intent(this, LoginActivity::class.java)
         getLoginResult.launch(intent)
     }
@@ -90,19 +91,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             UserApiClient.instance.accessTokenInfo { token, error ->
                 if (error != null) {
                     if (error is KakaoSdkError && error.isInvalidTokenError()) {
-                        doLogIn()
+                        doLogin()
                     }
                     else {
-                        //기타 에러
+                        Log.e("Error",error.toString())
                     }
                 }
                 else if (token != null){
                     UserApiClient.instance.me { user, error ->
                         if (error != null) {
                             Log.e("사용자 정보 요청 실패","")
-                            doLogIn()
+                            doLogin()
                         } else if (user != null) {
                             Log.i("사용자 정보 요청 성공",user.kakaoAccount?.profile?.nickname!!)
+                            Toast.makeText(this@MainActivity, "로그인되었습니다.", Toast.LENGTH_SHORT).show()
                             viewModel.setProfile(user.kakaoAccount?.profile?.nickname, user.kakaoAccount?.profile?.thumbnailImageUrl)
                         }
                     }
@@ -110,7 +112,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         else {
-            doLogIn()
+            doLogin()
         }
     }
 
@@ -201,19 +203,43 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivity(intent)
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.category_item -> showCategoryDialog()
-            R.id.logout_item -> {
-                UserApiClient.instance.logout { error ->
-                    if(error != null){
-                        Toast.makeText(this@MainActivity, "로그아웃 실패", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this@MainActivity, "로그아웃 성공", Toast.LENGTH_SHORT).show()
+    fun doLogout(){
+        UserApiClient.instance.logout { error ->
+            if(error != null){
+                Toast.makeText(this@MainActivity, "로그아웃 실패", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@MainActivity, "로그아웃 성공", Toast.LENGTH_SHORT).show()
+                viewModel.setProfile("로그인","")
+            }
+        }
+    }
+    fun doUnlink(){
+        MaterialAlertDialogBuilder(this)
+            .setTitle("탈퇴")
+            .setMessage("정말 탈퇴하시겠습니까?")
+            .setNegativeButton("아니오"){ dialog,_ ->
+                dialog.dismiss()
+            }
+            .setPositiveButton("예"){dialog,_ ->
+                dialog.dismiss()
+                UserApiClient.instance.unlink { error ->
+                    if (error != null) {
+                        Toast.makeText(this@MainActivity, "탈퇴 실패", Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        Toast.makeText(this@MainActivity, "탈퇴 성공", Toast.LENGTH_SHORT).show()
                         viewModel.setProfile("로그인","")
                     }
                 }
             }
+            .show()
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.category_item -> showCategoryDialog()
+            R.id.logout_item -> doLogout()
+            R.id.unlink_item -> doUnlink()
         }
         binding.drawerLayout.close()
         return true

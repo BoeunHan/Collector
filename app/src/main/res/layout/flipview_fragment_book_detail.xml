@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-
+        <variable
+            name="book"
+            type="com.han.collector.model.data.database.BookEntity" />
     </data>
 
     <LinearLayout
@@ -18,6 +20,7 @@
             android:textSize="16sp" />
 
         <androidx.emoji2.widget.EmojiTextView
+            android:id="@+id/tvSummary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -26,7 +29,7 @@
             android:lines="5"
             android:padding="10dp"
             android:scrollbars="vertical"
-            android:text="book줄거리"
+            android:text="@{book.summary}"
             android:textColor="@color/textColor"
             android:textSize="16sp" />
 
@@ -39,6 +42,7 @@
             android:textSize="16sp" />
 
         <androidx.emoji2.widget.EmojiTextView
+            android:id="@+id/tvReview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -47,7 +51,7 @@
             android:lines="5"
             android:padding="10dp"
             android:scrollbars="vertical"
-            android:text="book감상평"
+            android:text="@{book.review}"
             android:textColor="@color/textColor"
             android:textSize="16sp" />
 
@@ -60,6 +64,7 @@
             android:textSize="16sp" />
 
         <androidx.emoji2.widget.EmojiTextView
+            android:id="@+id/tvMemo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"

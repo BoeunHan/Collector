@@ -67,7 +67,7 @@ class ItemListActivity : AppCompatActivity() {
         setRecyclerView()
     }
 
-    private fun setRecyclerView(){
+    private fun setRecyclerView() {
         pagingAdapter = ItemAdapter(category, this@ItemListActivity)
         pagingAdapter?.addLoadStateListener { loadState ->
             binding.isEmpty =
@@ -75,7 +75,7 @@ class ItemListActivity : AppCompatActivity() {
                         && pagingAdapter?.itemCount!! < 1)
         }
 
-        val smoothScroller = object : LinearSmoothScroller(this){
+        val smoothScroller = object : LinearSmoothScroller(this) {
             override fun getVerticalSnapPreference(): Int {
                 return SNAP_TO_START
             }
@@ -146,7 +146,12 @@ class ItemListActivity : AppCompatActivity() {
         intent.putExtra(Constants.CATEGORY, category)
         intent.putExtra(Constants.SELECTED_ID, id)
         startActivity(intent)*/
-        CardFlipDialogFragment().show(supportFragmentManager, CardFlipDialogFragment.TAG)
+        val cardDialog = CardFlipDialogFragment()
+        val bundle = Bundle()
+        bundle.putString(Constants.CATEGORY, category)
+        bundle.putInt(Constants.SELECTED_ID, id)
+        cardDialog.arguments = bundle
+        cardDialog.show(supportFragmentManager, CardFlipDialogFragment.TAG)
     }
 
 

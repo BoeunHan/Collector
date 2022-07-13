@@ -4,7 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="com.han.collector.viewmodel.ItemViewModel"/>
+        <variable
+            name="image"
+            type="String" />
+        <variable
+            name="rating"
+            type="Float" />
+        <variable
+            name="like"
+            type="Boolean" />
+        <variable
+            name="id"
+            type="Integer" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -29,8 +43,8 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/cat_image" />
+                    android:scaleType="center"
+                    app:image="@{image}"/>
 
             </androidx.cardview.widget.CardView>
 
@@ -39,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="30dp">
+                android:padding="20dp">
 
                 <RatingBar
                     android:id="@+id/ratingBar"
@@ -48,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:isIndicator="true"
                     android:numStars="5"
-                    android:rating="2"
+                    android:rating="@{rating}"
                     android:stepSize="0.5"
                     android:theme="@style/RatingBar" />
 
@@ -58,10 +72,10 @@
                     android:layout_weight="1" />
 
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_like"
-                    app:tint="@color/secondaryColor" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:onClick="@{()->viewModel.setLike(id, like)}"
+                    android:src="@{like? @drawable/ic_like : @drawable/ic_dislike}" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

@@ -25,6 +25,8 @@ object Constants {
     const val CATEGORY_PREF = "category_pref"
     const val CATEGORY_DATA = "category_data"
 
+    const val REVIEW_DETAIL = "review_detail"
+
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)
                 as ConnectivityManager

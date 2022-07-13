@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <FrameLayout
-            android:id="@+id/card_front"
+            android:id="@+id/cardFront"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:onClick="@{()->fragment.flipCard()}"
@@ -26,13 +26,14 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <include
+                android:id="@+id/flipViewFront"
                 layout="@layout/flipview_front"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/card_back"
+            android:id="@+id/cardBack"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:onClick="@{()->fragment.flipCard()}"
@@ -45,6 +46,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <include
+                android:id="@+id/flipViewBack"
                 layout="@layout/flipview_back"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

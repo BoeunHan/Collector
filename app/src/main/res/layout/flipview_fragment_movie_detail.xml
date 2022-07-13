@@ -2,7 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
+        <variable
+            name="movie"
+            type="com.han.collector.model.data.database.MovieEntity" />
     </data>
 
     <LinearLayout
@@ -19,6 +21,7 @@
             android:textSize="16sp" />
 
         <androidx.emoji2.widget.EmojiTextView
+            android:id="@+id/tvSummary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -27,7 +30,7 @@
             android:lines="5"
             android:padding="10dp"
             android:scrollbars="vertical"
-            android:text="movie줄거리"
+            android:text="@{movie.summary}"
             android:textColor="@color/textColor"
             android:textSize="16sp" />
 
@@ -40,6 +43,7 @@
             android:textSize="16sp" />
 
         <androidx.emoji2.widget.EmojiTextView
+            android:id="@+id/tvReview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -48,7 +52,7 @@
             android:lines="5"
             android:padding="10dp"
             android:scrollbars="vertical"
-            android:text="movie감상평"
+            android:text="@{movie.review}"
             android:textColor="@color/textColor"
             android:textSize="16sp" />
 
@@ -61,6 +65,7 @@
             android:textSize="16sp" />
 
         <androidx.emoji2.widget.EmojiTextView
+            android:id="@+id/tvMemo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"

@@ -32,7 +32,7 @@ class MovieRepository @Inject constructor(reviewDatabase: ReviewDatabase) {
 
     fun fetchData(id: Int): Flow<MovieEntity> = movieDao.fetchData(id)
 
-    fun fetchBasicInfo(id: Int) = movieDao.fetchBasicInfo(id)
+    fun fetchDetailInfo(id: Int) = movieDao.fetchDetailInfo(id)
 
     fun fetchAll(): List<MovieEntity> = movieDao.fetchAll()
 

@@ -8,6 +8,12 @@
         <variable
             name="title"
             type="String" />
+        <variable
+            name="uploadDate"
+            type="String" />
+        <variable
+            name="editDate"
+            type="String" />
 
         <variable
             name="fragment"
@@ -42,6 +48,35 @@
                 android:text="@{title}"
                 android:textColor="@color/textColor"
                 android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvUploadDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@{`등록: `+uploadDate}"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvEditDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@{`수정: `+editDate}"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp"
+                    android:visibility="@{editDate.empty? View.GONE : View.VISIBLE}" />
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"

@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import com.han.collector.R
 import com.han.collector.model.data.database.BasicInfo
 import com.han.collector.model.data.database.BookEntity
+import com.han.collector.model.data.database.DetailInfo
 import com.han.collector.model.data.database.MovieEntity
 import com.han.collector.model.repository.BookRepository
 import com.han.collector.model.repository.CategoryRepository
@@ -89,7 +90,6 @@ class ItemViewModel @Inject constructor(
             for(j in i) array.put(j.toString())
             jsonArray.put(array)
         }
-        Log.e("jsonArray", jsonArray.toString())
 
         val properties = mapOf("reviews" to jsonArray.toString())
         UserApiClient.instance.updateProfile(properties, callback)
@@ -207,10 +207,10 @@ class ItemViewModel @Inject constructor(
         }
     }
 
-    fun getBasicInfo(id: Int): Flow<BasicInfo>{
+    fun getDetailInfo(id: Int): Flow<DetailInfo>{
         return when(category){
-            "영화" -> movieRepository.fetchBasicInfo(id)
-            "책" -> bookRepository.fetchBasicInfo(id)
+            "영화" -> movieRepository.fetchDetailInfo(id)
+            "책" -> bookRepository.fetchDetailInfo(id)
             else -> flowOf()
         }
     }

@@ -33,7 +33,7 @@ class BookRepository @Inject constructor(reviewDatabase: ReviewDatabase) {
 
     fun fetchData(id: Int): Flow<BookEntity> = bookDao.fetchData(id)
 
-    fun fetchBasicInfo(id: Int) = bookDao.fetchBasicInfo(id)
+    fun fetchDetailInfo(id: Int) = bookDao.fetchDetailInfo(id)
 
     fun fetchAll(): List<BookEntity> = bookDao.fetchAll()
 

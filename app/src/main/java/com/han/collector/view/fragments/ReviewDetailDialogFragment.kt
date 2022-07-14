@@ -101,11 +101,13 @@ class ReviewDetailDialogFragment : DialogFragment() {
 
         lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getBasicInfo(id!!).collectLatest {
+                viewModel.getDetailInfo(id!!).collectLatest {
                     binding.flipViewFront.image = it.image
                     binding.flipViewFront.rating = it.rate
                     binding.flipViewFront.like = it.like
                     binding.flipViewBack.title = it.title
+                    binding.flipViewBack.uploadDate = it.uploadDate
+                    binding.flipViewBack.editDate = it.editDate
                 }
             }
         }

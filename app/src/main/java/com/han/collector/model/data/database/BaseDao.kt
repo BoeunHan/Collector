@@ -21,7 +21,7 @@ interface BaseDao<T> {
 
     fun fetchData(id: Int): Flow<T>
 
-    fun fetchBasicInfo(id: Int): Flow<BasicInfo>
+    fun fetchDetailInfo(id: Int): Flow<DetailInfo>
 
     fun fetchAll(): List<T>
 

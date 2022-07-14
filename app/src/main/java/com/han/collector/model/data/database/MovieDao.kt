@@ -17,8 +17,8 @@ interface MovieDao : BaseDao<MovieEntity> {
     @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}` WHERE id = :id")
     override fun fetchData(id: Int): Flow<MovieEntity>
 
-    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE id = :id")
-    override fun fetchBasicInfo(id: Int): Flow<BasicInfo>
+    @Query("SELECT id, title, image, rate, `like`, uploadDate, editDate FROM `${Constants.TABLE_MOVIE_LIST}` WHERE id = :id")
+    override fun fetchDetailInfo(id: Int): Flow<DetailInfo>
 
     @Query("SELECT * FROM `${Constants.TABLE_MOVIE_LIST}`")
     override fun fetchAll(): List<MovieEntity>

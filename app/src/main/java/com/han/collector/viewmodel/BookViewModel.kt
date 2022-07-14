@@ -35,13 +35,8 @@ class BookViewModel @Inject constructor(
 
     val bookDetail = MutableStateFlow(BookEntity())
 
-    fun getBookDetail(id: Int){
-        viewModelScope.launch {
-            bookRepository.fetchData(id).collectLatest { book ->
-                bookDetail.update { book }
-            }
-        }
-    }
+    fun getBookDetail(id: Int) = bookRepository.fetchData(id)
+
 
     fun setBookStatus(id: Int) {
         viewModelScope.launch {

@@ -35,13 +35,7 @@ class MovieViewModel @Inject constructor(
 
     val movieDetail = MutableStateFlow(MovieEntity())
 
-    fun getMovieDetail(id: Int){
-        viewModelScope.launch {
-            movieRepository.fetchData(id).collectLatest { movie ->
-                movieDetail.update { movie }
-            }
-        }
-    }
+    fun getMovieDetail(id: Int) = movieRepository.fetchData(id)
 
     fun setMovieStatus(id: Int) {
         viewModelScope.launch {

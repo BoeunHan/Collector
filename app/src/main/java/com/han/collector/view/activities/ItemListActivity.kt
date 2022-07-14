@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
@@ -14,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.han.collector.utils.Constants
@@ -25,6 +22,7 @@ import com.han.collector.databinding.SortDialogBinding
 import com.han.collector.viewmodel.ItemViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.han.collector.view.adapters.ItemAdapter
+import com.han.collector.view.fragments.CardFlipDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -69,7 +67,7 @@ class ItemListActivity : AppCompatActivity() {
         setRecyclerView()
     }
 
-    private fun setRecyclerView(){
+    private fun setRecyclerView() {
         pagingAdapter = ItemAdapter(category, this@ItemListActivity)
         pagingAdapter?.addLoadStateListener { loadState ->
             binding.isEmpty =
@@ -77,7 +75,7 @@ class ItemListActivity : AppCompatActivity() {
                         && pagingAdapter?.itemCount!! < 1)
         }
 
-        val smoothScroller = object : LinearSmoothScroller(this){
+        val smoothScroller = object : LinearSmoothScroller(this) {
             override fun getVerticalSnapPreference(): Int {
                 return SNAP_TO_START
             }
@@ -144,10 +142,12 @@ class ItemListActivity : AppCompatActivity() {
     }
 
     fun getItemDetail(category: String, id: Int) {
-        val intent = Intent(this@ItemListActivity, ReviewDetailActivity::class.java)
-        intent.putExtra(Constants.CATEGORY, category)
-        intent.putExtra(Constants.SELECTED_ID, id)
-        startActivity(intent)
+        val cardDialog = CardFlipDialogFragment()
+        val bundle = Bundle()
+        bundle.putString(Constants.CATEGORY, category)
+        bundle.putInt(Constants.SELECTED_ID, id)
+        cardDialog.arguments = bundle
+        cardDialog.show(supportFragmentManager, CardFlipDialogFragment.TAG)
     }
 
 

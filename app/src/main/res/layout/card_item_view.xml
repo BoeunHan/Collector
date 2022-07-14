@@ -59,6 +59,7 @@
                     android:layout_gravity="top|end"
                     android:layout_margin="5dp"
                     app:srcCompat="@drawable/ic_like"
+                    app:tint="@color/white"
                     android:visibility="@{item.like ? View.VISIBLE : View.GONE}" />
 
                 <ImageView

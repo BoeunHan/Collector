@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.han.collector.R
+import com.han.collector.model.data.database.BasicInfo
 import com.han.collector.model.data.database.BookEntity
 import com.han.collector.model.data.database.MovieEntity
 import com.han.collector.model.repository.BookRepository
@@ -203,6 +204,14 @@ class ItemViewModel @Inject constructor(
                 "영화" -> movieRepository.like(id, !like)
                 "책" -> bookRepository.like(id, !like)
             }
+        }
+    }
+
+    fun getBasicInfo(id: Int): Flow<BasicInfo>{
+        return when(category){
+            "영화" -> movieRepository.fetchBasicInfo(id)
+            "책" -> bookRepository.fetchBasicInfo(id)
+            else -> flowOf()
         }
     }
 }

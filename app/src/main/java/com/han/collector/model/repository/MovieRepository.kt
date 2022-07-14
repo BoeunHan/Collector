@@ -32,6 +32,8 @@ class MovieRepository @Inject constructor(reviewDatabase: ReviewDatabase) {
 
     fun fetchData(id: Int): Flow<MovieEntity> = movieDao.fetchData(id)
 
+    fun fetchBasicInfo(id: Int) = movieDao.fetchBasicInfo(id)
+
     fun fetchAll(): List<MovieEntity> = movieDao.fetchAll()
 
     fun getRecentReviewFlow() = Pager(config = PagingConfig(pageSize = RECENT_PAGE_SIZE),

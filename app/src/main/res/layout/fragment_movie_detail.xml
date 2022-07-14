@@ -80,7 +80,7 @@
                     android:gravity="start|top"
                     android:padding="10dp"
                     android:scrollbars="vertical"
-                    android:text="movie메모"
+                    android:text="@{movie.memo}"
                     android:textColor="@color/textColor"
                     android:textSize="16sp" />
             </LinearLayout>

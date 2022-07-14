@@ -16,6 +16,7 @@ data class MovieEntity(
     val rate: Float = 0.0f,
     val summary: String = "",
     val review: String = "",
+    val memo: String = "",
     val uploadDate: String = "",
     val editDate: String = "",
     val like: Boolean = false

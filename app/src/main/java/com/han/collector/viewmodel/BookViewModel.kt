@@ -32,8 +32,7 @@ class BookViewModel @Inject constructor(
     var rate = MutableStateFlow(0.0f)
     var summary = MutableStateFlow("")
     var review = MutableStateFlow("")
-
-    val bookDetail = MutableStateFlow(BookEntity())
+    var memo = MutableStateFlow("")
 
     fun getBookDetail(id: Int) = bookRepository.fetchData(id)
 
@@ -51,6 +50,7 @@ class BookViewModel @Inject constructor(
                 rate.update { book.rate }
                 summary.update { book.summary }
                 review.update { book.review }
+                memo.update { book.memo }
             }
         }
     }
@@ -66,20 +66,21 @@ class BookViewModel @Inject constructor(
         val sdf = SimpleDateFormat("yyyy/MM/dd")
         val datestr = sdf.format(date)
 
-        val movie = BookEntity(
+        val book = BookEntity(
             bookStatus.id,
             bookStatus.title,
             bookStatus.image,
             rate.value,
             summary.value,
             review.value,
+            memo.value,
             if (bookStatus.uploadDate == "") datestr else bookStatus.uploadDate,
             if (bookStatus.uploadDate == "") "" else datestr,
             bookStatus.like
         )
 
         viewModelScope.launch {
-            bookRepository.insert(movie)
+            bookRepository.insert(book)
         }
     }
 }

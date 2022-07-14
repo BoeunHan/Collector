@@ -55,14 +55,15 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/edittext_background_selector"
             android:gravity="start|top"
+            android:hint="@string/movie_summary_hint"
             android:inputType="textMultiLine"
             android:lines="5"
+            android:overScrollMode="always"
             android:padding="10dp"
             android:scrollbars="vertical"
             android:text="@={viewModel.summary}"
             android:textColor="@color/textColor"
-            android:textSize="16sp"
-            android:overScrollMode="always"/>
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -79,6 +80,7 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/edittext_background_selector"
             android:gravity="start|top"
+            android:hint="@string/movie_review_hint"
             android:inputType="textMultiLine"
             android:lines="5"
             android:padding="10dp"
@@ -102,11 +104,12 @@
             android:layout_marginBottom="20dp"
             android:background="@drawable/edittext_background_selector"
             android:gravity="start|top"
+            android:hint="@string/movie_memo_hint"
             android:inputType="textMultiLine"
             android:lines="5"
             android:padding="10dp"
             android:scrollbars="vertical"
-            android:text="@{}"
+            android:text="@={viewModel.memo}"
             android:textColor="@color/textColor"
             android:textSize="16sp" />
     </LinearLayout>

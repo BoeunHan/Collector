@@ -32,8 +32,7 @@ class MovieViewModel @Inject constructor(
     var rate = MutableStateFlow(0.0f)
     var summary = MutableStateFlow("")
     var review = MutableStateFlow("")
-
-    val movieDetail = MutableStateFlow(MovieEntity())
+    var memo = MutableStateFlow("")
 
     fun getMovieDetail(id: Int) = movieRepository.fetchData(id)
 
@@ -50,6 +49,7 @@ class MovieViewModel @Inject constructor(
                 rate.update { movie.rate }
                 summary.update { movie.summary }
                 review.update { movie.review }
+                memo.update { movie.memo }
             }
         }
     }
@@ -73,6 +73,7 @@ class MovieViewModel @Inject constructor(
             rate.value,
             summary.value,
             review.value,
+            memo.value,
             if (movieStatus.uploadDate == "") datestr else movieStatus.uploadDate,
             if (movieStatus.uploadDate == "") "" else datestr,
             movieStatus.like

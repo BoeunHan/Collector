@@ -142,10 +142,6 @@ class ItemListActivity : AppCompatActivity() {
     }
 
     fun getItemDetail(category: String, id: Int) {
-        /*val intent = Intent(this@ItemListActivity, ReviewDetailActivity::class.java)
-        intent.putExtra(Constants.CATEGORY, category)
-        intent.putExtra(Constants.SELECTED_ID, id)
-        startActivity(intent)*/
         val cardDialog = CardFlipDialogFragment()
         val bundle = Bundle()
         bundle.putString(Constants.CATEGORY, category)

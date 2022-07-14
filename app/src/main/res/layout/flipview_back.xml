@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="5dp"
-        app:cardCornerRadius="20dp">
+        app:cardCornerRadius="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,26 +25,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
                 android:background="@color/textColor" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:text="@{title}"
                 android:textColor="@color/textColor"
                 android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="20dp"
-                android:text="subtitle"
-                android:textColor="@color/textColor"
-                android:textSize="16sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -55,16 +46,18 @@
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/detailFragmentContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
                 android:text="편집"
-                android:textSize="20sp"
-                android:textStyle="bold"
                 android:textColor="@color/textColor"
-                android:layout_gravity="center_horizontal"/>
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

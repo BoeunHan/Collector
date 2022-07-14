@@ -24,7 +24,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="10dp"
         android:elevation="5dp">
 
         <LinearLayout
@@ -38,7 +38,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                app:cardCornerRadius="20dp">
+                android:elevation="0dp"
+                app:cardCornerRadius="10dp">
 
                 <ImageView
                     android:layout_width="match_parent"

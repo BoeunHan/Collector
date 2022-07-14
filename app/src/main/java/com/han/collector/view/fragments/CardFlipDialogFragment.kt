@@ -47,6 +47,8 @@ class CardFlipDialogFragment : DialogFragment() {
     val bookViewModel: BookViewModel by activityViewModels()
 
     private var showingBack = false
+    private var isFlipping = false
+
     private var id: Int? = null
     private var category: String? = null
 
@@ -60,6 +62,7 @@ class CardFlipDialogFragment : DialogFragment() {
     ): View? {
         binding = FragmentCardFlipBinding.inflate(inflater, container, false)
         binding.fragment = this
+
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         id = arguments?.getInt(Constants.SELECTED_ID)
@@ -111,6 +114,10 @@ class CardFlipDialogFragment : DialogFragment() {
 
     fun flipCard(){
         try {
+            if(isFlipping) return
+
+            isFlipping = true
+
             lateinit var visibleView: View
             lateinit var invisibleView: View
 
@@ -146,6 +153,7 @@ class CardFlipDialogFragment : DialogFragment() {
 
             flipInAnimationSet.doOnEnd{
                 invisibleView.visibility = View.GONE
+                isFlipping = false
             }
         } catch (e: Exception){
             e.printStackTrace()

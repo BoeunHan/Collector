@@ -43,8 +43,8 @@ class MovieDetailFragment : Fragment() {
             }
         }
 
-        binding?.tvSummary?.movementMethod = ScrollingMovementMethod()
-        binding?.tvReview?.movementMethod = ScrollingMovementMethod()
+        //binding?.tvSummary?.movementMethod = ScrollingMovementMethod()
+        //binding?.tvReview?.movementMethod = ScrollingMovementMethod()
 
         return binding?.root
     }

@@ -30,6 +30,7 @@ import com.han.collector.databinding.HeaderNavigationDrawerBinding
 import com.han.collector.utils.Constants
 import com.han.collector.view.adapters.CategoryAdapter
 import com.han.collector.view.adapters.ItemAdapter
+import com.han.collector.view.fragments.CardFlipDialogFragment
 import com.han.collector.viewmodel.ItemViewModel
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.AuthCodeHandlerActivity
@@ -201,10 +202,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun getItemDetail(category: String, id: Int) {
-        val intent = Intent(this@MainActivity, ReviewDetailActivity::class.java)
-        intent.putExtra(Constants.CATEGORY, category)
-        intent.putExtra(Constants.SELECTED_ID, id)
-        startActivity(intent)
+        viewModel.category = category
+        val cardDialog = CardFlipDialogFragment()
+        val bundle = Bundle()
+        bundle.putString(Constants.CATEGORY, category)
+        bundle.putInt(Constants.SELECTED_ID, id)
+        cardDialog.arguments = bundle
+        cardDialog.show(supportFragmentManager, CardFlipDialogFragment.TAG)
     }
 
     fun doLogout(){

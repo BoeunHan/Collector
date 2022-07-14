@@ -11,25 +11,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginEnd="10dp"
                 android:text="평점"
                 android:textColor="@color/textColor"
                 android:textSize="16sp" />
 
             <RatingBar
-                android:id="@+id/ratingBar"
                 style="?android:attr/ratingBarStyleIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,11 +39,12 @@
                 android:theme="@style/RatingBar" />
         </LinearLayout>
 
+
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="나의 영화 줄거리"
+            android:layout_marginBottom="10dp"
+            android:text="줄거리"
             android:textColor="@color/textColor"
             android:textSize="16sp" />
 
@@ -52,23 +52,23 @@
             android:id="@+id/etSummary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/edittext_background_selector"
             android:gravity="start|top"
             android:inputType="textMultiLine"
-            android:lines="6"
+            android:lines="5"
             android:padding="10dp"
             android:scrollbars="vertical"
             android:text="@={viewModel.summary}"
             android:textColor="@color/textColor"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:overScrollMode="always"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:text="나의 영화 후기"
+            android:text="감상평"
             android:textColor="@color/textColor"
             android:textSize="16sp" />
 
@@ -76,15 +76,38 @@
             android:id="@+id/etReview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/edittext_background_selector"
             android:gravity="start|top"
             android:inputType="textMultiLine"
-            android:lines="6"
+            android:lines="5"
             android:padding="10dp"
             android:scrollbars="vertical"
             android:text="@={viewModel.review}"
             android:textColor="@color/textColor"
             android:textSize="16sp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="메모"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+
+        <androidx.emoji2.widget.EmojiEditText
+            android:id="@+id/etMemo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/edittext_background_selector"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:padding="10dp"
+            android:scrollbars="vertical"
+            android:text="@{}"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
     </LinearLayout>
 </layout>

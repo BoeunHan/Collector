@@ -1,20 +1,18 @@
 package com.han.collector.view.fragments
 
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.han.collector.databinding.FragmentAddMovieBinding
 import com.han.collector.viewmodel.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
+import kotlin.experimental.and
 
 @FlowPreview
 @AndroidEntryPoint
-class AddMovieFragment : Fragment(){
+class AddMovieFragment : Fragment() {
     private var binding: FragmentAddMovieBinding? = null
 
     private val viewModel: MovieViewModel by activityViewModels()
@@ -29,9 +27,27 @@ class AddMovieFragment : Fragment(){
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = this
 
+        binding?.etSummary?.setOnTouchListener(onTouchListener)
+        binding?.etReview?.setOnTouchListener(onTouchListener)
+        binding?.etMemo?.setOnTouchListener(onTouchListener)
+
         return binding?.root
     }
 
+    val onTouchListener = View.OnTouchListener { view, event ->
+        if (view?.id == binding?.etSummary?.id
+            || view?.id == binding?.etReview?.id
+            || view?.id == binding?.etMemo?.id
+        ) {
+            view?.parent?.requestDisallowInterceptTouchEvent(true)
+            when (event?.action?.toByte()?.and(MotionEvent.ACTION_MASK.toByte())?.toInt()) {
+                MotionEvent.ACTION_UP -> {
+                    view?.parent?.requestDisallowInterceptTouchEvent(false)
+                }
+            }
+        }
+        false
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

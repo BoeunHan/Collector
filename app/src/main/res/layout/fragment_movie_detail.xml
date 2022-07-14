@@ -2,117 +2,89 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <import type="android.view.View" />
         <variable
-            name="viewModel"
-            type="com.han.collector.viewmodel.MovieViewModel" />
+            name="movie"
+            type="com.han.collector.model.data.database.MovieEntity" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="평점"
-                android:textColor="@color/textColor"
-                android:textSize="16sp" />
+                android:orientation="vertical" >
 
-            <RatingBar
-                android:id="@+id/ratingBar"
-                style="?android:attr/ratingBarStyleIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:isIndicator="true"
-                android:numStars="5"
-                android:rating="@{viewModel.movieDetail.rate}"
-                android:stepSize="0.5"
-                android:theme="@style/RatingBar" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="줄거리"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="나의 영화 줄거리"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
+                <androidx.emoji2.widget.EmojiTextView
+                    android:id="@+id/tvSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/multiline_textview_background"
+                    android:gravity="start|top"
+                    android:padding="10dp"
+                    android:scrollbars="vertical"
+                    android:text="@{movie.summary}"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp" />
 
-        <androidx.emoji2.widget.EmojiTextView
-            android:id="@+id/tvSummary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/multiline_textview_background"
-            android:gravity="start|top"
-            android:lines="6"
-            android:padding="10dp"
-            android:scrollbars="vertical"
-            android:text="@{viewModel.movieDetail.summary}"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="감상평"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp"
-            android:text="나의 영화 후기"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
+                <androidx.emoji2.widget.EmojiTextView
+                    android:id="@+id/tvReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/multiline_textview_background"
+                    android:gravity="start|top"
+                    android:padding="10dp"
+                    android:scrollbars="vertical"
+                    android:text="@{movie.review}"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp" />
 
-        <androidx.emoji2.widget.EmojiTextView
-            android:id="@+id/tvReview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/multiline_textview_background"
-            android:gravity="start|top"
-            android:lines="6"
-            android:padding="10dp"
-            android:scrollbars="vertical"
-            android:text="@{viewModel.movieDetail.review}"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="메모"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvUploadDate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:text="@{`등록: `+viewModel.movieDetail.uploadDate}"
-                android:textColor="@color/textColor"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tvEditDate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:text="@{`수정: `+viewModel.movieDetail.editDate}"
-                android:textColor="@color/textColor"
-                android:textSize="14sp"
-                android:visibility="@{viewModel.movieDetail.editDate.empty? View.GONE : View.VISIBLE}" />
-        </LinearLayout>
+                <androidx.emoji2.widget.EmojiTextView
+                    android:id="@+id/tvMemo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/multiline_textview_background"
+                    android:gravity="start|top"
+                    android:padding="10dp"
+                    android:scrollbars="vertical"
+                    android:text="movie메모"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 </layout>

@@ -4,9 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="title"
             type="String" />
+
+        <variable
+            name="fragment"
+            type="com.han.collector.view.fragments.ReviewDetailDialogFragment" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -25,14 +30,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:background="@color/textColor" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="10dp"
                 android:text="@{title}"
                 android:textColor="@color/textColor"
                 android:textSize="20sp" />
@@ -40,8 +46,9 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@color/textColor"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@color/textColor" />
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/detailFragmentContainer"
@@ -53,7 +60,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
+                android:onClick="@{()->fragment.editCard()}"
+                android:padding="10dp"
                 android:text="편집"
                 android:textColor="@color/textColor"
                 android:textSize="16sp"

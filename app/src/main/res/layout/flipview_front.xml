@@ -75,7 +75,7 @@
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:onClick="@{()->viewModel.setLike(id, like)}"
+                    android:onClick="@{()->viewModel.setLike(id,like)}"
                     android:src="@{like? @drawable/ic_like : @drawable/ic_dislike}" />
             </LinearLayout>
         </LinearLayout>

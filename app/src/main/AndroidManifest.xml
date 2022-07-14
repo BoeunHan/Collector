@@ -39,7 +39,8 @@
         </activity>
         <activity android:name="com.han.collector.view.activities.SearchActivity" />
         <activity android:name="com.han.collector.view.activities.ItemListActivity" />
-        <activity android:name="com.han.collector.view.activities.AddReviewActivity" />
+        <activity android:name="com.han.collector.view.activities.AddReviewActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name="com.han.collector.view.activities.ReviewDetailActivity" />
     </application>
 

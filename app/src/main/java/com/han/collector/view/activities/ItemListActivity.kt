@@ -22,7 +22,7 @@ import com.han.collector.databinding.SortDialogBinding
 import com.han.collector.viewmodel.ItemViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.han.collector.view.adapters.ItemAdapter
-import com.han.collector.view.fragments.CardFlipDialogFragment
+import com.han.collector.view.fragments.ReviewDetailDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -142,12 +142,12 @@ class ItemListActivity : AppCompatActivity() {
     }
 
     fun getItemDetail(category: String, id: Int) {
-        val cardDialog = CardFlipDialogFragment()
+        val cardDialog = ReviewDetailDialogFragment()
         val bundle = Bundle()
         bundle.putString(Constants.CATEGORY, category)
         bundle.putInt(Constants.SELECTED_ID, id)
         cardDialog.arguments = bundle
-        cardDialog.show(supportFragmentManager, CardFlipDialogFragment.TAG)
+        cardDialog.show(supportFragmentManager, ReviewDetailDialogFragment.TAG)
     }
 
 

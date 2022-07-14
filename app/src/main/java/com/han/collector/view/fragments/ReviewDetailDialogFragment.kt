@@ -3,6 +3,7 @@ package com.han.collector.view.fragments
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
@@ -13,7 +14,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.activity.viewModels
 import androidx.core.animation.doOnEnd
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -23,11 +23,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.han.collector.R
-import com.han.collector.databinding.FlipviewBackBinding
-import com.han.collector.databinding.FlipviewFrontBinding
-import com.han.collector.databinding.FragmentCardFlipBinding
-import com.han.collector.model.data.database.BasicInfo
+import com.han.collector.databinding.FragmentReviewDetailBinding
 import com.han.collector.utils.Constants
+import com.han.collector.view.activities.AddReviewActivity
 import com.han.collector.viewmodel.BookViewModel
 import com.han.collector.viewmodel.ItemViewModel
 import com.han.collector.viewmodel.MovieViewModel
@@ -38,9 +36,9 @@ import kotlinx.coroutines.launch
 
 @FlowPreview
 @AndroidEntryPoint
-class CardFlipDialogFragment : DialogFragment() {
+class ReviewDetailDialogFragment : DialogFragment() {
 
-    lateinit var binding: FragmentCardFlipBinding
+    lateinit var binding: FragmentReviewDetailBinding
 
     val viewModel: ItemViewModel by activityViewModels()
     val movieViewModel: MovieViewModel by activityViewModels()
@@ -60,7 +58,7 @@ class CardFlipDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentCardFlipBinding.inflate(inflater, container, false)
+        binding = FragmentReviewDetailBinding.inflate(inflater, container, false)
         binding.fragment = this
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -99,6 +97,8 @@ class CardFlipDialogFragment : DialogFragment() {
         binding.flipViewFront.lifecycleOwner = this
         binding.flipViewFront.id = id
         binding.flipViewFront.viewModel = viewModel
+        binding.flipViewBack.fragment = this
+
         lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getBasicInfo(id!!).collectLatest {
@@ -109,6 +109,15 @@ class CardFlipDialogFragment : DialogFragment() {
                 }
             }
         }
+    }
+
+    fun editCard(){
+        val intent = Intent(context, AddReviewActivity::class.java)
+        intent.putExtra(Constants.SELECTED_ID, id)
+        intent.putExtra(Constants.CATEGORY, category)
+        intent.putExtra(Constants.IMAGE, binding.flipViewFront.image)
+        intent.putExtra(Constants.TITLE, binding.flipViewBack.title)
+        startActivity(intent)
     }
 
 

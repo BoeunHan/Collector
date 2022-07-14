@@ -1,24 +1,20 @@
 package com.han.collector.view.activities
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -30,16 +26,12 @@ import com.han.collector.databinding.HeaderNavigationDrawerBinding
 import com.han.collector.utils.Constants
 import com.han.collector.view.adapters.CategoryAdapter
 import com.han.collector.view.adapters.ItemAdapter
-import com.han.collector.view.fragments.CardFlipDialogFragment
+import com.han.collector.view.fragments.ReviewDetailDialogFragment
 import com.han.collector.viewmodel.ItemViewModel
 import com.kakao.sdk.auth.AuthApiClient
-import com.kakao.sdk.auth.AuthCodeHandlerActivity
-import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
@@ -203,12 +195,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun getItemDetail(category: String, id: Int) {
         viewModel.category = category
-        val cardDialog = CardFlipDialogFragment()
+        val cardDialog = ReviewDetailDialogFragment()
         val bundle = Bundle()
         bundle.putString(Constants.CATEGORY, category)
         bundle.putInt(Constants.SELECTED_ID, id)
         cardDialog.arguments = bundle
-        cardDialog.show(supportFragmentManager, CardFlipDialogFragment.TAG)
+        cardDialog.show(supportFragmentManager, ReviewDetailDialogFragment.TAG)
     }
 
     fun doLogout(){

@@ -2,14 +2,10 @@ package com.han.collector.view.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.han.collector.utils.Constants
-import com.han.collector.R
 import com.han.collector.databinding.ActivityAddReviewBinding
 import com.han.collector.view.fragments.AddBookFragment
 import com.han.collector.view.fragments.AddMovieFragment
@@ -35,9 +31,9 @@ class AddReviewActivity : AppCompatActivity() {
 
         binding = ActivityAddReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbarMovieAddEdit)
 
         binding.lifecycleOwner = this
+        binding.activity = this
 
         itemImage = intent.getStringExtra(Constants.IMAGE)
         itemTitle = intent.getStringExtra(Constants.TITLE)
@@ -77,22 +73,11 @@ class AddReviewActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_add_edit, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.btSave -> {
-                when(category){
-                    "영화" -> movieViewModel.saveMovie()
-                    "책" -> bookViewModel.saveBook()
-                }
-                finish()
-            }
+    fun saveData(){
+        when(category){
+            "영화" -> movieViewModel.saveMovie()
+            "책" -> bookViewModel.saveBook()
         }
-        return true
+        finish()
     }
-
 }

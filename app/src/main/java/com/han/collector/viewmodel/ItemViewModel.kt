@@ -71,31 +71,6 @@ class ItemViewModel @Inject constructor(
         getResult()
     }
 
-    fun upload(callback: (Throwable?) -> Unit): Deferred<Unit>{
-        lateinit var movieList: List<MovieEntity>
-        lateinit var bookList: List<BookEntity>
-        return CoroutineScope(Dispatchers.IO).async{
-            val movie = async { movieList = movieRepository.fetchAll() }
-            val book = async { bookList = bookRepository.fetchAll() }
-            movie.await()
-            book.await()
-            uploadCategory(callback, movieList, bookList)
-        }
-    }
-
-    private fun uploadCategory(callback: (Throwable?) -> Unit, vararg list: List<Any>) {
-        val jsonArray = JSONArray()
-        for(i in list){
-            val array = JSONArray()
-            for(j in i) array.put(j.toString())
-            jsonArray.put(array)
-        }
-
-        val properties = mapOf("reviews" to jsonArray.toString())
-        UserApiClient.instance.updateProfile(properties, callback)
-    }
-
-
     fun setProfile(nickname: String?, thumbnail: String?){
         _nickname.update { nickname }
         _thumbnail.update { thumbnail }

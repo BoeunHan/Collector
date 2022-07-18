@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/CustomActionBar">
 
+        <activity android:name=".view.activities.GoogleLoginActivity"
+            android:exported="true">
+
+        </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -41,7 +45,6 @@
         <activity android:name="com.han.collector.view.activities.ItemListActivity" />
         <activity android:name="com.han.collector.view.activities.AddReviewActivity"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name="com.han.collector.view.activities.ReviewDetailActivity" />
     </application>
 
 </manifest>

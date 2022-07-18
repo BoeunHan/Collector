@@ -22,7 +22,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.37" />
-
+<!--
         <ImageButton
             android:id="@+id/btLogin"
             android:layout_width="wrap_content"
@@ -33,6 +33,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView2"
-            android:onClick="@{()->activity.login()}"/>
+            android:onClick="@{()->activity.login()}"/>-->
+        <TextView
+            android:id="@+id/btGoogleLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="google login"
+            android:onClick="@{()->activity.googleLogin()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

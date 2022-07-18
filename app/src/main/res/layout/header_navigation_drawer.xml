@@ -40,7 +40,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.nickname==`로그인`? activity.doLogin():null}"
+                android:onClick="@{()->viewModel.nickname==`로그인`? activity.gotoLogin():null}"
                 android:text="@{viewModel.nickname}"
                 android:textColor="@color/textColor"
                 android:textSize="20sp" />

@@ -19,6 +19,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.han.collector.R
 import com.han.collector.databinding.ActivityMainBinding
 import com.han.collector.databinding.CategoryDialogBinding
@@ -50,9 +54,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
+    private lateinit var auth: FirebaseAuth
+    private var currentUser: FirebaseUser? = null
+
     private val getLoginResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        checkLoggedIn()
+        currentUser = auth.currentUser
+        currentUser?.let{
+            viewModel.setProfile(currentUser!!.displayName, currentUser!!.photoUrl.toString())
+            binding.drawerLayout.close()
+        }
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,18 +84,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
-
-        checkLoggedIn()
+        auth = Firebase.auth
+        currentUser = auth.currentUser
+        currentUser?.let{
+            viewModel.setProfile(currentUser!!.displayName, currentUser!!.photoUrl.toString())
+            binding.drawerLayout.close()
+        }
+        //checkLoggedIn()
 
         setRecyclerView()
 
     }
-    fun doLogin(){
+
+
+    fun gotoLogin(){
         val intent = Intent(this, LoginActivity::class.java)
         getLoginResult.launch(intent)
     }
 
-    private fun checkLoggedIn() {
+
+    /*private fun checkLoggedIn() {
         if (AuthApiClient.instance.hasToken()) {
             UserApiClient.instance.accessTokenInfo { token, error ->
                 if (error != null) {
@@ -112,7 +133,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             doLogin()
         }
     }
-
+*/
     fun openDrawer(){
         binding.drawerLayout.open()
     }
@@ -204,14 +225,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun doLogout(){
-        UserApiClient.instance.logout { error ->
-            if(error != null){
-                Toast.makeText(this@MainActivity, "로그아웃 실패", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this@MainActivity, "로그아웃 성공", Toast.LENGTH_SHORT).show()
-                viewModel.setProfile("로그인","")
-            }
-        }
+        auth.signOut()
+        viewModel.setProfile("로그인","")
     }
     fun doUnlink(){
         MaterialAlertDialogBuilder(this)
@@ -222,15 +237,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             .setPositiveButton("예"){dialog,_ ->
                 dialog.dismiss()
-                UserApiClient.instance.unlink { error ->
-                    if (error != null) {
-                        Toast.makeText(this@MainActivity, "탈퇴 실패", Toast.LENGTH_SHORT).show()
-                    }
-                    else {
-                        Toast.makeText(this@MainActivity, "탈퇴 성공", Toast.LENGTH_SHORT).show()
-                        viewModel.setProfile("로그인","")
-                    }
-                }
+                currentUser?.delete()
+                viewModel.setProfile("로그인","")
             }
             .show()
     }
@@ -238,12 +246,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.category_item -> showCategoryDialog()
-            R.id.logout_item -> {
-                lifecycleScope.launch {
-                    viewModel.upload(callback).await()
-                    doLogout()
-                }
-            }
+            R.id.logout_item -> doLogout()
             R.id.unlink_item -> doUnlink()
         }
         binding.drawerLayout.close()

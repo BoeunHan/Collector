@@ -5,22 +5,15 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 import com.han.collector.R
-import com.han.collector.model.data.database.BasicInfo
-import com.han.collector.model.data.database.BookEntity
 import com.han.collector.model.data.database.DetailInfo
-import com.han.collector.model.data.database.MovieEntity
 import com.han.collector.model.repository.BookRepository
 import com.han.collector.model.repository.CategoryRepository
+import com.han.collector.model.repository.FirestoreRepository
 import com.han.collector.model.repository.MovieRepository
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import org.json.JSONArray
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -37,7 +30,8 @@ enum class SortType {
 class ItemViewModel @Inject constructor(
     val categoryRepository: CategoryRepository,
     val movieRepository: MovieRepository,
-    val bookRepository: BookRepository
+    val bookRepository: BookRepository,
+    val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
     private var _categoryList = MutableStateFlow(ArrayList<String>())
     val categoryList = _categoryList.asStateFlow()
@@ -65,16 +59,22 @@ class ItemViewModel @Inject constructor(
     private var _thumbnail = MutableStateFlow<String?>("")
     val thumbnail = _thumbnail
 
-
     init {
         fetchCategoryList()
         getResult()
     }
 
-    fun setProfile(nickname: String?, thumbnail: String?){
+    fun uploadState() = viewModelScope.launch(Dispatchers.IO) {
+        firestoreRepository.uploadState()
+    }
+    fun uploadAll() = viewModelScope.async(Dispatchers.IO) {
+        firestoreRepository.uploadAll()
+    }
+
+    fun setProfile(nickname: String?, thumbnail: String?) {
         _nickname.update { nickname }
         _thumbnail.update { thumbnail }
-        Log.e("${_nickname.value}","${_thumbnail.value}")
+        Log.e("${_nickname.value}", "${_thumbnail.value}")
     }
 
     private fun fetchCategoryList() {
@@ -96,10 +96,10 @@ class ItemViewModel @Inject constructor(
 
     @ExperimentalCoroutinesApi
     val itemFlow = _sortFlow.flatMapLatest {
-        when(category){
+        when (category) {
             "영화" -> movieRepository.getReviewFlow(Pair(it.first, it.second), "%${it.third}%")
             "책" -> bookRepository.getReviewFlow(Pair(it.first, it.second), "%${it.third}%")
-            else -> flow{}
+            else -> flow {}
         }
     }
 
@@ -164,26 +164,38 @@ class ItemViewModel @Inject constructor(
     }
 
     fun removeIdSet() {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (category) {
+                "영화" -> {
+                    movieRepository.deleteIdSet(selectedIdSet.value)
+                    for (id in selectedIdSet.value) firestoreRepository.update("영화", id, "R")
+                }
+                "책" -> {
+                    bookRepository.deleteIdSet(selectedIdSet.value)
+                    for (id in selectedIdSet.value) firestoreRepository.update("책", id, "R")
+                }
+            }
+            setSelectMode(false)
+        }
+    }
+
+    fun setLike(id: Int, like: Boolean) {
         viewModelScope.launch {
             when (category) {
-                "영화" -> movieRepository.deleteIdSet(selectedIdSet.value)
-                "책" -> bookRepository.deleteIdSet(selectedIdSet.value)
-            }
-        }
-        setSelectMode(false)
-    }
-
-    fun setLike(id: Int, like: Boolean){
-        viewModelScope.launch {
-            when(category){
-                "영화" -> movieRepository.like(id, !like)
-                "책" -> bookRepository.like(id, !like)
+                "영화" -> {
+                    movieRepository.like(id, !like)
+                    firestoreRepository.update("영화", id, "I")
+                }
+                "책" -> {
+                    bookRepository.like(id, !like)
+                    firestoreRepository.update("영화", id, "I")
+                }
             }
         }
     }
 
-    fun getDetailInfo(id: Int): Flow<DetailInfo>{
-        return when(category){
+    fun getDetailInfo(id: Int): Flow<DetailInfo> {
+        return when (category) {
             "영화" -> movieRepository.fetchDetailInfo(id)
             "책" -> bookRepository.fetchDetailInfo(id)
             else -> flowOf()

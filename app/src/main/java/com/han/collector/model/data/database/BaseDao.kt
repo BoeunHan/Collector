@@ -2,12 +2,13 @@ package com.han.collector.model.data.database
 
 import androidx.paging.PagingSource
 import androidx.room.*
+import com.han.collector.utils.Constants
 import kotlinx.coroutines.flow.Flow
 
 interface BaseDao<T> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(obj: T)
+    suspend fun insert(obj: T): Long
 
     @Update
     suspend fun update(obj: T)
@@ -21,9 +22,13 @@ interface BaseDao<T> {
 
     fun fetchData(id: Int): Flow<T>
 
+    suspend fun getData(id: Int): T
+
     fun fetchDetailInfo(id: Int): Flow<DetailInfo>
 
-    fun fetchAll(): List<T>
+    fun fetchAll(): Flow<List<T>>
+
+    fun getAll(): List<T>?
 
     suspend fun like(id: Int, like: Boolean)
 

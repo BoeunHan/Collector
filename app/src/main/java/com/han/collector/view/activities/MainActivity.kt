@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
-import android.net.NetworkCapabilities
-import android.net.NetworkRequest
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -35,25 +33,26 @@ import com.han.collector.R
 import com.han.collector.databinding.ActivityMainBinding
 import com.han.collector.databinding.CategoryDialogBinding
 import com.han.collector.databinding.HeaderNavigationDrawerBinding
+import com.han.collector.model.data.database.ReviewDatabase
+import com.han.collector.model.repository.FirestoreRepository
+import com.han.collector.model.repository.MovieRepository
 import com.han.collector.utils.Constants
 import com.han.collector.view.adapters.CategoryAdapter
 import com.han.collector.view.adapters.ItemAdapter
 import com.han.collector.view.fragments.ReviewDetailDialogFragment
 import com.han.collector.viewmodel.ItemViewModel
-import com.kakao.sdk.auth.AuthApiClient
-import com.kakao.sdk.common.model.KakaoSdkError
-import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 @FlowPreview
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
+
     val viewModel: ItemViewModel by viewModels()
 
     private lateinit var categoryDialog: Dialog
@@ -65,13 +64,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var auth: FirebaseAuth
     private var currentUser: FirebaseUser? = null
 
-    private val getLoginResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        currentUser = auth.currentUser
-        currentUser?.let{
-            viewModel.setProfile(currentUser!!.displayName, currentUser!!.photoUrl.toString())
-            binding.drawerLayout.close()
+    private val getLoginResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            currentUser = auth.currentUser
+            currentUser?.let {
+                viewModel.setProfile(currentUser!!.displayName, currentUser!!.photoUrl.toString())
+                binding.drawerLayout.close()
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,13 +92,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         auth = Firebase.auth
         currentUser = auth.currentUser
-        currentUser?.let{
+        currentUser?.let {
             viewModel.setProfile(currentUser!!.displayName, currentUser!!.photoUrl.toString())
             binding.drawerLayout.close()
         }
 
         setRecyclerView()
-
     }
 
     override fun onResume() {
@@ -111,35 +110,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         unregisterNetworkCallback()
     }
 
-    val networkCallback = object : ConnectivityManager.NetworkCallback(){
+    var job: Job? = null
+
+    val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
             Toast.makeText(this@MainActivity, "인터넷 연결됨 - 백업 재개", Toast.LENGTH_SHORT).show()
-            //백업
+            job = if (currentUser == null) null else viewModel.uploadState()
         }
 
         override fun onLost(network: Network) {
             super.onLost(network)
             Toast.makeText(this@MainActivity, "인터넷 연결 끊김 - 백업 중지", Toast.LENGTH_SHORT).show()
+            job?.cancel()
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    fun registerNetworkCallback(){
+    fun registerNetworkCallback() {
         val connectivityManager = getSystemService(ConnectivityManager::class.java)
         connectivityManager.registerDefaultNetworkCallback(networkCallback)
     }
-    fun unregisterNetworkCallback(){
+
+    fun unregisterNetworkCallback() {
         val connectivityManager = getSystemService(ConnectivityManager::class.java)
         connectivityManager.unregisterNetworkCallback(networkCallback)
     }
 
-    fun gotoLogin(){
+    fun gotoLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         getLoginResult.launch(intent)
     }
 
-    fun openDrawer(){
+    fun openDrawer() {
         binding.drawerLayout.open()
     }
 
@@ -229,27 +232,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         cardDialog.show(supportFragmentManager, ReviewDetailDialogFragment.TAG)
     }
 
-    fun doLogout(){
-        auth.signOut()
-        viewModel.setProfile("로그인","")
+    fun doLogout() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (Constants.isNetworkAvailable(this@MainActivity)) {
+                viewModel.uploadAll().await()
+                auth.signOut()
+                viewModel.setProfile("로그인", "")
+            } else {
+                Toast.makeText(this@MainActivity, "인터넷 연결 끊김", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
-    fun doUnlink(){
+
+    fun doUnlink() {
         MaterialAlertDialogBuilder(this)
             .setTitle("탈퇴")
             .setMessage("정말 탈퇴하시겠습니까?")
-            .setNegativeButton("아니오"){ dialog,_ ->
+            .setNegativeButton("아니오") { dialog, _ ->
                 dialog.dismiss()
             }
-            .setPositiveButton("예"){dialog,_ ->
+            .setPositiveButton("예") { dialog, _ ->
                 dialog.dismiss()
-                currentUser?.delete()
-                viewModel.setProfile("로그인","")
+                if (Constants.isNetworkAvailable(this@MainActivity)) {
+                    currentUser?.delete()
+                    viewModel.setProfile("로그인", "")
+                } else {
+                    Toast.makeText(this@MainActivity, "인터넷 연결 끊김", Toast.LENGTH_SHORT).show()
+                }
             }
             .show()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.category_item -> showCategoryDialog()
             R.id.logout_item -> doLogout()
             R.id.unlink_item -> doUnlink()

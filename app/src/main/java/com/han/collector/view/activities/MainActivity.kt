@@ -1,7 +1,13 @@
 package com.han.collector.view.activities
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +17,7 @@ import android.view.Window
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -22,6 +29,7 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.han.collector.R
 import com.han.collector.databinding.ActivityMainBinding
@@ -65,8 +73,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -90,50 +96,49 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             viewModel.setProfile(currentUser!!.displayName, currentUser!!.photoUrl.toString())
             binding.drawerLayout.close()
         }
-        //checkLoggedIn()
 
         setRecyclerView()
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        registerNetworkCallback()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterNetworkCallback()
+    }
+
+    val networkCallback = object : ConnectivityManager.NetworkCallback(){
+        override fun onAvailable(network: Network) {
+            super.onAvailable(network)
+            Toast.makeText(this@MainActivity, "인터넷 연결됨 - 백업 재개", Toast.LENGTH_SHORT).show()
+            //백업
+        }
+
+        override fun onLost(network: Network) {
+            super.onLost(network)
+            Toast.makeText(this@MainActivity, "인터넷 연결 끊김 - 백업 중지", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun registerNetworkCallback(){
+        val connectivityManager = getSystemService(ConnectivityManager::class.java)
+        connectivityManager.registerDefaultNetworkCallback(networkCallback)
+    }
+    fun unregisterNetworkCallback(){
+        val connectivityManager = getSystemService(ConnectivityManager::class.java)
+        connectivityManager.unregisterNetworkCallback(networkCallback)
+    }
 
     fun gotoLogin(){
         val intent = Intent(this, LoginActivity::class.java)
         getLoginResult.launch(intent)
     }
 
-
-    /*private fun checkLoggedIn() {
-        if (AuthApiClient.instance.hasToken()) {
-            UserApiClient.instance.accessTokenInfo { token, error ->
-                if (error != null) {
-                    if (error is KakaoSdkError && error.isInvalidTokenError()) {
-                        doLogin()
-                    }
-                    else {
-                        Log.e("Error",error.toString())
-                    }
-                }
-                else if (token != null){
-                    UserApiClient.instance.me { user, error ->
-                        if (error != null) {
-                            Log.e("사용자 정보 요청 실패","")
-                            doLogin()
-                        } else if (user != null) {
-                            Log.i("사용자 정보 요청 성공",user.kakaoAccount?.profile?.nickname!!)
-                            Toast.makeText(this@MainActivity, "로그인되었습니다.", Toast.LENGTH_SHORT).show()
-                            binding.drawerLayout.close()
-                            viewModel.setProfile(user.kakaoAccount?.profile?.nickname, user.kakaoAccount?.profile?.thumbnailImageUrl)
-                        }
-                    }
-                }
-            }
-        }
-        else {
-            doLogin()
-        }
-    }
-*/
     fun openDrawer(){
         binding.drawerLayout.open()
     }
@@ -251,13 +256,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         binding.drawerLayout.close()
         return true
-    }
-
-    val callback: (Throwable?) -> Unit = { error ->
-        if(error != null){
-            Log.e("사용자 정보 저장 실패", error.toString())
-        } else {
-            Log.i("사용자 정보 저장 성공", "")
-        }
     }
 }

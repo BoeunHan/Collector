@@ -3,8 +3,10 @@ package com.han.collector.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Build
 import android.text.InputFilter
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
 import com.han.collector.model.data.database.BasicInfo
 
@@ -41,8 +43,7 @@ object Constants {
                 else -> false
             }
         } else {
-            val activeNetworkInfo = connectivityManager.activeNetworkInfo
-            return activeNetworkInfo != null && activeNetworkInfo.isConnected
+            return connectivityManager.activeNetworkInfo?.isConnected ?: false
         }
     }
 

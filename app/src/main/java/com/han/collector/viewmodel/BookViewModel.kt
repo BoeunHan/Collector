@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.han.collector.model.data.database.BookEntity
 import com.han.collector.model.repository.BookRepository
+import com.han.collector.model.repository.FirestoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -24,7 +26,8 @@ data class BookStatus(
 
 @HiltViewModel
 class BookViewModel @Inject constructor(
-    val bookRepository: BookRepository
+    val bookRepository: BookRepository,
+    val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
 
     var bookStatus = BookStatus()
@@ -79,8 +82,9 @@ class BookViewModel @Inject constructor(
             bookStatus.like
         )
 
-        viewModelScope.launch {
-            bookRepository.insert(book)
+        viewModelScope.launch (Dispatchers.IO){
+            val id = bookRepository.insert(book)
+            firestoreRepository.upload("책", id.toInt(), "I")
         }
     }
 }

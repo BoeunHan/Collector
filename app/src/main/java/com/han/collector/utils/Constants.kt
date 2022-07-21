@@ -3,12 +3,15 @@ package com.han.collector.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Build
 import android.text.InputFilter
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
 import com.han.collector.model.data.database.BasicInfo
 
 object Constants {
+    const val REVIEW_DATABASE = "review_database"
     const val TABLE_MOVIE_LIST = "movie-list"
     const val TABLE_BOOK_LIST = "book-list"
 
@@ -41,8 +44,7 @@ object Constants {
                 else -> false
             }
         } else {
-            val activeNetworkInfo = connectivityManager.activeNetworkInfo
-            return activeNetworkInfo != null && activeNetworkInfo.isConnected
+            return connectivityManager.activeNetworkInfo?.isConnected ?: false
         }
     }
 

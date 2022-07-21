@@ -65,6 +65,12 @@ class SearchActivity : AppCompatActivity() {
         setRecyclerView()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(!Constants.isNetworkAvailable(this))
+            Toast.makeText(this, "인터넷 연결 끊김", Toast.LENGTH_SHORT).show()
+    }
+
     val EMOJI_FLITER = InputFilter { source, start, end, dst, dstart, dend ->
         for (i in start until end) {
             val type = Character.getType(source[i])

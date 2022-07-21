@@ -17,8 +17,14 @@ interface BookDao : BaseDao<BookEntity> {
     @Query("SELECT * FROM `${Constants.TABLE_BOOK_LIST}` WHERE id = :id")
     override fun fetchData(id: Int): Flow<BookEntity>
 
+    @Query("SELECT * FROM `${Constants.TABLE_BOOK_LIST}` WHERE id = :id")
+    override suspend fun getData(id: Int): BookEntity
+
     @Query("SELECT * FROM `${Constants.TABLE_BOOK_LIST}`")
-    override fun fetchAll(): List<BookEntity>
+    override fun fetchAll(): Flow<List<BookEntity>>
+
+    @Query("SELECT * FROM `${Constants.TABLE_BOOK_LIST}`")
+    override fun getAll(): List<BookEntity>?
 
     @Query("SELECT id, title, image, rate, `like`, uploadDate, editDate FROM `${Constants.TABLE_BOOK_LIST}` WHERE id = :id")
     override fun fetchDetailInfo(id: Int): Flow<DetailInfo>

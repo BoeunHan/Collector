@@ -35,7 +35,7 @@ class BookRepository @Inject constructor(reviewDatabase: ReviewDatabase) {
 
     fun fetchDetailInfo(id: Int) = bookDao.fetchDetailInfo(id)
 
-    fun fetchAll(): List<BookEntity> = bookDao.fetchAll()
+    fun fetchAll(): Flow<List<BookEntity>> = bookDao.fetchAll()
 
     fun getRecentReviewFlow() = Pager(config = PagingConfig(pageSize = RECENT_PAGE_SIZE),
         pagingSourceFactory = { bookDao.fetchRecent() }).flow

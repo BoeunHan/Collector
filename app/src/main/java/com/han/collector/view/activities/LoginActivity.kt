@@ -3,16 +3,35 @@ package com.han.collector.view.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.han.collector.BuildConfig
 import com.han.collector.databinding.ActivityLoginBinding
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.auth.model.Prompt
-import com.kakao.sdk.common.model.ClientError
-import com.kakao.sdk.common.model.ClientErrorCause
-import com.kakao.sdk.user.UserApiClient
 
 class LoginActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityLoginBinding
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
+
+    private val getGoogleLoginResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+        try{
+            val account = task.getResult(ApiException::class.java)!!
+            firebaseAuthWithGoogle(account.idToken!!)
+        } catch(e: Exception) {
+            Toast.makeText(this, "구글 로그인 실패", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,32 +40,30 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.activity = this
-    }
-    fun login(){
-        val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-            if(error != null){
-                Log.e("로그인 실패", error.toString())
-            } else if(token != null){
-                Log.i("로그인 성공", token.accessToken)
-                finish()
-            }
-        }
 
-        if(UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
-            UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
-                if (error != null) {
-                    Log.e("로그인 실패", error.toString())
-                    if(error is ClientError && error.reason == ClientErrorCause.Cancelled){
-                        return@loginWithKakaoTalk
-                    }
-                    UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
-                } else if (token != null) {
-                    Log.i("로그인 성공", token.accessToken)
-                    finish()
-                }
+        auth = Firebase.auth
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(BuildConfig.WEB_CLIENT_ID)
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+    }
+
+
+
+    fun googleLogin(){
+        val loginIntent = googleSignInClient.signInIntent
+        getGoogleLoginResult.launch(loginIntent)
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if(task.isSuccessful) finish()
+                else Toast.makeText(this, "구글 로그인 실패", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
-        }
     }
 }

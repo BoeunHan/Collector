@@ -12,8 +12,7 @@ import org.json.JSONObject
 import javax.inject.Inject
 
 class CategoryRepository @Inject constructor(
-    @ApplicationContext val context: Context,
-    val reviewDatabase: ReviewDatabase
+    @ApplicationContext val context: Context
 ) {
 
     private val sharedPref = context.getSharedPreferences(Constants.CATEGORY_PREF, Context.MODE_PRIVATE)
@@ -23,13 +22,14 @@ class CategoryRepository @Inject constructor(
         val type = object : TypeToken<ArrayList<String>>(){}.type
         return Gson().fromJson(json, type) ?: ArrayList()
     }
+
     fun setCategory(list: ArrayList<String>){
         val json = Gson().toJson(list)
         sharedPref.edit().putString(Constants.CATEGORY_DATA, json).apply()
     }
 
-
-    private val movieDao = reviewDatabase.movieDao()
-    private val bookDao = reviewDatabase.bookDao()
+    fun clearCategory() {
+        sharedPref.edit().putString(Constants.CATEGORY_DATA, "").apply()
+    }
 
 }

@@ -1,11 +1,14 @@
 package com.han.collector.viewmodel
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.han.collector.model.data.database.MovieEntity
+import com.han.collector.model.repository.FirestoreRepository
 import com.han.collector.model.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -24,7 +27,8 @@ data class MovieStatus(
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(
-    val movieRepository: MovieRepository
+    val movieRepository: MovieRepository,
+    val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
 
     var movieStatus = MovieStatus()
@@ -79,8 +83,9 @@ class MovieViewModel @Inject constructor(
             movieStatus.like
         )
 
-        viewModelScope.launch {
-            movieRepository.insert(movie)
+        viewModelScope.launch (Dispatchers.IO){
+            val id = movieRepository.insert(movie)
+            firestoreRepository.upload("영화", id.toInt(), "I")
         }
     }
 }

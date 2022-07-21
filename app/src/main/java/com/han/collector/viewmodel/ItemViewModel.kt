@@ -64,20 +64,12 @@ class ItemViewModel @Inject constructor(
         getResult()
     }
 
-    fun uploadState() = viewModelScope.launch(Dispatchers.IO) {
-        firestoreRepository.uploadState()
-    }
-    fun uploadAll() = viewModelScope.async(Dispatchers.IO) {
-        firestoreRepository.uploadAll()
-    }
-
     fun setProfile(nickname: String?, thumbnail: String?) {
         _nickname.update { nickname }
         _thumbnail.update { thumbnail }
-        Log.e("${_nickname.value}", "${_thumbnail.value}")
     }
 
-    private fun fetchCategoryList() {
+    fun fetchCategoryList() {
         _categoryList.update { categoryRepository.getCategory() }
 
     }
@@ -85,6 +77,11 @@ class ItemViewModel @Inject constructor(
     fun setCategoryList(list: ArrayList<String>) {
         _categoryList.update { list }
         categoryRepository.setCategory(list)
+    }
+
+    fun clearCategoryList(){
+        _categoryList.update { ArrayList() }
+        categoryRepository.clearCategory()
     }
 
     private fun getResult() {

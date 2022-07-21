@@ -1,23 +1,31 @@
 package com.han.collector.model.repository
 
 import android.content.Context
+import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.han.collector.model.data.database.BookEntity
+import com.han.collector.model.data.database.MovieEntity
 import com.han.collector.model.data.database.ReviewDatabase
 import com.han.collector.utils.Constants
+import com.han.collector.view.activities.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirestoreRepository @Inject constructor(
-    db: ReviewDatabase,
+    val db: ReviewDatabase,
     @ApplicationContext val context: Context
 ) {
     val movieDao = db.movieDao()
     val bookDao = db.bookDao()
 
     val firestore = Firebase.firestore
+
 
     class MovieUpdates {
         companion object {
@@ -41,7 +49,6 @@ class FirestoreRepository @Inject constructor(
     suspend fun upload(category: String, id: Int, mode: String) {
         val uid = Firebase.auth.currentUser!!.uid
         val userDoc = firestore.collection("users").document(uid)
-
         when (category) {
             "영화" -> {
                 val movie = movieDao.getData(id)
@@ -115,4 +122,60 @@ class FirestoreRepository @Inject constructor(
         BookUpdates.addedId.clear()
         BookUpdates.removedId.clear()
     }
+
+    fun clearDBTables() {
+        db.clearAllTables()
+    }
+
+
+    fun clearUserData(uid: String) {
+        val userDoc = firestore.collection("users").document(uid)
+        userDoc.delete()
+    }
+
+    suspend fun download(scope: CoroutineScope) {
+        val uid = Firebase.auth.currentUser!!.uid
+        val userDoc = firestore.collection("users").document(uid)
+
+        userDoc.collection("movie").get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    scope.launch(Dispatchers.IO) {
+                        movieDao.insert(document.toObject(MovieEntity::class.java))
+                    }
+                }
+            }
+            .await()
+        userDoc.collection("book").get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    scope.launch(Dispatchers.IO) {
+                        bookDao.insert(document.toObject(BookEntity::class.java))
+                    }
+                }
+            }
+    }
+
+    private val sharedPref =
+        context.getSharedPreferences(Constants.CATEGORY_PREF, Context.MODE_PRIVATE)
+
+    fun downloadCategory(callback: MainActivity.Callback) {
+        val uid = Firebase.auth.currentUser!!.uid
+        val userDoc = firestore.collection("users").document(uid)
+
+        userDoc.get()
+            .addOnCompleteListener { document ->
+                val categoryList = document.result.getString("category")
+                sharedPref.edit().putString(Constants.CATEGORY_DATA, categoryList).apply()
+                callback.event()
+            }
+    }
+
+    fun uploadCategory(uid: String) {
+        val userDoc = firestore.collection("users").document(uid)
+
+        val categoryList = sharedPref.getString(Constants.CATEGORY_DATA, null)
+        userDoc.set(hashMapOf("category" to categoryList))
+    }
+
 }

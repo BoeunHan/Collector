@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.han.collector.model.data.database.BasicInfo
 
 object Constants {
+    const val REVIEW_DATABASE = "review_database"
     const val TABLE_MOVIE_LIST = "movie-list"
     const val TABLE_BOOK_LIST = "book-list"
 

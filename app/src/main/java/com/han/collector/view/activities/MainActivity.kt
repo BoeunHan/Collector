@@ -1,7 +1,6 @@
 package com.han.collector.view.activities
 
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
@@ -27,25 +26,21 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.han.collector.R
 import com.han.collector.databinding.ActivityMainBinding
 import com.han.collector.databinding.CategoryDialogBinding
 import com.han.collector.databinding.HeaderNavigationDrawerBinding
-import com.han.collector.model.data.database.ReviewDatabase
-import com.han.collector.model.repository.FirestoreRepository
-import com.han.collector.model.repository.MovieRepository
 import com.han.collector.utils.Constants
 import com.han.collector.view.adapters.CategoryAdapter
 import com.han.collector.view.adapters.ItemAdapter
 import com.han.collector.view.fragments.ReviewDetailDialogFragment
+import com.han.collector.viewmodel.FirestoreViewModel
 import com.han.collector.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.tasks.await
 
 @FlowPreview
 @AndroidEntryPoint
@@ -54,6 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var binding: ActivityMainBinding
 
     val viewModel: ItemViewModel by viewModels()
+    val firestoreViewModel: FirestoreViewModel by viewModels()
 
     private lateinit var categoryDialog: Dialog
     private lateinit var dialogBinding: CategoryDialogBinding
@@ -64,10 +60,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var auth: FirebaseAuth
     private var currentUser: FirebaseUser? = null
 
+    interface Callback {
+        fun event()
+    }
+
     private val getLoginResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             currentUser = auth.currentUser
             currentUser?.let {
+                firestoreViewModel.download()
+                val callback = object : Callback {
+                    override fun event() = viewModel.fetchCategoryList()
+                }
+                firestoreViewModel.downloadCategory(callback)
+                setMenuVisibility(true)
                 viewModel.setProfile(currentUser!!.displayName, currentUser!!.photoUrl.toString())
                 binding.drawerLayout.close()
             }
@@ -92,12 +98,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         auth = Firebase.auth
         currentUser = auth.currentUser
+
+        setMenuVisibility(false)
         currentUser?.let {
+            setMenuVisibility(true)
             viewModel.setProfile(currentUser!!.displayName, currentUser!!.photoUrl.toString())
             binding.drawerLayout.close()
         }
 
         setRecyclerView()
+
+        firestoreViewModel
     }
 
     override fun onResume() {
@@ -115,13 +126,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
-            Toast.makeText(this@MainActivity, "인터넷 연결됨 - 백업 재개", Toast.LENGTH_SHORT).show()
-            job = if (currentUser == null) null else viewModel.uploadState()
+            job = if (currentUser == null) null
+            else {
+                Toast.makeText(this@MainActivity, "인터넷 연결됨 - 백업 재개", Toast.LENGTH_SHORT).show()
+                firestoreViewModel.uploadState()
+            }
         }
 
         override fun onLost(network: Network) {
             super.onLost(network)
-            Toast.makeText(this@MainActivity, "인터넷 연결 끊김 - 백업 중지", Toast.LENGTH_SHORT).show()
+            if (currentUser != null) Toast.makeText(this@MainActivity, "인터넷 연결 끊김 - 백업 중지", Toast.LENGTH_SHORT).show()
             job?.cancel()
         }
     }
@@ -233,14 +247,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun doLogout() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            if (Constants.isNetworkAvailable(this@MainActivity)) {
-                viewModel.uploadAll().await()
-                auth.signOut()
-                viewModel.setProfile("로그인", "")
-            } else {
-                Toast.makeText(this@MainActivity, "인터넷 연결 끊김", Toast.LENGTH_SHORT).show()
-            }
+        if (Constants.isNetworkAvailable(this@MainActivity)) {
+            firestoreViewModel.uploadCategory(currentUser!!.uid)
+            auth.signOut()
+            currentUser = auth.currentUser
+            firestoreViewModel.clearDBTables()
+            viewModel.setProfile("로그인", "")
+            viewModel.clearCategoryList()
+            setMenuVisibility(false)
+        } else {
+            Toast.makeText(this@MainActivity, "인터넷 연결 끊김", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -254,13 +270,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .setPositiveButton("예") { dialog, _ ->
                 dialog.dismiss()
                 if (Constants.isNetworkAvailable(this@MainActivity)) {
+                    firestoreViewModel.clearDBTables()
+                    firestoreViewModel.clearUserData(currentUser!!.uid)
                     currentUser?.delete()
+                    currentUser = auth.currentUser
                     viewModel.setProfile("로그인", "")
+                    viewModel.clearCategoryList()
+                    setMenuVisibility(false)
                 } else {
                     Toast.makeText(this@MainActivity, "인터넷 연결 끊김", Toast.LENGTH_SHORT).show()
                 }
             }
             .show()
+    }
+
+    fun setMenuVisibility(boolean: Boolean) {
+        binding.navView.menu.findItem(R.id.category_item).isVisible = boolean
+        binding.navView.menu.findItem(R.id.logout_item).isVisible = boolean
+        binding.navView.menu.findItem(R.id.unlink_item).isVisible = boolean
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

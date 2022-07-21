@@ -3,6 +3,7 @@ package com.han.collector.model.module
 import android.content.Context
 import androidx.room.Room
 import com.han.collector.model.data.database.ReviewDatabase
+import com.han.collector.utils.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +21,7 @@ object DBModule {
         return Room.databaseBuilder(
             context,
             ReviewDatabase::class.java,
-            "review_database"
+            Constants.REVIEW_DATABASE
         ).fallbackToDestructiveMigration().build()
     }
 }

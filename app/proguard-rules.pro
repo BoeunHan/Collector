@@ -121,8 +121,3 @@
 #-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 ##---------------End: proguard configuration for Glide  ----------
 
-
-##---------------Begin: proguard configuration for Kakao SDK  ----------
--keep class com.kakao.sdk.**.model.* { <fields>; }
--keep class * extends com.google.gson.TypeAdapter
-##---------------End: proguard configuration for Kakao SDK  ----------

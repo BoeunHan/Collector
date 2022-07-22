@@ -3,6 +3,7 @@ package com.han.collector.model.data.database
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.firebase.firestore.PropertyName
 import com.han.collector.utils.Constants
 import kotlinx.parcelize.Parcelize
 

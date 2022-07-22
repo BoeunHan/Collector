@@ -15,6 +15,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.han.collector.BuildConfig
 import com.han.collector.databinding.ActivityLoginBinding
+import com.han.collector.utils.Constants
 
 class LoginActivity : AppCompatActivity() {
 
@@ -29,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
             val account = task.getResult(ApiException::class.java)!!
             firebaseAuthWithGoogle(account.idToken!!)
         } catch(e: Exception) {
-            Toast.makeText(this, "구글 로그인 실패", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "구글 로그인 실패", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -39,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.activity = this
+        binding.btGoogleLogin.setOnClickListener { googleLogin() }
 
         auth = Firebase.auth
 
@@ -54,8 +55,11 @@ class LoginActivity : AppCompatActivity() {
 
 
     fun googleLogin(){
-        val loginIntent = googleSignInClient.signInIntent
-        getGoogleLoginResult.launch(loginIntent)
+        if(Constants.isNetworkAvailable(this)){
+            val loginIntent = googleSignInClient.signInIntent
+            getGoogleLoginResult.launch(loginIntent)
+        }
+        else Toast.makeText(this, "인터넷 연결 끊김", Toast.LENGTH_SHORT).show()
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {

@@ -16,7 +16,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@FlowPreview
 @AndroidEntryPoint
 class MovieDetailFragment : Fragment() {
     private var binding: FragmentMovieDetailBinding? = null

@@ -1,5 +1,6 @@
 package com.han.collector.view.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlin.experimental.and
 
+@SuppressLint("ClickableViewAccessibility")
 @FlowPreview
 @AndroidEntryPoint
 class AddBookFragment : Fragment() {

@@ -38,19 +38,19 @@ interface MovieDao : BaseDao<MovieEntity> {
     @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` ORDER BY id DESC LIMIT 10")
     override fun fetchRecent(): PagingSource<Int, BasicInfo>
 
-    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value ORDER BY id ASC")
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value OR memo LIKE :value ORDER BY id ASC")
     override fun fetchDateAscending(value: String): PagingSource<Int, BasicInfo>
 
-    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value ORDER BY id DESC")
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value OR memo LIKE :value ORDER BY id DESC")
     override fun fetchDateDescending(value: String): PagingSource<Int, BasicInfo>
 
-    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value ORDER BY rate ASC")
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value OR memo LIKE :value ORDER BY rate ASC")
     override fun fetchRateAscending(value: String): PagingSource<Int, BasicInfo>
 
-    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value ORDER BY rate DESC")
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title LIKE :value OR summary LIKE :value OR review LIKE :value OR memo LIKE :value ORDER BY rate DESC")
     override fun fetchRateDescending(value: String): PagingSource<Int, BasicInfo>
 
-    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE `like`=1 AND (title LIKE :value OR summary LIKE :value OR review LIKE :value) ORDER BY id DESC")
+    @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` WHERE `like`=1 AND (title LIKE :value OR summary LIKE :value OR review LIKE :value OR memo LIKE :value) ORDER BY id DESC")
     override fun fetchLike(value: String): PagingSource<Int, BasicInfo>
 
 }

@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             currentUser = auth.currentUser
             currentUser?.let {
+                Log.e("uid", currentUser!!.uid)
                 firestoreViewModel.download()
                 val callback = object : Callback {
                     override fun event() = viewModel.fetchCategoryList()
@@ -128,7 +129,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             super.onAvailable(network)
             job = if (currentUser == null) null
             else {
-                Toast.makeText(this@MainActivity, "인터넷 연결됨 - 백업 재개", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@MainActivity, "인터넷 연결됨 - 백업 재개", Toast.LENGTH_SHORT).show()
                 firestoreViewModel.uploadState()
             }
         }

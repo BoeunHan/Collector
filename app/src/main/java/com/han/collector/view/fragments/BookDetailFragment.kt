@@ -15,7 +15,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@FlowPreview
 @AndroidEntryPoint
 class BookDetailFragment : Fragment(){
     private var binding: FragmentBookDetailBinding? = null

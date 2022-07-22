@@ -136,7 +136,6 @@ class FirestoreRepository @Inject constructor(
     suspend fun download(scope: CoroutineScope) {
         val uid = Firebase.auth.currentUser!!.uid
         val userDoc = firestore.collection("users").document(uid)
-
         userDoc.collection("movie").get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {

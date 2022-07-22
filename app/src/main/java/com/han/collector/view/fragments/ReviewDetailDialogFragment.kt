@@ -41,8 +41,6 @@ class ReviewDetailDialogFragment : DialogFragment() {
     lateinit var binding: FragmentReviewDetailBinding
 
     val viewModel: ItemViewModel by activityViewModels()
-    val movieViewModel: MovieViewModel by activityViewModels()
-    val bookViewModel: BookViewModel by activityViewModels()
 
     private var showingBack = false
     private var isFlipping = false

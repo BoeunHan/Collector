@@ -19,17 +19,13 @@ android {
         applicationId "com.han.collector"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 13
-        versionName "1.0.2"
+        versionCode 19
+        versionName "1.1.0"
 
 
         buildConfigField "String", "NAVER_API_ID", properties['naver_api_id']
         buildConfigField "String", "NAVER_API_SECRET", properties['naver_api_secret']
-        buildConfigField "String", "KAKAO_NATIVE_APP_KEY", properties['kakao_native_app_key']
         buildConfigField "String", "WEB_CLIENT_ID", properties['web_client_id']
-
-        def kakao_native_app_key = properties.getProperty('kakao_native_app_key2')
-        manifestPlaceholders = [KAKAO_NATIVE_APP_KEY: kakao_native_app_key]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,6 +36,10 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            firebaseCrashlytics{
+                mappingFileUploadEnabled false
+            }
         }
     }
     compileOptions {
@@ -105,8 +105,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
-    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
-    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation ('com.google.firebase:firebase-auth-ktx'){
+        exclude module: 'play-services-safetynet'
+    }
+
 
     //google login
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
@@ -120,9 +122,6 @@ dependencies {
     implementation "androidx.emoji2:emoji2:$emoji2_version"
     implementation "androidx.emoji2:emoji2-views:$emoji2_version"
     implementation "androidx.emoji2:emoji2-views-helper:$emoji2_version"
-
-    //kakao login
-    implementation "com.kakao.sdk:v2-user:2.11.0"
 
     //circleimageview
     implementation 'de.hdodenhof:circleimageview:3.1.0'

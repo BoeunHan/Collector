@@ -39,7 +39,7 @@
                     android:scrollbars="vertical"
                     android:text="@{book.summary}"
                     android:textColor="@color/textColor"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                     android:scrollbars="vertical"
                     android:text="@{book.review}"
                     android:textColor="@color/textColor"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                     android:scrollbars="vertical"
                     android:text="@{book.memo}"
                     android:textColor="@color/textColor"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
         </ScrollView>
 

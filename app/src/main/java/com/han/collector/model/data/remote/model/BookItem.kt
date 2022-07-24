@@ -1,4 +1,4 @@
-package com.han.collector.model.data.networkModel
+package com.han.collector.model.data.remote.model
 
 import android.text.Html
 import com.google.gson.annotations.SerializedName

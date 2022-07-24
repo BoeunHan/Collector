@@ -2,9 +2,9 @@ package com.han.collector.model.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.han.collector.model.data.dataSource.BookSearchPagingSource
-import com.han.collector.model.data.dataSource.MovieSearchPagingSource
-import com.han.collector.network.SearchApiService
+import com.han.collector.model.data.remote.dataSource.BookSearchPagingSource
+import com.han.collector.model.data.remote.dataSource.MovieSearchPagingSource
+import com.han.collector.model.data.remote.api.SearchApiService
 import javax.inject.Inject
 
 

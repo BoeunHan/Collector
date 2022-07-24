@@ -1,13 +1,12 @@
 package com.han.collector.view.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.han.collector.databinding.MovieSearchItemViewBinding
-import com.han.collector.model.data.networkModel.MovieItem
+import com.han.collector.model.data.remote.model.MovieItem
 import com.han.collector.view.activities.SearchActivity
 import kotlinx.coroutines.FlowPreview
 

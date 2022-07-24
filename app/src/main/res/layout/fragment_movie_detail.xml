@@ -40,7 +40,7 @@
                     android:scrollbars="vertical"
                     android:text="@{movie.summary}"
                     android:textColor="@color/textColor"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                     android:scrollbars="vertical"
                     android:text="@{movie.review}"
                     android:textColor="@color/textColor"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -82,7 +82,7 @@
                     android:scrollbars="vertical"
                     android:text="@{movie.memo}"
                     android:textColor="@color/textColor"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
         </ScrollView>
 

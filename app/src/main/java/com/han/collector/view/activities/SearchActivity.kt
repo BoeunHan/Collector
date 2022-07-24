@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputFilter
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -19,8 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.han.collector.utils.Constants
 import com.han.collector.databinding.ActivitySearchBinding
-import com.han.collector.model.data.networkModel.BookItem
-import com.han.collector.model.data.networkModel.MovieItem
+import com.han.collector.model.data.remote.model.BookItem
+import com.han.collector.model.data.remote.model.MovieItem
 import com.han.collector.view.adapters.BookSearchAdapter
 import com.han.collector.view.adapters.MovieSearchAdapter
 import com.han.collector.viewmodel.SearchViewModel

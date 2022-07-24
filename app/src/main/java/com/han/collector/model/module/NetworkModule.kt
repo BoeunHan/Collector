@@ -1,14 +1,12 @@
 package com.han.collector.model.module
 
 import com.han.collector.utils.Constants
-import com.han.collector.network.SearchApiService
+import com.han.collector.model.data.remote.api.SearchApiService
 import com.google.gson.GsonBuilder
-import com.han.collector.model.data.networkModel.MovieList
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -27,7 +25,7 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideSearchApiService(retrofit: Retrofit): SearchApiService{
+    fun provideSearchApiService(retrofit: Retrofit): SearchApiService {
         return retrofit.create(SearchApiService::class.java)
     }
 }

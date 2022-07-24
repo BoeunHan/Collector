@@ -1,24 +1,22 @@
-package com.han.collector.model.data.dataSource
+package com.han.collector.model.data.remote.dataSource
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.han.collector.BuildConfig
-import com.han.collector.model.data.networkModel.MovieItem
-import com.han.collector.network.SearchApiService
+import com.han.collector.model.data.remote.model.BookItem
+import com.han.collector.model.data.remote.api.SearchApiService
 
-
-class MovieSearchPagingSource(
+class BookSearchPagingSource(
     val service: SearchApiService,
     val query: String
-) : PagingSource<Int, MovieItem>() {
+) : PagingSource<Int, BookItem>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MovieItem> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BookItem> {
         return try {
             val key = params.key ?: 0
             val position = key*params.loadSize + 1
 
-            val response = service.getMovieSearchResult(
+            val response = service.getBookSearchResult(
                 BuildConfig.NAVER_API_ID,
                 BuildConfig.NAVER_API_SECRET,
                 query,
@@ -27,7 +25,7 @@ class MovieSearchPagingSource(
             )
 
             LoadResult.Page(
-                data = response.movieItems,
+                data = response.bookItems,
                 prevKey = null,
                 nextKey = if (response.total >= position + params.loadSize) key.plus(1) else null
             )
@@ -36,10 +34,10 @@ class MovieSearchPagingSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, MovieItem>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, BookItem>): Int? {
         return state.anchorPosition?.let {
-            state.closestPageToPosition(it)?.prevKey?.plus(1)
-                ?: state.closestPageToPosition(it)?.nextKey?.minus(1)
+            state.closestPageToPosition(it)?.prevKey?.plus(state.config.pageSize)
+                ?: state.closestPageToPosition(it)?.nextKey?.minus(state.config.pageSize)
         }
     }
 }

@@ -1,13 +1,12 @@
 package com.han.collector.view.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.han.collector.databinding.BookSearchItemViewBinding
-import com.han.collector.model.data.networkModel.BookItem
+import com.han.collector.model.data.remote.model.BookItem
 import com.han.collector.view.activities.SearchActivity
 import kotlinx.coroutines.FlowPreview
 

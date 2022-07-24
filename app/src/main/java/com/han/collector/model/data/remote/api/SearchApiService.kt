@@ -1,9 +1,7 @@
-package com.han.collector.network
+package com.han.collector.model.data.remote.api
 
-import com.han.collector.model.data.networkModel.BookList
-import com.han.collector.model.data.networkModel.MovieList
-import retrofit2.Call
-import retrofit2.Response
+import com.han.collector.model.data.remote.model.BookList
+import com.han.collector.model.data.remote.model.MovieList
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query

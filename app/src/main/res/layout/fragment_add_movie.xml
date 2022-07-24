@@ -63,7 +63,7 @@
             android:scrollbars="vertical"
             android:text="@={viewModel.summary}"
             android:textColor="@color/textColor"
-            android:textSize="16sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -87,7 +87,7 @@
             android:scrollbars="vertical"
             android:text="@={viewModel.review}"
             android:textColor="@color/textColor"
-            android:textSize="16sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -111,6 +111,6 @@
             android:scrollbars="vertical"
             android:text="@={viewModel.memo}"
             android:textColor="@color/textColor"
-            android:textSize="16sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 </layout>

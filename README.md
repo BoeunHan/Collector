@@ -2,7 +2,7 @@
 
 종종 생각의 저편에서 영화나 책의 줄거리가 떠오르곤 하지만 정작 제목을 몰라 다시 꺼내보지도 못한 채 기억 속에 묻어두곤 합니다. Collector은 이러한 아쉬움을 극복하기 위해 고안된 앱입니다.
 
-플레이스토어 출시 https://play.google.com/store/apps/details?id=com.han.collector
+플레이스토어 링크 https://play.google.com/store/apps/details?id=com.han.collector
 
 ### 기능
 <img src="https://user-images.githubusercontent.com/81304917/180639588-0c882de1-3a45-440e-b739-d91a31c58c17.png" width="700">

@@ -5,8 +5,10 @@ import com.han.collector.model.data.remote.model.MovieList
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
+import javax.inject.Singleton
 
 
+@Singleton
 interface SearchApiService {
     @GET("search/movie.json")
     suspend fun getMovieSearchResult(

@@ -24,10 +24,8 @@ import com.han.collector.view.adapters.BookSearchAdapter
 import com.han.collector.view.adapters.MovieSearchAdapter
 import com.han.collector.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @FlowPreview
 @AndroidEntryPoint
@@ -83,6 +81,13 @@ class SearchActivity : AppCompatActivity() {
     private fun setRecyclerView() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchValueFlow.collectLatest {
+                    rvSearchList?.scrollToPosition(0)
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 when (category) {
                     "영화" -> {
                         val pagingAdapter = MovieSearchAdapter(this@SearchActivity)
@@ -90,11 +95,9 @@ class SearchActivity : AppCompatActivity() {
                             binding.isEmpty =
                                 (loadState.source.refresh is LoadState.NotLoading
                                         && pagingAdapter.itemCount < 1)
-                            if (loadState.source.refresh is LoadState.NotLoading) {
-                                rvSearchList?.scrollToPosition(0)
-                            }
                         }
                         rvSearchList?.adapter = pagingAdapter
+
                         viewModel.searchFlow.collectLatest { pagingData ->
                             pagingAdapter.submitData(pagingData as PagingData<MovieItem>)
                         }
@@ -105,9 +108,6 @@ class SearchActivity : AppCompatActivity() {
                             binding.isEmpty =
                                 (loadState.source.refresh is LoadState.NotLoading
                                         && pagingAdapter.itemCount < 1)
-                            if (loadState.source.refresh is LoadState.NotLoading) {
-                                rvSearchList?.scrollToPosition(0)
-                            }
                         }
                         rvSearchList?.adapter = pagingAdapter
                         viewModel.searchFlow.collectLatest { pagingData ->

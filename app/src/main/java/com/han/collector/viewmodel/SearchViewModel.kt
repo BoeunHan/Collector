@@ -23,7 +23,8 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     val searchValue = MutableStateFlow("")
-    private var searchValueFlow = MutableStateFlow("")
+    private val _searchValueFlow = MutableStateFlow("")
+    val searchValueFlow = _searchValueFlow.asStateFlow()
 
     var category: String = ""
 
@@ -37,12 +38,12 @@ class SearchViewModel @Inject constructor(
         searchValue
             .debounce(500)
             .filter { it.isNotEmpty() }
-            .onEach { value -> searchValueFlow.update { value } }
+            .onEach { value -> _searchValueFlow.update { value } }
             .launchIn(viewModelScope)
     }
 
     @ExperimentalCoroutinesApi
-    val searchFlow = searchValueFlow.flatMapLatest {
+    val searchFlow = _searchValueFlow.flatMapLatest {
         when (category) {
             "영화" -> searchRepository.getMovieSearchFlow(it)
                 .cachedIn(viewModelScope)

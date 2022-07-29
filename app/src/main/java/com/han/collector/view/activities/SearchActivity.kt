@@ -20,8 +20,10 @@ import com.han.collector.utils.Constants
 import com.han.collector.databinding.ActivitySearchBinding
 import com.han.collector.model.data.remote.model.BookItem
 import com.han.collector.model.data.remote.model.MovieItem
+import com.han.collector.model.data.remote.model.PlaceItem
 import com.han.collector.view.adapters.BookSearchAdapter
 import com.han.collector.view.adapters.MovieSearchAdapter
+import com.han.collector.view.adapters.PlaceSearchAdapter
 import com.han.collector.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -92,8 +94,7 @@ class SearchActivity : AppCompatActivity() {
                     "영화" -> {
                         val pagingAdapter = MovieSearchAdapter(this@SearchActivity)
                         pagingAdapter.addLoadStateListener { loadState ->
-                            binding.isEmpty =
-                                (loadState.source.refresh is LoadState.NotLoading
+                            binding.isEmpty = (loadState.source.refresh is LoadState.NotLoading
                                         && pagingAdapter.itemCount < 1)
                         }
                         rvSearchList?.adapter = pagingAdapter
@@ -105,8 +106,7 @@ class SearchActivity : AppCompatActivity() {
                     "책" -> {
                         val pagingAdapter = BookSearchAdapter(this@SearchActivity)
                         pagingAdapter.addLoadStateListener { loadState ->
-                            binding.isEmpty =
-                                (loadState.source.refresh is LoadState.NotLoading
+                            binding.isEmpty = (loadState.source.refresh is LoadState.NotLoading
                                         && pagingAdapter.itemCount < 1)
                         }
                         rvSearchList?.adapter = pagingAdapter
@@ -114,14 +114,25 @@ class SearchActivity : AppCompatActivity() {
                             pagingAdapter.submitData(pagingData as PagingData<BookItem>)
                         }
                     }
+                    "장소" -> {
+                        val pagingAdapter = PlaceSearchAdapter(this@SearchActivity)
+                        pagingAdapter.addLoadStateListener { loadState ->
+                            binding.isEmpty = (loadState.source.refresh is LoadState.NotLoading
+                                        && pagingAdapter.itemCount < 1)
+                        }
+                        rvSearchList?.adapter = pagingAdapter
+                        viewModel.searchFlow.collectLatest { pagingData ->
+                            pagingAdapter.submitData(pagingData as PagingData<PlaceItem>)
+                        }
+                    }
                 }
             }
         }
     }
 
-    fun onClickSearchItem(title: String, image: String) {
+    fun onClickSearchItem(title: String, image: String = "", mapx: Int = 0, mapy: Int = 0) {
         lifecycleScope.launch {
-            if (viewModel.checkExist(title, image)) {
+            if (viewModel.checkExist(title, image, mapx, mapy)) {
                 Toast.makeText(this@SearchActivity, "이미 리뷰를 남긴 ${category}입니다.", Toast.LENGTH_SHORT)
                     .show()
             } else {

@@ -16,7 +16,6 @@
 
 
     <style name="CustomActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:statusBarColor">@color/white</item>
         <item name="colorSecondary">@color/blue</item>
     </style>
     <style name="RatingBar" parent="Theme.MaterialComponents">

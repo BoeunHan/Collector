@@ -49,6 +49,8 @@ class SearchViewModel @Inject constructor(
                 .cachedIn(viewModelScope)
             "책" -> searchRepository.getBookSearchFlow(it)
                 .cachedIn(viewModelScope)
+            "장소" -> searchRepository.getPlaceSearchFlow(it)
+                .cachedIn(viewModelScope)
             else -> flow {}
         }
     }
@@ -58,7 +60,7 @@ class SearchViewModel @Inject constructor(
         searchValue.update { "" }
     }
 
-    suspend fun checkExist(title: String, image: String): Boolean {
+    suspend fun checkExist(title: String, image: String = "", mapx: Int = 0, mapy: Int = 0): Boolean {
         return when (category) {
             "영화" -> movieRepository.checkExist(title, image)
             "책" -> bookRepository.checkExist(title, image)

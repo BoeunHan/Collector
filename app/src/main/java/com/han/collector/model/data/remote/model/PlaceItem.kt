@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PlaceItem(
     @SerializedName("title") val rawTitle: String,
-    @SerializedName("category") val rawCategory: String,
+    @SerializedName("category") val category: String,
     @SerializedName("description") val description: String,
     @SerializedName("roadAddress") val roadAddress: String,
     @SerializedName("mapx") val mapx: Int,
@@ -13,6 +13,4 @@ data class PlaceItem(
 ){
     val title: String
     get() = Html.fromHtml(this.rawTitle).toString()
-    val category: String
-    get() = rawCategory.split("&")[0]
 }

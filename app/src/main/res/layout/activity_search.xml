@@ -50,7 +50,9 @@
                 android:inputType="textPersonName"
                 android:text="@={viewmodel.searchValue}"
                 android:textColor="@color/textColor"
-                android:textSize="18sp"/>
+                android:textSize="18sp">
+                <requestFocus/>
+            </EditText>
 
             <ImageView
                 android:id="@+id/btCancel"

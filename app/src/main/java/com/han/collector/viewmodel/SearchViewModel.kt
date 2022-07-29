@@ -60,7 +60,7 @@ class SearchViewModel @Inject constructor(
         searchValue.update { "" }
     }
 
-    suspend fun checkExist(title: String, image: String = "", mapx: Int = 0, mapy: Int = 0): Boolean {
+    suspend fun checkExist(title: String, image: String = ""): Boolean {
         return when (category) {
             "영화" -> movieRepository.checkExist(title, image)
             "책" -> bookRepository.checkExist(title, image)

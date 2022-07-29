@@ -7,4 +7,8 @@
     <string name="book_summary_hint">문득 이 책이 떠올랐을 때 찾아볼 수 있도록 나만의 줄거리로 정리해 보세요</string>
     <string name="book_review_hint">이 책에 대한 감상평을 남겨보세요</string>
     <string name="book_memo_hint">이 책을 본 기간, 인상깊은 구절 등을 기록해보세요</string>
+
+    <string name="place_goods_hint">이 장소에서 좋았던 점을 기록해보세요</string>
+    <string name="place_bads_hint">이 장소에서 나빴던 점을 기록해보세요</string>
+    <string name="place_memo_hint">이 장소를 함께 간 사람, 그날의 날씨 등을 기록해보세요</string>
 </resources>

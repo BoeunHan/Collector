@@ -85,6 +85,13 @@ class ReviewDetailDialogFragment : DialogFragment() {
                         args = bundle
                     )
                 }
+                "장소" -> childFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    replace<PlaceDetailFragment>(
+                        binding.flipViewBack.detailFragmentContainer.id,
+                        args = bundle
+                    )
+                }
             }
         }
 

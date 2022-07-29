@@ -130,14 +130,13 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    fun onClickSearchItem(title: String, image: String = "", mapx: Int = 0, mapy: Int = 0) {
+    fun onClickSearchItem(title: String, image: String) {
         lifecycleScope.launch {
-            if (viewModel.checkExist(title, image, mapx, mapy)) {
+            if (viewModel.checkExist(title, image)) {
                 Toast.makeText(this@SearchActivity, "이미 리뷰를 남긴 ${category}입니다.", Toast.LENGTH_SHORT)
                     .show()
             } else {
                 val intent = Intent(this@SearchActivity, AddReviewActivity::class.java)
-
                 intent.putExtra(Constants.IMAGE, image)
                 intent.putExtra(Constants.TITLE, title)
                 intent.putExtra(Constants.CATEGORY, category)

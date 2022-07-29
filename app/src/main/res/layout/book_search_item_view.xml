@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="15dp"
-        android:onClick="@{()->activity.onClickSearchItem(item.title, item.image,0,0)}">
+        android:onClick="@{()->activity.onClickSearchItem(item.title, item.image)}">
 
         <androidx.cardview.widget.CardView
             android:layout_width="80dp"

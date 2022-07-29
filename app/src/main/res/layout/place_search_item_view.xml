@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="15dp"
-        android:onClick="@{()->activity.onClickSearchItem(item.title, ``, item.mapx, item.mapy)}">
+        android:onClick="@{()->activity.onClickSearchItem(item.title, ``)}">
 
         <LinearLayout
             android:layout_width="match_parent"

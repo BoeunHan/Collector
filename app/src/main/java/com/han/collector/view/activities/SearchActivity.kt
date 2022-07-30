@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputFilter
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -116,9 +117,30 @@ class SearchActivity : AppCompatActivity() {
                     }
                     "장소" -> {
                         val pagingAdapter = PlaceSearchAdapter(this@SearchActivity)
+                        /*pagingAdapter.addLoadStateListener { loadState ->
+                            if (loadState.source.refresh is LoadState.NotLoading
+                                        && pagingAdapter.itemCount < 1){
+                                binding.isEmpty = true
+                                binding.tvAddNewPlace.visibility = View.VISIBLE
+                                binding.tvAddNewPlace.text = "'${viewModel.searchValueFlow.value.substring(0..10)}...' 직접 추가하기"
+                            } else binding.tvAddNewPlace.visibility = View.GONE
+                        }*/
+                        lifecycleScope.launch{
+                            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                                viewModel.searchValue.collectLatest{
+                                    if(it.isEmpty()) binding.tvAddNewPlace.visibility = View.GONE
+                                    else {
+                                        binding.tvAddNewPlace.visibility = View.VISIBLE
+                                        binding.tvAddNewPlace.text =
+                                            if(it.length<=10) "'$it' 직접 추가하기"
+                                            else "'${it.substring(0..9)}...' 직접 추가하기"
+                                    }
+                                }
+                            }
+                        }
                         pagingAdapter.addLoadStateListener { loadState ->
                             binding.isEmpty = (loadState.source.refresh is LoadState.NotLoading
-                                        && pagingAdapter.itemCount < 1)
+                                    && pagingAdapter.itemCount < 1)
                         }
                         rvSearchList?.adapter = pagingAdapter
                         viewModel.searchFlow.collectLatest { pagingData ->

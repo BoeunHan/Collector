@@ -4,13 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="isEmpty"
             type="Boolean" />
+
         <variable
             name="viewmodel"
             type="com.han.collector.viewmodel.SearchViewModel" />
+
         <variable
             name="activity"
             type="com.han.collector.view.activities.SearchActivity" />
@@ -51,7 +55,8 @@
                 android:text="@={viewmodel.searchValue}"
                 android:textColor="@color/textColor"
                 android:textSize="18sp">
-                <requestFocus/>
+
+                <requestFocus />
             </EditText>
 
             <ImageView
@@ -62,13 +67,25 @@
                 app:srcCompat="@drawable/ic_cancel" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvAddNewPlace"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/edittext_background_accent"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:onClick="@{()->activity.onClickSearchItem(viewmodel.searchValue, ``)}"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSearchList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/movie_search_item_view"
+            android:visibility="@{isEmpty ? View.GONE : View.VISIBLE}"
             app:scrollListener="@{activity.onScrollListener}"
-            android:visibility="@{isEmpty ? View.GONE : View.VISIBLE}"/>
+            tools:listitem="@layout/movie_search_item_view" />
 
         <TextView
             android:id="@+id/tvNothingFound"

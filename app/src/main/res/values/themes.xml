@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Collectors" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -16,6 +16,7 @@
 
 
     <style name="CustomActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/white</item>
         <item name="colorSecondary">@color/blue</item>
     </style>
     <style name="RatingBar" parent="Theme.MaterialComponents">

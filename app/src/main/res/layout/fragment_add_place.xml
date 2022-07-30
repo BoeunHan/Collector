@@ -6,6 +6,9 @@
         <variable
             name="viewModel"
             type="com.han.collector.viewmodel.PlaceViewModel" />
+        <variable
+            name="fragment"
+            type="com.han.collector.view.fragments.AddPlaceFragment" />
     </data>
 
     <LinearLayout
@@ -29,6 +32,7 @@
                 android:textSize="16sp" />
 
             <ImageView
+                android:id="@+id/ivImage"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@drawable/ic_no_image"
@@ -41,7 +45,8 @@
                 android:padding="10dp"
                 android:text="이미지 추가"
                 android:textColor="@color/blue"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:onClick="@{()->fragment.requestPermission()}"/>
         </LinearLayout>
 
         <LinearLayout

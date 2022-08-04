@@ -1,6 +1,7 @@
 package com.han.collector.viewmodel
 
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,7 +33,7 @@ class PlaceViewModel @Inject constructor(
 
     var placeStatus = PlaceStatus()
 
-    var image = MutableStateFlow("")
+    var image = MutableStateFlow<Bitmap?>(null)
     var rate = MutableStateFlow(0.0f)
     var goods = MutableStateFlow("")
     var bads = MutableStateFlow("")
@@ -62,6 +63,10 @@ class PlaceViewModel @Inject constructor(
         placeStatus = placeStatus.copy(
             title = title
         )
+    }
+
+    fun setPlaceImage(_image: Bitmap?){
+        image.update { _image }
     }
 
     fun savePlace() {

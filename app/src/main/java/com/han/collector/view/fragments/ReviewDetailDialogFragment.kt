@@ -26,9 +26,7 @@ import com.han.collector.R
 import com.han.collector.databinding.FragmentReviewDetailBinding
 import com.han.collector.utils.Constants
 import com.han.collector.view.activities.AddReviewActivity
-import com.han.collector.viewmodel.BookViewModel
 import com.han.collector.viewmodel.ItemViewModel
-import com.han.collector.viewmodel.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -107,6 +105,8 @@ class ReviewDetailDialogFragment : DialogFragment() {
         lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getDetailInfo(id!!).collectLatest {
+                    Log.e("getdetailInfo", it.toString())
+                    Log.e("getimagebitmap", it.image.toString())
                     binding.flipViewFront.image = it.image
                     binding.flipViewFront.rating = it.rate
                     binding.flipViewFront.like = it.like

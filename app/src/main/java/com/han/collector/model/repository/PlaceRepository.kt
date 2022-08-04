@@ -68,7 +68,7 @@ class PlaceRepository @Inject constructor(reviewDatabase: ReviewDatabase) {
 
     suspend fun like(id: Int, like: Boolean) = placeDao.like(id, like)
 
-    suspend fun checkExist(title: String, image: String): Boolean =
-        placeDao.checkExist(title, image)
+    suspend fun checkExist(title: String): Boolean =
+        placeDao.checkExist(title)
 
 }

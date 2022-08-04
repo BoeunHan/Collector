@@ -77,7 +77,8 @@
             android:background="@drawable/edittext_background_accent"
             android:gravity="center"
             android:textColor="@color/black"
-            android:onClick="@{()->activity.onClickSearchItem(viewmodel.searchValue, ``)}"/>
+            android:onClick="@{()->activity.onClickSearchItem(viewmodel.searchValue, ``)}"
+            android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSearchList"

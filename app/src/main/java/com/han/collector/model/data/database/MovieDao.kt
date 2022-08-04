@@ -1,5 +1,6 @@
 package com.han.collector.model.data.database
 
+import android.graphics.Bitmap
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.han.collector.utils.Constants
@@ -33,7 +34,7 @@ interface MovieDao : BaseDao<MovieEntity> {
     override suspend fun like(id: Int, like: Boolean)
 
     @Query("SELECT EXISTS(SELECT * FROM `${Constants.TABLE_MOVIE_LIST}` WHERE title = :title AND image = :image)")
-    override suspend fun checkExist(title: String, image: String): Boolean
+    suspend fun checkExist(title: String, image: Bitmap?): Boolean
 
     @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_MOVIE_LIST}` ORDER BY id DESC LIMIT 10")
     override fun fetchRecent(): PagingSource<Int, BasicInfo>

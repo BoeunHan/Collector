@@ -1,5 +1,6 @@
 package com.han.collector.model.repository
 
+import android.graphics.Bitmap
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -68,7 +69,7 @@ class MovieRepository @Inject constructor(reviewDatabase: ReviewDatabase) {
 
     suspend fun like(id: Int, like: Boolean) = movieDao.like(id, like)
 
-    suspend fun checkExist(title: String, image: String): Boolean =
+    suspend fun checkExist(title: String, image: Bitmap?): Boolean =
         movieDao.checkExist(title, image)
 
 }

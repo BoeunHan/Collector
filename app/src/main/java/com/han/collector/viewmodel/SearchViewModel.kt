@@ -1,5 +1,6 @@
 package com.han.collector.viewmodel
 
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.han.collector.model.repository.BookRepository
 import com.han.collector.model.repository.MovieRepository
+import com.han.collector.model.repository.PlaceRepository
 import com.han.collector.model.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,6 +21,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     val movieRepository: MovieRepository,
     val bookRepository: BookRepository,
+    val placeRepository: PlaceRepository,
     val searchRepository: SearchRepository
 ) : ViewModel() {
 
@@ -60,10 +63,11 @@ class SearchViewModel @Inject constructor(
         searchValue.update { "" }
     }
 
-    suspend fun checkExist(title: String, image: String = ""): Boolean {
+    suspend fun checkExist(title: String, image: Bitmap?): Boolean {
         return when (category) {
             "영화" -> movieRepository.checkExist(title, image)
             "책" -> bookRepository.checkExist(title, image)
+            "장소" -> placeRepository.checkExist(title)
             else -> false
         }
     }

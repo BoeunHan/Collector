@@ -1,14 +1,15 @@
 package com.han.collector.model.repository
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.Blob
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.han.collector.model.data.database.BookEntity
-import com.han.collector.model.data.database.MovieEntity
-import com.han.collector.model.data.database.ReviewDatabase
+import com.han.collector.model.data.database.*
 import com.han.collector.utils.Constants
+import com.han.collector.utils.Converters
 import com.han.collector.view.activities.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -40,6 +41,77 @@ class FirestoreRepository @Inject constructor(
             val removedId = ArrayList<Int>()
         }
     }
+    fun bitmapToBlob(bitmap: Bitmap?) = Blob.fromBytes(Converters().toByteArray(bitmap))
+
+    fun blobToBitmap(blob: Blob?) = Converters().toBitmap(blob?.toBytes())
+
+    fun changeToUploadVersion(entity: Any): Any? {
+        return when (entity) {
+            is MovieEntity -> {
+                UploadMovieEntity(
+                    entity.id,
+                    entity.title,
+                    bitmapToBlob(entity.image),
+                    entity.rate,
+                    entity.summary,
+                    entity.review,
+                    entity.memo,
+                    entity.uploadDate,
+                    entity.editDate,
+                    entity.like
+                )
+            }
+            is BookEntity -> {
+                UploadBookEntity(
+                    entity.id,
+                    entity.title,
+                    bitmapToBlob(entity.image),
+                    entity.rate,
+                    entity.summary,
+                    entity.review,
+                    entity.memo,
+                    entity.uploadDate,
+                    entity.editDate,
+                    entity.like
+                )
+            }
+            else -> null
+        }
+    }
+
+    fun changeToDownloadVersion(entity: Any): Any? {
+        return when (entity) {
+            is UploadMovieEntity -> {
+                MovieEntity(
+                    entity.id,
+                    entity.title,
+                    blobToBitmap(entity.image),
+                    entity.rate,
+                    entity.summary,
+                    entity.review,
+                    entity.memo,
+                    entity.uploadDate,
+                    entity.editDate,
+                    entity.like
+                )
+            }
+            is UploadBookEntity -> {
+                BookEntity(
+                    entity.id,
+                    entity.title,
+                    blobToBitmap(entity.image),
+                    entity.rate,
+                    entity.summary,
+                    entity.review,
+                    entity.memo,
+                    entity.uploadDate,
+                    entity.editDate,
+                    entity.like
+                )
+            }
+            else -> null
+        }
+    }
 
     suspend fun update(category: String, id: Int, mode: String) {
         if (Constants.isNetworkAvailable(context)) upload(category, id, mode)
@@ -52,15 +124,17 @@ class FirestoreRepository @Inject constructor(
         when (category) {
             "영화" -> {
                 val movie = movieDao.getData(id)
+                val uploadMovie = changeToUploadVersion(movie) as UploadMovieEntity
                 when (mode) {
-                    "I" -> userDoc.collection("movie").document(id.toString()).set(movie).await()
+                    "I" -> userDoc.collection("movie").document(id.toString()).set(uploadMovie).await()
                     "R" -> userDoc.collection("movie").document(id.toString()).delete().await()
                 }
             }
             "책" -> {
                 val book = bookDao.getData(id)
+                val uploadBook = changeToUploadVersion(book) as UploadBookEntity
                 when (mode) {
-                    "I" -> userDoc.collection("book").document(id.toString()).set(book).await()
+                    "I" -> userDoc.collection("book").document(id.toString()).set(uploadBook).await()
                     "R" -> userDoc.collection("book").document(id.toString()).delete().await()
                 }
             }
@@ -89,12 +163,14 @@ class FirestoreRepository @Inject constructor(
         val userDoc = firestore.collection("users").document(uid)
         movieDao.getAll()?.let {
             for (movie in movieDao.getAll()!!) {
-                userDoc.collection("movie").document(movie.id.toString()).set(movie).await()
+                val uploadMovie = changeToUploadVersion(movie) as UploadMovieEntity
+                userDoc.collection("movie").document(uploadMovie.id.toString()).set(uploadMovie).await()
             }
         }
         bookDao.getAll()?.let {
             for (book in bookDao.getAll()!!) {
-                userDoc.collection("book").document(book.id.toString()).set(book).await()
+                val uploadBook = changeToUploadVersion(book) as UploadBookEntity
+                userDoc.collection("book").document(uploadBook.id.toString()).set(uploadBook).await()
             }
         }
     }
@@ -104,14 +180,16 @@ class FirestoreRepository @Inject constructor(
         val userDoc = firestore.collection("users").document(uid)
         for (i in MovieUpdates.addedId) {
             val movie = movieDao.getData(i)
-            userDoc.collection("movie").document(movie.id.toString()).set(movie).await()
+            val uploadMovie = changeToUploadVersion(movie) as UploadMovieEntity
+            userDoc.collection("movie").document(uploadMovie.id.toString()).set(uploadMovie).await()
         }
         for (i in MovieUpdates.removedId) {
             userDoc.collection("movie").document(i.toString()).delete().await()
         }
         for (i in BookUpdates.addedId) {
             val book = bookDao.getData(i)
-            userDoc.collection("book").document(book.id.toString()).set(book).await()
+            val uploadBook = changeToUploadVersion(book) as UploadBookEntity
+            userDoc.collection("book").document(uploadBook.id.toString()).set(uploadBook).await()
         }
         for (i in BookUpdates.removedId) {
             userDoc.collection("book").document(i.toString()).delete().await()
@@ -140,7 +218,9 @@ class FirestoreRepository @Inject constructor(
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     scope.launch(Dispatchers.IO) {
-                        movieDao.insert(document.toObject(MovieEntity::class.java))
+                        val downloadMovie = document.toObject(UploadMovieEntity::class.java)
+                        val movie = changeToDownloadVersion(downloadMovie) as MovieEntity
+                        movieDao.insert(movie)
                     }
                 }
             }
@@ -149,7 +229,9 @@ class FirestoreRepository @Inject constructor(
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     scope.launch(Dispatchers.IO) {
-                        bookDao.insert(document.toObject(BookEntity::class.java))
+                        val downloadBook = document.toObject(UploadBookEntity::class.java)
+                        val book = changeToDownloadVersion(downloadBook) as BookEntity
+                        bookDao.insert(book)
                     }
                 }
             }

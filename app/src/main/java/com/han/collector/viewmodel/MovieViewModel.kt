@@ -1,6 +1,7 @@
 package com.han.collector.viewmodel
 
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +21,7 @@ import javax.inject.Inject
 data class MovieStatus(
     var id: Int = 0,
     var title: String = "",
-    var image: String = "",
+    var image: Bitmap? = null,
     var uploadDate: String = "",
     var like: Boolean = false
 )
@@ -58,7 +59,7 @@ class MovieViewModel @Inject constructor(
         }
     }
 
-    fun setMovieStatus(title: String, image: String) {
+    fun setMovieStatus(title: String, image: Bitmap?) {
         movieStatus = movieStatus.copy(
             title = title,
             image = image

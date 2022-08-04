@@ -2,9 +2,11 @@ package com.han.collector.view.activities
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputFilter
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -22,6 +24,9 @@ import com.han.collector.databinding.ActivitySearchBinding
 import com.han.collector.model.data.remote.model.BookItem
 import com.han.collector.model.data.remote.model.MovieItem
 import com.han.collector.model.data.remote.model.PlaceItem
+import com.han.collector.utils.BitmapCallback
+import com.han.collector.utils.Converters
+import com.han.collector.utils.FunctionUtils
 import com.han.collector.view.adapters.BookSearchAdapter
 import com.han.collector.view.adapters.MovieSearchAdapter
 import com.han.collector.view.adapters.PlaceSearchAdapter
@@ -117,14 +122,6 @@ class SearchActivity : AppCompatActivity() {
                     }
                     "장소" -> {
                         val pagingAdapter = PlaceSearchAdapter(this@SearchActivity)
-                        /*pagingAdapter.addLoadStateListener { loadState ->
-                            if (loadState.source.refresh is LoadState.NotLoading
-                                        && pagingAdapter.itemCount < 1){
-                                binding.isEmpty = true
-                                binding.tvAddNewPlace.visibility = View.VISIBLE
-                                binding.tvAddNewPlace.text = "'${viewModel.searchValueFlow.value.substring(0..10)}...' 직접 추가하기"
-                            } else binding.tvAddNewPlace.visibility = View.GONE
-                        }*/
                         lifecycleScope.launch{
                             repeatOnLifecycle(Lifecycle.State.STARTED) {
                                 viewModel.searchValue.collectLatest{
@@ -152,20 +149,27 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    fun onClickSearchItem(title: String, image: String) {
-        lifecycleScope.launch {
-            if (viewModel.checkExist(title, image)) {
-                Toast.makeText(this@SearchActivity, "이미 리뷰를 남긴 ${category}입니다.", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                val intent = Intent(this@SearchActivity, AddReviewActivity::class.java)
-                intent.putExtra(Constants.IMAGE, image)
-                intent.putExtra(Constants.TITLE, title)
-                intent.putExtra(Constants.CATEGORY, category)
-                startActivity(intent)
-                finish()
+    fun onClickSearchItem(title: String, imageUrl: String) {
+
+        val callback = object : BitmapCallback{
+            override fun doWithBitmap(bitmap: Bitmap?) {
+                val byteArray = Converters().toByteArray(bitmap)
+                lifecycleScope.launch {
+                    if (viewModel.checkExist(title, bitmap)) {
+                        Toast.makeText(this@SearchActivity, "이미 리뷰를 남긴 ${category}입니다.", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        val intent = Intent(this@SearchActivity, AddReviewActivity::class.java)
+                        intent.putExtra(Constants.IMAGE, byteArray)
+                        intent.putExtra(Constants.TITLE, title)
+                        intent.putExtra(Constants.CATEGORY, category)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
             }
         }
+        FunctionUtils.loadBitmapFromUrl(this, imageUrl, callback)
     }
 
     val onScrollListener = object : RecyclerView.OnScrollListener() {

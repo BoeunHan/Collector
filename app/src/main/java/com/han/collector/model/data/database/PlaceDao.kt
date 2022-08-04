@@ -32,8 +32,8 @@ interface PlaceDao : BaseDao<PlaceEntity> {
     @Query("UPDATE `${Constants.TABLE_PLACE_LIST}` SET `like` = :like WHERE id = :id")
     override suspend fun like(id: Int, like: Boolean)
 
-    @Query("SELECT EXISTS(SELECT * FROM `${Constants.TABLE_PLACE_LIST}` WHERE title = :title AND image = :image)")
-    override suspend fun checkExist(title: String, image: String): Boolean
+    @Query("SELECT EXISTS(SELECT * FROM `${Constants.TABLE_PLACE_LIST}` WHERE title = :title)")
+    suspend fun checkExist(title: String): Boolean
 
     @Query("SELECT id, title, image, rate, `like` FROM `${Constants.TABLE_PLACE_LIST}` ORDER BY id DESC LIMIT 10")
     override fun fetchRecent(): PagingSource<Int, BasicInfo>

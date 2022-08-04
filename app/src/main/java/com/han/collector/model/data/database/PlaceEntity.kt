@@ -1,5 +1,6 @@
 package com.han.collector.model.data.database
 
+import android.graphics.Bitmap
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -12,7 +13,7 @@ data class PlaceEntity(
     @PrimaryKey(autoGenerate=true)
     val id: Int = 0,
     val title: String = "",
-    val image: String = "",
+    val image: Bitmap? = null,
     val rate: Float = 0.0f,
     val goods: String = "",
     val bads: String = "",

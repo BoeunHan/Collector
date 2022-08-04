@@ -5,11 +5,12 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
+import android.graphics.ImageDecoder
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -17,11 +18,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.han.collector.databinding.FragmentAddPlaceBinding
-import com.han.collector.utils.Constants
 import com.han.collector.viewmodel.PlaceViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
-import java.net.URI
 import kotlin.experimental.and
 
 @SuppressLint("ClickableViewAccessibility")
@@ -51,26 +50,33 @@ class AddPlaceFragment : Fragment() {
     }
 
     val getGalleryImageLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
-            with(result) {
-                when (resultCode) {
-                    Activity.RESULT_OK -> {
-                        val uri = data?.data as Uri
-                        binding?.ivImage?.scaleType = ImageView.ScaleType.CENTER_CROP
-                        binding?.ivImage?.setImageURI(uri)
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            when (it.resultCode) {
+                Activity.RESULT_OK -> {
+                    /*val uri = it.data?.data?.also{
+                        requireActivity().contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     }
-                    Activity.RESULT_CANCELED -> {
-                        Toast.makeText(
-                            context, "사진을 가져오지 못했습니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+
+                    viewModel.setPlaceImage(uri.toString())*/
+                    val uri = it.data?.data!!
+                    val bitmap = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+                        ImageDecoder.decodeBitmap(ImageDecoder.createSource(
+                            requireActivity().contentResolver, uri))
+                    } else{
+                        MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, uri)
                     }
+                    viewModel.setPlaceImage(bitmap)
+                }
+                Activity.RESULT_CANCELED -> {
+                    Toast.makeText(
+                        context, "사진을 가져오지 못했습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
-
         }
 
-    fun startGalleryApp(){
+    fun startGalleryApp() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT

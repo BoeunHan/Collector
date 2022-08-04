@@ -10,10 +10,6 @@
             type="com.han.collector.view.activities.AddReviewActivity" />
 
         <variable
-            name="image"
-            type="String" />
-
-        <variable
             name="title"
             type="String" />
     </data>

@@ -38,7 +38,7 @@
                 android:src="@drawable/ic_no_image"
                 android:scaleType="center"
                 android:background="@color/lightGrey"
-                app:uploadImage="@{viewModel.image}"/>
+                app:image="@{viewModel.image}"/>
 
             <TextView
                 android:layout_width="wrap_content"

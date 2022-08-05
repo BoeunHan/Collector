@@ -1,6 +1,7 @@
 package com.han.collector.utils
 
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.util.Log
@@ -10,6 +11,9 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.han.collector.R
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -25,12 +29,6 @@ fun loadImage(view: ImageView, image: String?) {
 }
 @BindingAdapter("image")
 fun loadImageBitmap(view: ImageView, image: Bitmap?) {
-    if (image == null) Glide.with(view).load(R.drawable.ic_no_image).into(view)
-    else Glide.with(view).load(image).centerCrop().error(R.drawable.ic_no_image).into(view)
-}
-
-@BindingAdapter("uploadImage")
-fun uploadImage(view: ImageView, image: Bitmap?) {
     if (image == null) Glide.with(view).load(R.drawable.ic_no_image).into(view)
     else {
         view.setImageBitmap(image)

@@ -13,6 +13,7 @@ interface BitmapCallback{
 }
 object FunctionUtils{
     fun loadBitmapFromUrl(context: Context, imageUrl: String?, callback: BitmapCallback) {
+        if(imageUrl=="") callback.doWithBitmap(null)
         Glide.with(context).asBitmap()
             .load(imageUrl)
             .override(300)

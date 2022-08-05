@@ -66,6 +66,7 @@ class PlaceViewModel @Inject constructor(
     }
 
     fun setPlaceImage(_image: Bitmap?){
+        Log.e("setplaceimage",_image.toString())
         image.update { _image }
     }
 

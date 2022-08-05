@@ -72,7 +72,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if(!Constants.isNetworkAvailable(this))
+        if (!Constants.isNetworkAvailable(this))
             Toast.makeText(this, "인터넷 연결 끊김", Toast.LENGTH_SHORT).show()
     }
 
@@ -101,7 +101,7 @@ class SearchActivity : AppCompatActivity() {
                         val pagingAdapter = MovieSearchAdapter(this@SearchActivity)
                         pagingAdapter.addLoadStateListener { loadState ->
                             binding.isEmpty = (loadState.source.refresh is LoadState.NotLoading
-                                        && pagingAdapter.itemCount < 1)
+                                    && pagingAdapter.itemCount < 1)
                         }
                         rvSearchList?.adapter = pagingAdapter
 
@@ -113,7 +113,7 @@ class SearchActivity : AppCompatActivity() {
                         val pagingAdapter = BookSearchAdapter(this@SearchActivity)
                         pagingAdapter.addLoadStateListener { loadState ->
                             binding.isEmpty = (loadState.source.refresh is LoadState.NotLoading
-                                        && pagingAdapter.itemCount < 1)
+                                    && pagingAdapter.itemCount < 1)
                         }
                         rvSearchList?.adapter = pagingAdapter
                         viewModel.searchFlow.collectLatest { pagingData ->
@@ -122,14 +122,14 @@ class SearchActivity : AppCompatActivity() {
                     }
                     "장소" -> {
                         val pagingAdapter = PlaceSearchAdapter(this@SearchActivity)
-                        lifecycleScope.launch{
+                        lifecycleScope.launch {
                             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                                viewModel.searchValue.collectLatest{
-                                    if(it.isEmpty()) binding.tvAddNewPlace.visibility = View.GONE
+                                viewModel.searchValue.collectLatest {
+                                    if (it.isEmpty()) binding.tvAddNewPlace.visibility = View.GONE
                                     else {
                                         binding.tvAddNewPlace.visibility = View.VISIBLE
                                         binding.tvAddNewPlace.text =
-                                            if(it.length<=10) "'$it' 직접 추가하기"
+                                            if (it.length <= 10) "'$it' 직접 추가하기"
                                             else "'${it.substring(0..9)}...' 직접 추가하기"
                                     }
                                 }
@@ -150,17 +150,22 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun onClickSearchItem(title: String, imageUrl: String) {
-
-        val callback = object : BitmapCallback{
+        val callback = object : BitmapCallback {
             override fun doWithBitmap(bitmap: Bitmap?) {
-                val byteArray = Converters().toByteArray(bitmap)
                 lifecycleScope.launch {
                     if (viewModel.checkExist(title, bitmap)) {
-                        Toast.makeText(this@SearchActivity, "이미 리뷰를 남긴 ${category}입니다.", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(
+                            this@SearchActivity,
+                            "이미 리뷰를 남긴 ${category}입니다.",
+                            Toast.LENGTH_SHORT
+                        )
+                        .show()
                     } else {
                         val intent = Intent(this@SearchActivity, AddReviewActivity::class.java)
-                        intent.putExtra(Constants.IMAGE, byteArray)
+                        bitmap?.let {
+                            val byteArray = Converters().toByteArray(bitmap)
+                            intent.putExtra(Constants.IMAGE, byteArray)
+                        }
                         intent.putExtra(Constants.TITLE, title)
                         intent.putExtra(Constants.CATEGORY, category)
                         startActivity(intent)

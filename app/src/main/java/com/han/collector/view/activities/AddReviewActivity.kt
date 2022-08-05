@@ -69,8 +69,6 @@ class AddReviewActivity : AppCompatActivity() {
         setData()
     }
 
-
-
     private fun setData() {
         when (category) {
             "영화" -> {

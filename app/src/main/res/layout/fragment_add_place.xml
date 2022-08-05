@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:text="사진"
+                android:text="이미지"
                 android:textColor="@color/textColor"
                 android:textSize="16sp" />
 
@@ -38,13 +38,13 @@
                 android:src="@drawable/ic_no_image"
                 android:scaleType="center"
                 android:background="@color/lightGrey"
-                app:image="@{viewModel.image}"/>
+                app:uploadImage="@{viewModel.image}"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="이미지 추가"
+                android:text="이미지 업로드"
                 android:textColor="@color/blue"
                 android:textSize="16sp"
                 android:onClick="@{()->fragment.requestPermission()}"/>

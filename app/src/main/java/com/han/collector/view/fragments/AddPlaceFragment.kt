@@ -53,11 +53,6 @@ class AddPlaceFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             when (it.resultCode) {
                 Activity.RESULT_OK -> {
-                    /*val uri = it.data?.data?.also{
-                        requireActivity().contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    }
-
-                    viewModel.setPlaceImage(uri.toString())*/
                     val uri = it.data?.data!!
                     val bitmap = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
                         ImageDecoder.decodeBitmap(ImageDecoder.createSource(

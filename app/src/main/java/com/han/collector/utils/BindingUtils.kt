@@ -25,11 +25,18 @@ fun loadImage(view: ImageView, image: String?) {
 }
 @BindingAdapter("image")
 fun loadImageBitmap(view: ImageView, image: Bitmap?) {
-    Log.e("loadimagebitmap", image.toString())
     if (image == null) Glide.with(view).load(R.drawable.ic_no_image).into(view)
-    else Glide.with(view).load(image).centerCrop().error(R.drawable.ic_user).into(view)
+    else Glide.with(view).load(image).centerCrop().error(R.drawable.ic_no_image).into(view)
 }
 
+@BindingAdapter("uploadImage")
+fun uploadImage(view: ImageView, image: Bitmap?) {
+    if (image == null) Glide.with(view).load(R.drawable.ic_no_image).into(view)
+    else {
+        view.setImageBitmap(image)
+        view.scaleType = ImageView.ScaleType.CENTER_CROP
+    }
+}
 
 @BindingAdapter("circleImage")
 fun loadImage(view: CircleImageView, url: String?){

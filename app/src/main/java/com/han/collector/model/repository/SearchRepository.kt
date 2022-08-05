@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import com.han.collector.model.data.remote.dataSource.BookSearchPagingSource
 import com.han.collector.model.data.remote.dataSource.MovieSearchPagingSource
 import com.han.collector.model.data.remote.api.SearchApiService
+import com.han.collector.model.data.remote.dataSource.PlaceSearchPagingSource
 import javax.inject.Inject
 
 
@@ -33,5 +34,15 @@ class SearchRepository @Inject constructor(
         ),
         initialKey = null,
         pagingSourceFactory = { BookSearchPagingSource(searchApiService, query) }
+    ).flow
+
+    fun getPlaceSearchFlow(query: String) = Pager(
+        config = PagingConfig(
+            pageSize = PAGE_SIZE,
+            initialLoadSize = PAGE_SIZE,
+            enablePlaceholders = false
+        ),
+        initialKey = null,
+        pagingSourceFactory = { PlaceSearchPagingSource(searchApiService, query) }
     ).flow
 }

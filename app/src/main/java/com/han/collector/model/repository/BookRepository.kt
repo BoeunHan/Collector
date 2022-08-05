@@ -1,11 +1,11 @@
 package com.han.collector.model.repository
 
+import android.graphics.Bitmap
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.han.collector.model.data.database.BasicInfo
 import com.han.collector.model.data.database.BookEntity
-import com.han.collector.model.data.database.MovieEntity
 import com.han.collector.model.data.database.ReviewDatabase
 import com.han.collector.viewmodel.SortField
 import com.han.collector.viewmodel.SortType
@@ -69,6 +69,6 @@ class BookRepository @Inject constructor(reviewDatabase: ReviewDatabase) {
 
     suspend fun like(id: Int, like: Boolean) = bookDao.like(id, like)
 
-    suspend fun checkExist(title: String, image: String): Boolean = bookDao.checkExist(title, image)
+    suspend fun checkExist(title: String, image: Bitmap?): Boolean = bookDao.checkExist(title, image)
 
 }

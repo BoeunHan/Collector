@@ -1,6 +1,7 @@
 package com.han.collector.viewmodel
 
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.han.collector.model.data.database.BookEntity
@@ -19,7 +20,7 @@ import javax.inject.Inject
 data class BookStatus(
     var id: Int = 0,
     var title: String = "",
-    var image: String = "",
+    var image: Bitmap? = null,
     var uploadDate: String = "",
     var like: Boolean = false
 )
@@ -57,7 +58,7 @@ class BookViewModel @Inject constructor(
             }
         }
     }
-    fun setBookStatus(title: String, image: String) {
+    fun setBookStatus(title: String, image: Bitmap?) {
         bookStatus = bookStatus.copy(
             title = title,
             image = image

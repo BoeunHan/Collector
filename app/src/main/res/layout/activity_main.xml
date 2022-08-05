@@ -43,7 +43,6 @@
                     android:layout_margin="5dp"
                     app:circleImage="@{viewModel.thumbnail}"
                     android:onClick="@{()->activity.openDrawer()}"/>
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -83,7 +82,6 @@
                 android:textColor="@color/textColor"
                 android:textSize="16sp"
                 android:visibility="@{isEmpty? View.VISIBLE : View.GONE}" />
-
 
         </LinearLayout>
         <com.google.android.material.navigation.NavigationView

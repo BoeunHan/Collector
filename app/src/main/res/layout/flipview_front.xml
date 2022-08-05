@@ -9,7 +9,7 @@
             type="com.han.collector.viewmodel.ItemViewModel"/>
         <variable
             name="image"
-            type="String" />
+            type="android.graphics.Bitmap" />
         <variable
             name="rating"
             type="Float" />

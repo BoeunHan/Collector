@@ -7,10 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.han.collector.R
 import com.han.collector.model.data.database.DetailInfo
-import com.han.collector.model.repository.BookRepository
-import com.han.collector.model.repository.CategoryRepository
-import com.han.collector.model.repository.FirestoreRepository
-import com.han.collector.model.repository.MovieRepository
+import com.han.collector.model.repository.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -31,6 +28,7 @@ class ItemViewModel @Inject constructor(
     val categoryRepository: CategoryRepository,
     val movieRepository: MovieRepository,
     val bookRepository: BookRepository,
+    val placeRepository: PlaceRepository,
     val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
     private var _categoryList = MutableStateFlow(ArrayList<String>())
@@ -41,6 +39,7 @@ class ItemViewModel @Inject constructor(
 
     val movieList = movieRepository.getRecentReviewFlow()
     val bookList = bookRepository.getRecentReviewFlow()
+    val placeList = placeRepository.getRecentReviewFlow()
 
     private val _selectedIdSet = MutableStateFlow(HashSet<Int>())
     val selectedIdSet = _selectedIdSet.asStateFlow()
@@ -96,6 +95,7 @@ class ItemViewModel @Inject constructor(
         when (category) {
             "영화" -> movieRepository.getReviewFlow(Pair(it.first, it.second), "%${it.third}%")
             "책" -> bookRepository.getReviewFlow(Pair(it.first, it.second), "%${it.third}%")
+            "장소" -> placeRepository.getReviewFlow(Pair(it.first, it.second), "%${it.third}%")
             else -> flow {}
         }
     }
@@ -171,6 +171,10 @@ class ItemViewModel @Inject constructor(
                     bookRepository.deleteIdSet(selectedIdSet.value)
                     for (id in selectedIdSet.value) firestoreRepository.update("책", id, "R")
                 }
+                "장소" -> {
+                    placeRepository.deleteIdSet(selectedIdSet.value)
+                    for (id in selectedIdSet.value) firestoreRepository.update("장소", id, "R")
+                }
             }
             setSelectMode(false)
         }
@@ -185,7 +189,11 @@ class ItemViewModel @Inject constructor(
                 }
                 "책" -> {
                     bookRepository.like(id, !like)
-                    firestoreRepository.update("영화", id, "I")
+                    firestoreRepository.update("책", id, "I")
+                }
+                "장소" -> {
+                    placeRepository.like(id, !like)
+                    firestoreRepository.update("장소", id, "I")
                 }
             }
         }
@@ -195,6 +203,7 @@ class ItemViewModel @Inject constructor(
         return when (category) {
             "영화" -> movieRepository.fetchDetailInfo(id)
             "책" -> bookRepository.fetchDetailInfo(id)
+            "장소" -> placeRepository.fetchDetailInfo(id)
             else -> flowOf()
         }
     }

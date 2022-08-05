@@ -2,7 +2,6 @@ package com.han.collector.model.data.database
 
 import androidx.paging.PagingSource
 import androidx.room.*
-import com.han.collector.utils.Constants
 import kotlinx.coroutines.flow.Flow
 
 interface BaseDao<T> {
@@ -31,8 +30,6 @@ interface BaseDao<T> {
     fun getAll(): List<T>?
 
     suspend fun like(id: Int, like: Boolean)
-
-    suspend fun checkExist(title: String, image: String): Boolean
 
     fun fetchRecent(): PagingSource<Int, BasicInfo>
 

@@ -14,6 +14,7 @@ object Constants {
     const val REVIEW_DATABASE = "review_database"
     const val TABLE_MOVIE_LIST = "movie-list"
     const val TABLE_BOOK_LIST = "book-list"
+    const val TABLE_PLACE_LIST = "place-list"
 
     const val SEARCH_API_BASE_URL = "https://openapi.naver.com/v1/"
 

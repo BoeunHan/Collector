@@ -41,6 +41,13 @@
             android:checked="@{activity.containsCategory(`책`)}"
             android:text="책" />
 
+        <CheckBox
+            android:id="@+id/cbPlace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="@{activity.containsCategory(`장소`)}"
+            android:text="장소" />
+
         <Button
             android:id="@+id/btCategorySave"
             style="?android:attr/borderlessButtonStyle"

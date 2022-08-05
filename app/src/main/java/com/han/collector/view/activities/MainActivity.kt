@@ -189,6 +189,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 when (category) {
                     "영화" -> viewModel.movieList
                     "책" -> viewModel.bookList
+                    "장소" -> viewModel.placeList
                     else -> flow {}
                 }.collectLatest {
                     pagingAdapter.submitData(it)
@@ -212,6 +213,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         categoryList.clear()
         if (dialogBinding.cbMovie.isChecked) categoryList.add("영화")
         if (dialogBinding.cbBook.isChecked) categoryList.add("책")
+        if (dialogBinding.cbPlace.isChecked) categoryList.add("장소")
 
         firebaseAnalytics.logEvent("category_save") {
             param("category_list", categoryList.toString())

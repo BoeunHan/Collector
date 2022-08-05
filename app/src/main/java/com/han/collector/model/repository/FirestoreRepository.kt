@@ -24,6 +24,7 @@ class FirestoreRepository @Inject constructor(
 ) {
     val movieDao = db.movieDao()
     val bookDao = db.bookDao()
+    val placeDao = db.placeDao()
 
     val firestore = Firebase.firestore
 
@@ -41,6 +42,14 @@ class FirestoreRepository @Inject constructor(
             val removedId = ArrayList<Int>()
         }
     }
+
+    class PlaceUpdates {
+        companion object {
+            val addedId = ArrayList<Int>()
+            val removedId = ArrayList<Int>()
+        }
+    }
+
     fun bitmapToBlob(bitmap: Bitmap?) = Blob.fromBytes(Converters().toByteArray(bitmap))
 
     fun blobToBitmap(blob: Blob?) = Converters().toBitmap(blob?.toBytes())
@@ -69,6 +78,20 @@ class FirestoreRepository @Inject constructor(
                     entity.rate,
                     entity.summary,
                     entity.review,
+                    entity.memo,
+                    entity.uploadDate,
+                    entity.editDate,
+                    entity.like
+                )
+            }
+            is PlaceEntity -> {
+                UploadPlaceEntity(
+                    entity.id,
+                    entity.title,
+                    bitmapToBlob(entity.image),
+                    entity.rate,
+                    entity.goods,
+                    entity.bads,
                     entity.memo,
                     entity.uploadDate,
                     entity.editDate,
@@ -109,6 +132,20 @@ class FirestoreRepository @Inject constructor(
                     entity.like
                 )
             }
+            is UploadPlaceEntity -> {
+                PlaceEntity(
+                    entity.id,
+                    entity.title,
+                    blobToBitmap(entity.image),
+                    entity.rate,
+                    entity.goods,
+                    entity.bads,
+                    entity.memo,
+                    entity.uploadDate,
+                    entity.editDate,
+                    entity.like
+                )
+            }
             else -> null
         }
     }
@@ -138,6 +175,14 @@ class FirestoreRepository @Inject constructor(
                     "R" -> userDoc.collection("book").document(id.toString()).delete().await()
                 }
             }
+            "장소" -> {
+                val place = placeDao.getData(id)
+                val uploadPlace = changeToUploadVersion(place) as UploadPlaceEntity
+                when (mode) {
+                    "I" -> userDoc.collection("place").document(id.toString()).set(uploadPlace).await()
+                    "R" -> userDoc.collection("place").document(id.toString()).delete().await()
+                }
+            }
         }
     }
 
@@ -155,6 +200,12 @@ class FirestoreRepository @Inject constructor(
                     "R" -> BookUpdates.removedId.add(id)
                 }
             }
+            "장소" -> {
+                when (mode) {
+                    "I" -> PlaceUpdates.addedId.add(id)
+                    "R" -> PlaceUpdates.removedId.add(id)
+                }
+            }
         }
     }
 
@@ -162,15 +213,21 @@ class FirestoreRepository @Inject constructor(
         val uid = Firebase.auth.currentUser!!.uid
         val userDoc = firestore.collection("users").document(uid)
         movieDao.getAll()?.let {
-            for (movie in movieDao.getAll()!!) {
+            for (movie in it) {
                 val uploadMovie = changeToUploadVersion(movie) as UploadMovieEntity
                 userDoc.collection("movie").document(uploadMovie.id.toString()).set(uploadMovie).await()
             }
         }
         bookDao.getAll()?.let {
-            for (book in bookDao.getAll()!!) {
+            for (book in it) {
                 val uploadBook = changeToUploadVersion(book) as UploadBookEntity
                 userDoc.collection("book").document(uploadBook.id.toString()).set(uploadBook).await()
+            }
+        }
+        placeDao.getAll()?.let {
+            for (place in it) {
+                val uploadPlace = changeToUploadVersion(place) as UploadPlaceEntity
+                userDoc.collection("place").document(uploadPlace.id.toString()).set(uploadPlace).await()
             }
         }
     }
@@ -194,11 +251,21 @@ class FirestoreRepository @Inject constructor(
         for (i in BookUpdates.removedId) {
             userDoc.collection("book").document(i.toString()).delete().await()
         }
+        for (i in PlaceUpdates.addedId) {
+            val place = placeDao.getData(i)
+            val uploadPlace = changeToUploadVersion(place) as UploadPlaceEntity
+            userDoc.collection("place").document(uploadPlace.id.toString()).set(uploadPlace).await()
+        }
+        for (i in PlaceUpdates.removedId) {
+            userDoc.collection("place").document(i.toString()).delete().await()
+        }
 
         MovieUpdates.addedId.clear()
         MovieUpdates.removedId.clear()
         BookUpdates.addedId.clear()
         BookUpdates.removedId.clear()
+        PlaceUpdates.addedId.clear()
+        PlaceUpdates.removedId.clear()
     }
 
     fun clearDBTables() {
@@ -232,6 +299,16 @@ class FirestoreRepository @Inject constructor(
                         val downloadBook = document.toObject(UploadBookEntity::class.java)
                         val book = changeToDownloadVersion(downloadBook) as BookEntity
                         bookDao.insert(book)
+                    }
+                }
+            }
+        userDoc.collection("place").get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    scope.launch(Dispatchers.IO) {
+                        val downloadPlace = document.toObject(UploadPlaceEntity::class.java)
+                        val place = changeToDownloadVersion(downloadPlace) as PlaceEntity
+                        placeDao.insert(place)
                     }
                 }
             }

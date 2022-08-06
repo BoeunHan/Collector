@@ -12,15 +12,15 @@ def properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.han.collector"
         minSdkVersion 21
-        targetSdkVersion 31
-        versionCode 19
-        versionName "1.1.0"
+        targetSdkVersion 32
+        versionCode 20
+        versionName "1.2.0"
 
 
         buildConfigField "String", "NAVER_API_ID", properties['naver_api_id']

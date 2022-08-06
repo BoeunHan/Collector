@@ -29,10 +29,13 @@ fun loadImage(view: ImageView, image: String?) {
 }
 @BindingAdapter("image")
 fun loadImageBitmap(view: ImageView, image: Bitmap?) {
-    if (image == null) Glide.with(view).load(R.drawable.ic_no_image).into(view)
+    if (image == null) {
+        view.scaleType = ImageView.ScaleType.CENTER
+        Glide.with(view).load(R.drawable.ic_no_image).into(view)
+    }
     else {
-        view.setImageBitmap(image)
         view.scaleType = ImageView.ScaleType.CENTER_CROP
+        view.setImageBitmap(image)
     }
 }
 
@@ -40,16 +43,6 @@ fun loadImageBitmap(view: ImageView, image: Bitmap?) {
 fun loadImage(view: CircleImageView, url: String?){
     if (url == "" || url == null) Glide.with(view).load(R.drawable.ic_user).into(view)
     else Glide.with(view).load(url).error(R.drawable.ic_user).into(view)
-}
-
-@BindingAdapter("imageUri")
-fun loadImageUri(view: ImageView, _uri: String?) {
-    if (_uri == "" || _uri == null) Glide.with(view).load(R.drawable.ic_no_image).into(view)
-    else {
-        val uri = Uri.parse(_uri)
-        view.scaleType = ImageView.ScaleType.CENTER_CROP
-        view.setImageURI(uri)
-    }
 }
 
 @RequiresApi(Build.VERSION_CODES.M)

@@ -4,6 +4,7 @@ import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
@@ -14,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.core.animation.doOnEnd
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -22,6 +24,7 @@ import androidx.fragment.app.replace
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
 import com.han.collector.R
 import com.han.collector.databinding.FragmentReviewDetailBinding
 import com.han.collector.utils.Constants
@@ -45,6 +48,8 @@ class ReviewDetailDialogFragment : DialogFragment() {
 
     private var id: Int? = null
     private var category: String? = null
+    private var title: String? = null
+    private var image: Bitmap? = null
 
     companion object{
         const val TAG = "CardFlipDialog"
@@ -105,9 +110,12 @@ class ReviewDetailDialogFragment : DialogFragment() {
         lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getDetailInfo(id!!).collectLatest {
-                    Log.e("getdetailInfo", it.toString())
-                    Log.e("getimagebitmap", it.image.toString())
-                    binding.flipViewFront.image = it.image
+                    image = it.image
+                    title = it.title
+                    if(it.image!=null) {
+                        binding.flipViewFront.ivImage.setImageBitmap(it.image)
+                        binding.flipViewFront.ivImage.scaleType = ImageView.ScaleType.CENTER_CROP
+                    } else Glide.with(requireContext()).load(R.drawable.ic_no_image).into(binding.flipViewFront.ivImage)
                     binding.flipViewFront.rating = it.rate
                     binding.flipViewFront.like = it.like
                     binding.flipViewBack.title = it.title
@@ -122,8 +130,7 @@ class ReviewDetailDialogFragment : DialogFragment() {
         val intent = Intent(context, AddReviewActivity::class.java)
         intent.putExtra(Constants.SELECTED_ID, id)
         intent.putExtra(Constants.CATEGORY, category)
-        intent.putExtra(Constants.IMAGE, binding.flipViewFront.image)
-        intent.putExtra(Constants.TITLE, binding.flipViewBack.title)
+        intent.putExtra(Constants.TITLE, title)
         startActivity(intent)
     }
 

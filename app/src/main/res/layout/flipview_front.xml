@@ -8,9 +8,6 @@
             name="viewModel"
             type="com.han.collector.viewmodel.ItemViewModel"/>
         <variable
-            name="image"
-            type="android.graphics.Bitmap" />
-        <variable
             name="rating"
             type="Float" />
         <variable
@@ -42,10 +39,10 @@
                 app:cardCornerRadius="10dp">
 
                 <ImageView
+                    android:id="@+id/ivImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="center"
-                    app:image="@{image}"/>
+                    android:scaleType="center"/>
 
             </androidx.cardview.widget.CardView>
 

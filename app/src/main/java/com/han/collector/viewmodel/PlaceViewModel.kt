@@ -90,7 +90,7 @@ class PlaceViewModel @Inject constructor(
 
         viewModelScope.launch (Dispatchers.IO){
             val id = placeRepository.insert(place)
-            firestoreRepository.upload("장소", id.toInt(), "I")
+            firestoreRepository.update("장소", id.toInt(), "I")
         }
     }
 }

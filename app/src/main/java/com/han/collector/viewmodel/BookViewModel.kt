@@ -85,7 +85,7 @@ class BookViewModel @Inject constructor(
 
         viewModelScope.launch (Dispatchers.IO){
             val id = bookRepository.insert(book)
-            firestoreRepository.upload("책", id.toInt(), "I")
+            firestoreRepository.update("책", id.toInt(), "I")
         }
     }
 }

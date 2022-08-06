@@ -19,7 +19,7 @@ class FirestoreViewModel @Inject constructor(
         firestoreRepository.uploadState()
     }
 
-    fun uploadAll() = viewModelScope.async(Dispatchers.IO) {
+    fun uploadAll() = viewModelScope.launch(Dispatchers.IO) {
         firestoreRepository.uploadAll()
     }
 

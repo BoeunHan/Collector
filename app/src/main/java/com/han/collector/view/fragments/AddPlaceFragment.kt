@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
@@ -60,7 +61,10 @@ class AddPlaceFragment : Fragment() {
                     } else{
                         MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, uri)
                     }
-                    viewModel.setPlaceImage(bitmap)
+
+                    val resizedBitmap = Bitmap.createScaledBitmap(bitmap,
+                        400, bitmap.height/(bitmap.width/400),true)
+                    viewModel.setPlaceImage(resizedBitmap)
                 }
                 Activity.RESULT_CANCELED -> {
                     Toast.makeText(
@@ -71,14 +75,14 @@ class AddPlaceFragment : Fragment() {
             }
         }
 
-    fun startGalleryApp() {
+    private fun startGalleryApp() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         getGalleryImageLauncher.launch(intent)
     }
 
-    val requestPermissionLauncher =
+    private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
                 startGalleryApp()

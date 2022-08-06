@@ -86,7 +86,7 @@ class MovieViewModel @Inject constructor(
 
         viewModelScope.launch (Dispatchers.IO){
             val id = movieRepository.insert(movie)
-            firestoreRepository.upload("영화", id.toInt(), "I")
+            firestoreRepository.update("영화", id.toInt(), "I")
         }
     }
 }

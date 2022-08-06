@@ -155,38 +155,44 @@ class FirestoreRepository @Inject constructor(
         else updateState(category, id, mode)
     }
 
-    suspend fun upload(category: String, id: Int, mode: String) {
+    private suspend fun upload(category: String, id: Int, mode: String) {
         val uid = Firebase.auth.currentUser!!.uid
         val userDoc = firestore.collection("users").document(uid)
         when (category) {
             "영화" -> {
-                val movie = movieDao.getData(id)
-                val uploadMovie = changeToUploadVersion(movie) as UploadMovieEntity
                 when (mode) {
-                    "I" -> userDoc.collection("movie").document(id.toString()).set(uploadMovie).await()
+                    "I" -> {
+                        val movie = movieDao.getData(id)
+                        val uploadMovie = changeToUploadVersion(movie) as UploadMovieEntity
+                        userDoc.collection("movie").document(id.toString()).set(uploadMovie).await()
+                    }
                     "R" -> userDoc.collection("movie").document(id.toString()).delete().await()
                 }
             }
             "책" -> {
-                val book = bookDao.getData(id)
-                val uploadBook = changeToUploadVersion(book) as UploadBookEntity
                 when (mode) {
-                    "I" -> userDoc.collection("book").document(id.toString()).set(uploadBook).await()
+                    "I" -> {
+                        val book = bookDao.getData(id)
+                        val uploadBook = changeToUploadVersion(book) as UploadBookEntity
+                        userDoc.collection("book").document(id.toString()).set(uploadBook).await()
+                    }
                     "R" -> userDoc.collection("book").document(id.toString()).delete().await()
                 }
             }
             "장소" -> {
-                val place = placeDao.getData(id)
-                val uploadPlace = changeToUploadVersion(place) as UploadPlaceEntity
                 when (mode) {
-                    "I" -> userDoc.collection("place").document(id.toString()).set(uploadPlace).await()
+                    "I" -> {
+                        val place = placeDao.getData(id)
+                        val uploadPlace = changeToUploadVersion(place) as UploadPlaceEntity
+                        userDoc.collection("place").document(id.toString()).set(uploadPlace).await()
+                    }
                     "R" -> userDoc.collection("place").document(id.toString()).delete().await()
                 }
             }
         }
     }
 
-    fun updateState(category: String, id: Int, mode: String) {
+    private fun updateState(category: String, id: Int, mode: String) {
         when (category) {
             "영화" -> {
                 when (mode) {
@@ -335,5 +341,4 @@ class FirestoreRepository @Inject constructor(
         val categoryList = sharedPref.getString(Constants.CATEGORY_DATA, null)
         userDoc.set(hashMapOf("category" to categoryList))
     }
-
 }

@@ -57,16 +57,16 @@ Kotlin
 - Paging3
 - Gson
 - Glide
-- Firebase
+- Firebase, Firestore
 
 ### 사용 API
-네이버 영화/책 검색 API  
+네이버 영화/책/장소 검색 API  
 https://developers.naver.com/docs/serviceapi/search/movie/movie.md#%EC%98%81%ED%99%94  
 https://developers.naver.com/docs/serviceapi/search/book/book.md#%EC%B1%85  
-
+https://developers.naver.com/docs/serviceapi/search/local/local.md#%EC%A7%80%EC%97%AD
 
 
 
 ### 앞으로의 계획  
-음악, 장소 등 카테고리를 확장하고, 지속적으로 유지보수할 계획입니다.  
+음악, 장소(✅) 등 카테고리를 확장하고, 지속적으로 유지보수할 계획입니다.  
 텍스트 파일로 추출해내거나, 리뷰를 공유하는 기능 등 새로운 기능들을 계속해서 추가해나갈 예정입니다.

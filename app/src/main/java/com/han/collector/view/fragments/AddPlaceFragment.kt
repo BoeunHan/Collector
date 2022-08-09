@@ -43,9 +43,9 @@ class AddPlaceFragment : Fragment() {
         binding?.fragment = this
         binding?.lifecycleOwner = this
 
-        binding?.etGoods?.setOnTouchListener(onTouchListener)
-        binding?.etBads?.setOnTouchListener(onTouchListener)
-        binding?.etMemo?.setOnTouchListener(onTouchListener)
+        binding?.layoutGoods?.editText?.setOnTouchListener(onTouchListener)
+        binding?.layoutBads?.editText?.setOnTouchListener(onTouchListener)
+        binding?.layoutMemo?.editText?.setOnTouchListener(onTouchListener)
 
         return binding?.root
     }
@@ -132,9 +132,9 @@ class AddPlaceFragment : Fragment() {
     }
 
     val onTouchListener = View.OnTouchListener { view, event ->
-        if (view?.id == binding?.etGoods?.id
-            || view?.id == binding?.etBads?.id
-            || view?.id == binding?.etMemo?.id
+        if (view == binding?.layoutGoods?.editText
+            || view == binding?.layoutBads?.editText
+            || view == binding?.layoutMemo?.editText
         ) {
             view?.parent?.requestDisallowInterceptTouchEvent(true)
             when (event?.action?.toByte()?.and(MotionEvent.ACTION_MASK.toByte())?.toInt()) {

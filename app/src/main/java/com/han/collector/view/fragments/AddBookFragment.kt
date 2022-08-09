@@ -32,17 +32,16 @@ class AddBookFragment : Fragment() {
         binding?.viewModel = viewModel
         binding?.lifecycleOwner = this
 
-        binding?.etSummary?.setOnTouchListener(onTouchListener)
-        binding?.etReview?.setOnTouchListener(onTouchListener)
-        binding?.etMemo?.setOnTouchListener(onTouchListener)
-
+        binding?.layoutSummary?.editText?.setOnTouchListener(onTouchListener)
+        binding?.layoutReview?.editText?.setOnTouchListener(onTouchListener)
+        binding?.layoutMemo?.editText?.setOnTouchListener(onTouchListener)
         return binding?.root
     }
 
     private val onTouchListener = View.OnTouchListener { view, event ->
-        if (view?.id == binding?.etSummary?.id
-            || view?.id == binding?.etReview?.id
-            || view?.id == binding?.etMemo?.id
+        if (view == binding?.layoutSummary?.editText
+            || view == binding?.layoutReview?.editText
+            || view == binding?.layoutMemo?.editText
         ) {
             view?.parent?.requestDisallowInterceptTouchEvent(true)
             when (event?.action?.toByte()?.and(MotionEvent.ACTION_MASK.toByte())?.toInt()) {

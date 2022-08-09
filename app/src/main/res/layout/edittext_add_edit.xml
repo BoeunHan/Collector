@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="etName"
+            type="String" />
+
+        <variable
+            name="etHint"
+            type="String" />
+
+        <variable
+            name="etText"
+            type="String" />
+    </data>
+
+    <merge
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@{etName}"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+
+        <androidx.emoji2.widget.EmojiEditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/edittext_background_selector"
+            android:gravity="start|top"
+            android:hint="@{etHint}"
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:padding="10dp"
+            android:scrollbars="vertical"
+            android:text="@={etText}"
+            android:textColor="@color/textColor"
+            android:textSize="12sp" />
+    </merge>
+</layout>

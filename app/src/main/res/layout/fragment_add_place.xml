@@ -77,77 +77,25 @@
         </LinearLayout>
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="좋았던 점"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
+        <include
+            android:id="@+id/layoutGoods"
+            layout="@layout/edittext_add_edit"
+            app:etName="@{`좋았던점`}"
+            app:etHint="@{@string/place_goods_hint}"
+            app:etText="@={viewModel.goods}"/>
 
-        <androidx.emoji2.widget.EmojiEditText
-            android:id="@+id/etGoods"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/edittext_background_selector"
-            android:gravity="start|top"
-            android:hint="@string/place_goods_hint"
-            android:inputType="textMultiLine"
-            android:lines="5"
-            android:overScrollMode="always"
-            android:padding="10dp"
-            android:scrollbars="vertical"
-            android:text="@={viewModel.goods}"
-            android:textColor="@color/textColor"
-            android:textSize="12sp" />
+        <include
+            android:id="@+id/layoutBads"
+            layout="@layout/edittext_add_edit"
+            app:etName="@{`나빴던점`}"
+            app:etHint="@{@string/place_bads_hint}"
+            app:etText="@={viewModel.bads}"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="나빴던 점"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
-
-        <androidx.emoji2.widget.EmojiEditText
-            android:id="@+id/etBads"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/edittext_background_selector"
-            android:gravity="start|top"
-            android:hint="@string/place_bads_hint"
-            android:inputType="textMultiLine"
-            android:lines="5"
-            android:padding="10dp"
-            android:scrollbars="vertical"
-            android:text="@={viewModel.bads}"
-            android:textColor="@color/textColor"
-            android:textSize="12sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="메모"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
-
-        <androidx.emoji2.widget.EmojiEditText
-            android:id="@+id/etMemo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/edittext_background_selector"
-            android:gravity="start|top"
-            android:hint="@string/place_memo_hint"
-            android:inputType="textMultiLine"
-            android:lines="5"
-            android:padding="10dp"
-            android:scrollbars="vertical"
-            android:text="@={viewModel.memo}"
-            android:textColor="@color/textColor"
-            android:textSize="12sp" />
+        <include
+            android:id="@+id/layoutMemo"
+            layout="@layout/edittext_add_edit"
+            app:etName="@{`메모`}"
+            app:etHint="@{@string/book_memo_hint}"
+            app:etText="@={viewModel.memo}"/>
     </LinearLayout>
 </layout>

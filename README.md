@@ -1,6 +1,7 @@
 # Collector - review collector
+<img src="https://user-images.githubusercontent.com/81304917/183879854-abe70d07-488d-4871-86d1-477848ffe94b.png" width="100">  
 
-종종 생각의 저편에서 영화나 책의 줄거리가 떠오르곤 하지만 정작 제목을 몰라 다시 꺼내보지도 못한 채 기억 속에 묻어두곤 합니다. Collector은 이러한 아쉬움을 극복하기 위해 고안되었습니다. 영화, 책 등 다양한 카테고리를 리뷰하고 카드 형식으로 수집하는 앱입니다.
+종종 생각의 저편에서 영화나 책의 줄거리가 떠오르곤 하지만 정작 제목을 몰라 다시 꺼내보지도 못한 채 기억 속에 묻어두곤 합니다. Collector은 이러한 아쉬움을 극복하기 위해 고안되었습니다. 영화, 책, 장소 등 다양한 카테고리를 리뷰하고 카드 형식으로 수집하는 앱입니다.
 
 플레이스토어 링크 https://play.google.com/store/apps/details?id=com.han.collector
 
@@ -23,6 +24,15 @@
 - `추가/편집 화면` : 리뷰를 작성하여 추가합니다.
 - `상세 화면` : 작성한 리뷰를 카드를 뒤집어 확인할 수 있습니다. 
 
+
+|**홈 화면**  |**검색 화면** |**리뷰 추가 + 상세화면**  |**리뷰 사진 추가 기능**  |
+|---|---|---|---|
+|<img src="https://user-images.githubusercontent.com/81304917/183877556-deb69fc5-0864-42b8-9a1b-81d08f9b1440.jpg" width="200">|<img src="https://user-images.githubusercontent.com/81304917/183876311-6fa9caf0-2921-4343-a5d4-6eb261757a9a.gif" width="200"> |<img src="https://user-images.githubusercontent.com/81304917/183876983-6d26bfd2-2dd9-459e-9f2d-aab1e38bccda.gif" width="200"> |<img src="https://user-images.githubusercontent.com/81304917/183875788-1b506491-7360-460f-8151-139c0f9a8560.gif" width="200"> |  
+
+|**리뷰 정렬 기능** |**리뷰 검색 기능**  |**리뷰 삭제 기능**   |
+|---|---|---|
+|<img src="https://user-images.githubusercontent.com/81304917/183876133-49718758-12b9-4149-b3b3-7e80d507f735.gif" width="200"> |<img src="https://user-images.githubusercontent.com/81304917/183877170-e5cda4dc-25be-4731-a0a3-f990584ad81f.gif" width="200"> |<img src="https://user-images.githubusercontent.com/81304917/183876027-fc99ee7a-ccd8-4de0-8f33-002315a7d9d6.gif" width="200"> |
+ 
     
 
 ### 패키지 구조

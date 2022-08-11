@@ -63,15 +63,18 @@
                 android:layout_height="0.5dp"
                 android:background="@color/black" />
 
-
-            <androidx.recyclerview.widget.RecyclerView
+            <com.factor.bouncy.BouncyRecyclerView
                 android:id="@+id/rvMain"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="@{isEmpty? View.GONE : View.VISIBLE}"
-                tools:listitem="@layout/main_list_item_view">
-
-            </androidx.recyclerview.widget.RecyclerView>
+                app:allow_drag_reorder="true"
+                app:allow_item_swipe="false"
+                app:recyclerview_damping_ratio="DAMPING_RATIO_LOW_BOUNCY"
+                app:recyclerview_fling_animation_size=".3"
+                app:recyclerview_overscroll_animation_size=".3"
+                app:recyclerview_stiffness="STIFFNESS_MEDIUM"
+                tools:listitem="@layout/main_list_item_view"/>
 
             <TextView
                 android:id="@+id/tvNothingFound"

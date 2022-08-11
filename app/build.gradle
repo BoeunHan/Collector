@@ -62,7 +62,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'com.android.support:design:31.0.0'
+    implementation 'com.android.support:design:32.0.0'
 
     //lifecycle
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
@@ -125,6 +125,10 @@ dependencies {
 
     //circleimageview
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    //bouncy
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'com.github.valkriaine:Bouncy:2.3'
 
 
 

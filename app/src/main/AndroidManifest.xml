@@ -13,22 +13,26 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/CustomActionBar">
 
-        <activity android:name="com.han.collector.view.activities.LoginActivity" />
+        <activity android:name="com.han.collector.view.activities.LoginActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.han.collector.view.activities.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.han.collector.view.activities.SearchActivity" />
-        <activity android:name="com.han.collector.view.activities.ItemListActivity" />
+        <activity android:name="com.han.collector.view.activities.SearchActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.han.collector.view.activities.ItemListActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.han.collector.view.activities.AddReviewActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
     </application>
 
